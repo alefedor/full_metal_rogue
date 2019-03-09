@@ -15,5 +15,5 @@ class GuarrantedUniformItemDropper(private val items: List<Item>) : ItemDropper 
         require(items.isNotEmpty())
     }
 
-    override fun drop(): Item? = items[Random.nextInt() % items.size]
+    override fun drop(): Item? = items[Random.nextInt(items.size)]
 }
