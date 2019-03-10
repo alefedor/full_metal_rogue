@@ -5,9 +5,9 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 enum class FreeSpaceDensity(val density: Double) {
-    Low(0.3),
-    Medium(0.5),
-    Strong(0.7)
+    Low(0.20),
+    Medium(0.35),
+    Strong(0.5)
 }
 
 interface MapGenerator {
