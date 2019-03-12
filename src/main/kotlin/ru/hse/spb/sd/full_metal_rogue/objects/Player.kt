@@ -6,4 +6,6 @@ class Player(maxHealth: Int, attackPower: Int) : Actor(maxHealth, attackPower) {
     fun earnExperience(experience: Int) {
         totalExperience += experience
     }
+
+    fun getExperience(): Int = totalExperience
 }
