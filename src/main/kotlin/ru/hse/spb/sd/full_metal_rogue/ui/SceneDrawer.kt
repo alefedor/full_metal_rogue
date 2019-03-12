@@ -12,8 +12,8 @@ import javax.swing.JFrame
 
 class SceneDrawer : JFrame() {
     companion object {
-        const val MAP_HEIGHT = 36 // use for map generation
-        const val MAP_WIDTH = 85 // use for map generation
+        private const val MAP_HEIGHT = 36 // use for map generation
+        private const val MAP_WIDTH = 85 // use for map generation
 
         private const val WINDOW_HEIGHT = 40
         private const val WINDOW_WIDTH = 100
@@ -70,7 +70,7 @@ class SceneDrawer : JFrame() {
             is Player -> terminal.write('@', x, y, AsciiPanel.brightWhite)
             // TODO different colors and glyphs for different kinds of mobs
             // how can i gain access to mob names?
-            is Enemy -> terminal.write('*', x, y, AsciiPanel.brightRed)
+            is Enemy -> terminal.write(actor.name.first(), x, y, AsciiPanel.brightRed)
         }
     }
 
@@ -79,7 +79,7 @@ class SceneDrawer : JFrame() {
     }
 
     private fun drawFreeSpace(x: Int, y: Int) {
-        terminal.write(Tile.FREESPACE.glyph, x, y, Tile.FREESPACE.color)
+        terminal.write(Tile.FREE_SPACE.glyph, x, y, Tile.FREE_SPACE.color)
     }
 
     private fun outputMessage(message: String) {
@@ -92,7 +92,7 @@ class SceneDrawer : JFrame() {
     }
 
     private fun outputPlayerState(player: Player) {
-        outputStateCharacteristic("EXP", player.getExperience(), MESSAGE_OFFSET)
+        outputStateCharacteristic("EXP", player.totalExperience, MESSAGE_OFFSET)
         outputStateCharacteristic("CUR HP", player.currentHealth, MESSAGE_OFFSET + 1)
         outputStateCharacteristic("MAX HP", player.maxHealth, MESSAGE_OFFSET + 2)
         outputStateCharacteristic("ATTACK", player.attackPower, MESSAGE_OFFSET + 3)
@@ -106,7 +106,7 @@ class SceneDrawer : JFrame() {
 
     fun draw(scene: InventoryScene) {}
 
-    fun fraw(scene: ChestScene) {}
+    fun draw(scene: ChestScene) {}
 
     fun draw(scene: DeathScene) {}
 
