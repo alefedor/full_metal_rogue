@@ -21,6 +21,7 @@ class Game : JFrame(), KeyListener {
         pack()
         val sceneDrawer = SceneDrawer(terminal)
         scenesStack.push(StartSceneHandler(sceneDrawer))
+        repaint()
     }
 
     override fun repaint() {
