@@ -31,8 +31,10 @@ class Game : JFrame(), KeyListener {
     }
 
     override fun keyPressed(key: KeyEvent) {
-        val nextScene = scenesStack.pop().handleUserInput(key)
-        if (nextScene != null) {
+        val nextScene = scenesStack.peek().handleUserInput(key)
+        if (nextScene == null) {
+            scenesStack.pop()
+        } else {
             scenesStack.push(nextScene)
         }
         repaint()
