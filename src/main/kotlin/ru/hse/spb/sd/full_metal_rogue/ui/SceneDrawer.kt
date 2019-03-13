@@ -1,9 +1,11 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
+import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.scene.*
 
 
-class SceneDrawer(private val drawer: UIDrawer) {
+class SceneDrawer(terminal: AsciiPanel) {
+    private val drawer = UIDrawer(terminal)
 
     private fun draw(scene: LevelScene) {
         drawer.drawMap(scene.map)
