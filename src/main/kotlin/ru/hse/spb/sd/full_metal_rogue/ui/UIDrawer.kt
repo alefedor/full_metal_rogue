@@ -1,7 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_HEIGHT
 import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_WIDTH
 import ru.hse.spb.sd.full_metal_rogue.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.objects.*
@@ -9,24 +8,16 @@ import java.awt.Color
 
 class UIDrawer(private val terminal: AsciiPanel) {
     private val mapLeftOffset = terminal.widthInCharacters - DEFAULT_MAP_WIDTH
-    private val leftMapBorder = mapLeftOffset - 1
-    private val rightMapBorder = leftMapBorder + DEFAULT_MAP_WIDTH
-
     private val messageOffset = 1
-    private val mapTopOffset = messageOffset + 1
-    private val topMapBorder = 1
-    private val bottomMapBorder = topMapBorder + DEFAULT_MAP_HEIGHT
 
     private val enemiesColors = HashMap<String, Color>()
 
     fun drawMap(map: GameMap) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
-                drawGameObject(map[j, i], j + mapLeftOffset, i + mapTopOffset)
+                drawGameObject(map[j, i], j + mapLeftOffset, i + messageOffset)
             }
         }
-
-        drawBorders()
     }
 
     fun outputMessage(message: String) {
@@ -52,19 +43,6 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.clear()
     }
 
-
-    private fun drawBorders() {
-        for (i in leftMapBorder..rightMapBorder) {
-            terminal.write(Tile.BOUNDS.glyph, i, topMapBorder, Tile.BOUNDS.color)
-            terminal.write(Tile.BOUNDS.glyph, i, bottomMapBorder, Tile.BOUNDS.color)
-        }
-
-        for (i in topMapBorder..bottomMapBorder) {
-            terminal.write(Tile.BOUNDS.glyph, leftMapBorder, i, Tile.BOUNDS.color)
-            terminal.write(Tile.BOUNDS.glyph, rightMapBorder, i, Tile.BOUNDS.color)
-        }
-    }
-
     private fun drawGameObject(gameObject: GameObject, x: Int, y: Int) {
         when (gameObject) {
             is Wall -> drawWall(x, y)
@@ -75,7 +53,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
     }
 
     private fun drawPlayer(x: Int, y: Int) {
-        terminal.write('@', x, y, AsciiPanel.brightWhite)
+        terminal.write(Tile.PLAYER.glyph, x, y, Tile.PLAYER.color)
     }
 
     private fun generateRandomBrightColor(): Color {
