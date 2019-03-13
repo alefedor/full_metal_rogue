@@ -39,10 +39,8 @@ class Game : JFrame(), KeyListener {
     }
 
     override fun keyTyped(p0: KeyEvent?) {
-        TODO("not implemented")
     }
 
     override fun keyReleased(p0: KeyEvent?) {
-        TODO("not implemented")
     }
 }
