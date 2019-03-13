@@ -64,18 +64,17 @@ class UIDrawer(private val terminal: AsciiPanel) {
         when (gameObject) {
             is Wall -> drawWall(x, y)
             is FreeSpace -> drawFreeSpace(x, y)
-            is Actor -> drawActor(gameObject, x, y)
+            is Player-> drawPlayer(x, y)
+            is Enemy -> drawActor(gameObject, x, y)
         }
     }
 
-    private fun drawActor(actor: Actor, x: Int, y: Int) {
-        when (actor) {
-            // TODO the reason why it's not in the Tile enum... why, indeed...
-            is Player -> terminal.write('@', x, y, AsciiPanel.brightWhite)
-            // TODO different colors and glyphs for different kinds of mobs
-            // how can i gain access to mob names?
-            is Enemy -> terminal.write(actor.name.first(), x, y, AsciiPanel.brightRed)
-        }
+    private fun drawPlayer(x: Int, y: Int) {
+        terminal.write('@', x, y, AsciiPanel.brightWhite)
+    }
+
+    private fun drawActor(enemy: Enemy, x: Int, y: Int) {
+        terminal.write(enemy.name.first(), x, y, AsciiPanel.brightRed)
     }
 
     private fun drawWall(x: Int, y: Int) {
