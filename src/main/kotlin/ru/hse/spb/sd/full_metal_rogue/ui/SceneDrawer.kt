@@ -1,37 +1,28 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.ChestScene
-import ru.hse.spb.sd.full_metal_rogue.DeathScene
-import ru.hse.spb.sd.full_metal_rogue.InventoryScene
-import ru.hse.spb.sd.full_metal_rogue.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.objects.*
+import ru.hse.spb.sd.full_metal_rogue.scene.*
+import javax.smartcardio.CardTerminal
 import javax.swing.JFrame
 
 
-class SceneDrawer : JFrame() {
+class SceneDrawer(private val terminal: AsciiPanel) {
+    //TODO check if terminal.width works as expected
+    private val MAP_LEFT_OFFSET = terminal.width - MAP_WIDTH
+    private val LEFT_MAP_BORDER = MAP_LEFT_OFFSET - 1
+    private val RIGHT_MAP_BORDER = LEFT_MAP_BORDER + MAP_WIDTH
     companion object {
-        private const val MAP_HEIGHT = 36 // use for map generation
-        private const val MAP_WIDTH = 85 // use for map generation
+        //TODO do these values belong to this class?
+        const val MAP_HEIGHT = 36 // use for map generation
+        const val MAP_WIDTH = 85 // use for map generation
 
-        private const val WINDOW_HEIGHT = 40
-        private const val WINDOW_WIDTH = 100
-        private const val MAP_LEFT_OFFSET = WINDOW_WIDTH - MAP_WIDTH
         private const val MESSAGE_OFFSET = 1
         private const val MAP_TOP_OFFSET = MESSAGE_OFFSET + 1
         private const val TOP_MAP_BORDER = 1
         private const val BOTTOM_MAP_BORDER = TOP_MAP_BORDER + MAP_HEIGHT
-        private const val LEFT_MAP_BORDER = MAP_LEFT_OFFSET - 1
-        private const val RIGHT_MAP_BORDER = LEFT_MAP_BORDER + MAP_WIDTH
         // TODO check if i haven't messed up the dimensions with +-1
-    }
-
-    private val terminal = AsciiPanel(WINDOW_WIDTH, WINDOW_HEIGHT)
-
-    init {
-        add(terminal)
-        pack()
     }
 
     private fun drawMap(map: GameMap) {
@@ -98,16 +89,20 @@ class SceneDrawer : JFrame() {
         outputStateCharacteristic("ATTACK", player.attackPower, MESSAGE_OFFSET + 3)
     }
 
-    fun draw(scene: LevelScene) {
-        drawMap(scene.level.map)
+    private fun draw(scene: LevelScene) {
+        drawMap(scene.map)
         outputMessage(scene.message)
+        //TODO maybe you should look for player on the map by yourself
         outputPlayerState(scene.player)
     }
 
-    fun draw(scene: InventoryScene) {}
+    private fun draw(scene: InventoryScene) {}
 
-    fun draw(scene: ChestScene) {}
+    private fun draw(scene: ChestScene) {}
 
-    fun draw(scene: DeathScene) {}
+    private fun draw(scene: DeathScene) {}
 
+    fun draw(scene: Scene) {
+        terminal.clear()
+    }
 }
