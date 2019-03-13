@@ -1,6 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.map
 
-const val DEFAULT_MAP_HEIGHT = 36
+const val DEFAULT_MAP_HEIGHT = 38
 const val DEFAULT_MAP_WIDTH = 85
 
 interface LevelGenerator {
