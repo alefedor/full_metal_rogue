@@ -38,6 +38,8 @@ class SceneDrawer(terminal: AsciiPanel) {
     }
 
     fun draw(scene: Scene) {
+        drawer.clear()
+
         when (scene) {
             is LevelScene -> drawLevelScene(scene)
             is InventoryScene -> drawInventoryScene(scene)
