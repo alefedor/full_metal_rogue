@@ -34,7 +34,7 @@ class Game : JFrame(), KeyListener {
         val nextScene = scenesStack.peek().handleUserInput(key)
         if (nextScene == null) {
             scenesStack.pop()
-        } else {
+        } else if(nextScene != scenesStack.peek()) {
             scenesStack.push(nextScene)
         }
         repaint()

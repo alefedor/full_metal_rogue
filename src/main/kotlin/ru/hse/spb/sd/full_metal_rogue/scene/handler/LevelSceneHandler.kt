@@ -18,8 +18,6 @@ class LevelSceneHandler(sceneDrawer: SceneDrawer, private val map: MutableGameMa
             KeyEvent.VK_S -> makeGameTurn(PlayerMove.DOWN)
             KeyEvent.VK_A -> makeGameTurn(PlayerMove.LEFT)
             KeyEvent.VK_D -> makeGameTurn(PlayerMove.RIGHT)
-            //TODO reading map from file
-            //VK_2 ->
             else -> this
         }
 
@@ -68,7 +66,6 @@ class LevelSceneHandler(sceneDrawer: SceneDrawer, private val map: MutableGameMa
             }
         }
 
-        // TODO or should there be a new SceneHandler?
         return this
     }
 
