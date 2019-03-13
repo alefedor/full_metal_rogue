@@ -1,26 +1,50 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.map.GameMap
+import ru.hse.spb.sd.full_metal_rogue.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
 
 
 class SceneDrawer(terminal: AsciiPanel) {
     private val drawer = UIDrawer(terminal)
 
-    private fun draw(scene: LevelScene) {
-        drawer.drawMap(scene.map)
-        drawer.outputMessage(scene.message)
-        //TODO maybe you should look for player on the map by yourself
-        //drawer.outputPlayerState(scene.player)
+    private fun getPlayerFromMap(map: GameMap): Player {
+        for (i in 0..map.height) {
+            for (j in 0..map.width) {
+                if (map[i, j] is Player) {
+                    return map[i, j] as Player
+                }
+            }
+        }
+
+        throw NoPlayerOnMapException()
     }
 
-    private fun draw(scene: InventoryScene) {}
+    private fun drawLevelScene(scene: LevelScene) {
+        drawer.drawMap(scene.map)
+        drawer.outputMessage(scene.message)
+        drawer.outputPlayerState(getPlayerFromMap(scene.map))
+    }
 
-    private fun draw(scene: ChestScene) {}
+    private fun drawInventoryScene(scene: InventoryScene) {}
 
-    private fun draw(scene: DeathScene) {}
+    private fun drawChestScene(scene: ChestScene) {}
+
+    private fun drawDeathScene(scene: DeathScene) {}
+
+    private fun drawStartScene(scene: StartScene) {
+        drawer.outputStartMessage()
+    }
 
     fun draw(scene: Scene) {
-        drawer.clear()
+        when (scene) {
+            is LevelScene -> drawLevelScene(scene)
+            is InventoryScene -> drawInventoryScene(scene)
+            is ChestScene -> drawChestScene(scene)
+            is DeathScene -> drawDeathScene(scene)
+            is StartScene -> drawStartScene(scene)
+            else -> return
+        }
     }
 }

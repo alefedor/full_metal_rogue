@@ -18,11 +18,6 @@ class UIDrawer(private val terminal: AsciiPanel) {
     private val bottomMapBorder = topMapBorder + DEFAULT_MAP_HEIGHT
     // TODO check if i haven't messed up the dimensions with +-1
 
-    companion object {
-        //TODO do these values belong to this class?
-
-    }
-
     fun drawMap(map: GameMap) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
@@ -42,6 +37,13 @@ class UIDrawer(private val terminal: AsciiPanel) {
         outputStateCharacteristic("CUR HP", player.currentHealth, messageOffset + 1)
         outputStateCharacteristic("MAX HP", player.maxHealth, messageOffset + 2)
         outputStateCharacteristic("ATTACK", player.attackPower, messageOffset + 3)
+    }
+
+    fun outputStartMessage() {
+        terminal.writeCenter("Welcome to Full Metal Rogue.", terminal.heightInCharacters / 2 - 3)
+        terminal.writeCenter("Press 1 to generate a random level", terminal.heightInCharacters / 2 - 2)
+        terminal.writeCenter("Press 2 to load a level file from memory", terminal.heightInCharacters / 2 - 1)
+        terminal.writeCenter("Press Esc to exit", terminal.heightInCharacters / 2)
     }
 
     fun clear() {
