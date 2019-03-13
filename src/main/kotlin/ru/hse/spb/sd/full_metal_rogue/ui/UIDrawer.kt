@@ -5,9 +5,9 @@ import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_HEIGHT
 import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_WIDTH
 import ru.hse.spb.sd.full_metal_rogue.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.objects.*
+import java.awt.Color
 
 class UIDrawer(private val terminal: AsciiPanel) {
-    //TODO check if terminal.width works as expected
     private val mapLeftOffset = terminal.widthInCharacters - DEFAULT_MAP_WIDTH
     private val leftMapBorder = mapLeftOffset - 1
     private val rightMapBorder = leftMapBorder + DEFAULT_MAP_WIDTH
@@ -16,7 +16,8 @@ class UIDrawer(private val terminal: AsciiPanel) {
     private val mapTopOffset = messageOffset + 1
     private val topMapBorder = 1
     private val bottomMapBorder = topMapBorder + DEFAULT_MAP_HEIGHT
-    // TODO check if i haven't messed up the dimensions with +-1
+
+    private val enemiesColors = HashMap<String, Color>()
 
     fun drawMap(map: GameMap) {
         for (i in 0 until map.height) {
@@ -69,7 +70,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
             is Wall -> drawWall(x, y)
             is FreeSpace -> drawFreeSpace(x, y)
             is Player-> drawPlayer(x, y)
-            is Enemy -> drawActor(gameObject, x, y)
+            is Enemy -> drawEnemy(gameObject, x, y)
         }
     }
 
@@ -77,8 +78,17 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.write('@', x, y, AsciiPanel.brightWhite)
     }
 
-    private fun drawActor(enemy: Enemy, x: Int, y: Int) {
-        terminal.write(enemy.name.first(), x, y, AsciiPanel.brightRed)
+    private fun generateRandomBrightColor(): Color {
+        val rand = java.util.Random()
+        val r = rand.nextFloat()
+        val g = rand.nextFloat() / 2f + 0.5f
+        val b = rand.nextFloat() / 3f
+        return Color(r, g, b).brighter()
+    }
+
+    private fun drawEnemy(enemy: Enemy, x: Int, y: Int) {
+        val enemyColor = enemiesColors.getOrPut(enemy.name) { generateRandomBrightColor() }
+        terminal.write(enemy.name.first(), x, y, enemyColor)
     }
 
     private fun drawWall(x: Int, y: Int) {
