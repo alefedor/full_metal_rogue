@@ -4,6 +4,7 @@ import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.scene.handler.SceneHandler
 import ru.hse.spb.sd.full_metal_rogue.scene.handler.StartSceneHandler
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
+import ru.hse.spb.sd.full_metal_rogue.ui.UIDrawer
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import java.util.*
@@ -20,7 +21,7 @@ class Game : JFrame(), KeyListener {
         val terminal = AsciiPanel(WINDOW_WIDTH, WINDOW_HEIGHT)
         add(terminal)
         pack()
-        val sceneDrawer = SceneDrawer(terminal)
+        val sceneDrawer = SceneDrawer(UIDrawer(terminal))
         scenesStack.push(StartSceneHandler(sceneDrawer))
     }
 
