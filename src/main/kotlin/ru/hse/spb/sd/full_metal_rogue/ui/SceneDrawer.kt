@@ -10,10 +10,10 @@ class SceneDrawer(terminal: AsciiPanel) {
     private val drawer = UIDrawer(terminal)
 
     private fun getPlayerFromMap(map: GameMap): Player {
-        for (i in 0..map.height) {
-            for (j in 0..map.width) {
-                if (map[i, j] is Player) {
-                    return map[i, j] as Player
+        for (i in 0 until map.height) {
+            for (j in 0 until map.width) {
+                if (map[j, i] is Player) {
+                    return map[j, i] as Player
                 }
             }
         }

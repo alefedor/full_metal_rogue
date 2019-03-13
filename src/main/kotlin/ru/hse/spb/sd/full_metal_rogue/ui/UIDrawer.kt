@@ -8,7 +8,7 @@ import ru.hse.spb.sd.full_metal_rogue.objects.*
 
 class UIDrawer(private val terminal: AsciiPanel) {
     //TODO check if terminal.width works as expected
-    private val mapLeftOffset = terminal.width - DEFAULT_MAP_WIDTH
+    private val mapLeftOffset = terminal.widthInCharacters - DEFAULT_MAP_WIDTH
     private val leftMapBorder = mapLeftOffset - 1
     private val rightMapBorder = leftMapBorder + DEFAULT_MAP_WIDTH
 
@@ -21,7 +21,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
     fun drawMap(map: GameMap) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
-                drawGameObject(map[i, j], i + mapTopOffset, j + mapLeftOffset)
+                drawGameObject(map[j, i], j + mapLeftOffset, i + mapTopOffset)
             }
         }
 
@@ -40,7 +40,8 @@ class UIDrawer(private val terminal: AsciiPanel) {
     }
 
     fun outputStartMessage() {
-        terminal.writeCenter("Welcome to Full Metal Rogue.", terminal.heightInCharacters / 2 - 3)
+        terminal.writeCenter("Welcome to Full Metal Rogue.", terminal.heightInCharacters / 2 - 3,
+            AsciiPanel.brightWhite)
         terminal.writeCenter("Press 1 to generate a random level", terminal.heightInCharacters / 2 - 2)
         terminal.writeCenter("Press 2 to load a level file from memory", terminal.heightInCharacters / 2 - 1)
         terminal.writeCenter("Press Esc to exit", terminal.heightInCharacters / 2)
