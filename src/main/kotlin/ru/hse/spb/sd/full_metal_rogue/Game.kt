@@ -19,6 +19,7 @@ class Game : JFrame(), KeyListener {
         val terminal = AsciiPanel(WINDOW_WIDTH, WINDOW_HEIGHT)
         add(terminal)
         pack()
+        addKeyListener(this)
         val sceneDrawer = SceneDrawer(terminal)
         scenesStack.push(StartSceneHandler(sceneDrawer))
         repaint()
