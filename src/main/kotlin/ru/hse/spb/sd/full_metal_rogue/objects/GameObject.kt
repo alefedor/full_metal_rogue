@@ -24,7 +24,7 @@ abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() 
         get() = currentHealth > 0
 
     val isDead: Boolean
-        get() = currentHealth <= 0
+        get() = !isAlive
 
     fun takeDamage(damage: Int) {
         currentHealth -= damage
