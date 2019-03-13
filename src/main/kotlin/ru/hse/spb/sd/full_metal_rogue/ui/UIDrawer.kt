@@ -37,6 +37,8 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.writeCenter("Press 1 to generate a random level", terminal.heightInCharacters / 2 - 2)
         terminal.writeCenter("Press 2 to load a level file from memory", terminal.heightInCharacters / 2 - 1)
         terminal.writeCenter("Press Esc to exit", terminal.heightInCharacters / 2)
+        terminal.writeCenter("Controls: W-A-S-D for player movement, P to save current map, Esc to exit",
+            terminal.heightInCharacters / 2 + 1)
     }
 
     fun clear() {
