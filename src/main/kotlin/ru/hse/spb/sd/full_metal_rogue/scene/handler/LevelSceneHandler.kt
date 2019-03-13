@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
+import ru.hse.spb.sd.full_metal_rogue.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.objects.*
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
@@ -18,6 +19,7 @@ class LevelSceneHandler(sceneDrawer: SceneDrawer, private val map: MutableGameMa
             KeyEvent.VK_S -> makeGameTurn(PlayerMove.DOWN)
             KeyEvent.VK_A -> makeGameTurn(PlayerMove.LEFT)
             KeyEvent.VK_D -> makeGameTurn(PlayerMove.RIGHT)
+            KeyEvent.VK_P -> this.also { FileMapLoader.saveMap(map) }
             else -> this
         }
 
