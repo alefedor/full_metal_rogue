@@ -9,5 +9,5 @@ abstract class SceneHandler(private val sceneDrawer: SceneDrawer) {
 
     fun repaint() = sceneDrawer.draw(scene)
 
-    abstract fun handleUserInput(key: KeyEvent)
+    abstract fun handleUserInput(key: KeyEvent): SceneHandler?
 }

@@ -1,25 +1,26 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_HEIGHT
+import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_WIDTH
 import ru.hse.spb.sd.full_metal_rogue.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.objects.*
 
 class UIDrawer(private val terminal: AsciiPanel) {
     //TODO check if terminal.width works as expected
-    private val mapLeftOffset = terminal.width - MAP_WIDTH
+    private val mapLeftOffset = terminal.width - DEFAULT_MAP_WIDTH
     private val leftMapBorder = mapLeftOffset - 1
-    private val rightMapBorder = leftMapBorder + MAP_WIDTH
+    private val rightMapBorder = leftMapBorder + DEFAULT_MAP_WIDTH
 
     private val messageOffset = 1
     private val mapTopOffset = messageOffset + 1
     private val topMapBorder = 1
-    private val bottomMapBorder = topMapBorder + MAP_HEIGHT
+    private val bottomMapBorder = topMapBorder + DEFAULT_MAP_HEIGHT
     // TODO check if i haven't messed up the dimensions with +-1
 
     companion object {
         //TODO do these values belong to this class?
-        const val MAP_HEIGHT = 36 // use for map generation
-        const val MAP_WIDTH = 85 // use for map generation
+
     }
 
     fun drawMap(map: GameMap) {

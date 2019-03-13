@@ -1,9 +1,10 @@
 package ru.hse.spb.sd.full_metal_rogue.map
 
-import ru.hse.spb.sd.full_metal_rogue.objects.Player
+const val DEFAULT_MAP_HEIGHT = 36
+const val DEFAULT_MAP_WIDTH = 85
 
 interface LevelGenerator {
-    fun generateLevel(width: Int, height: Int): MutableGameMap
+    fun generateLevel(width: Int = DEFAULT_MAP_WIDTH, height: Int = DEFAULT_MAP_HEIGHT): MutableGameMap
 }
 
 object CaveLevelGenerator : LevelGenerator {

@@ -11,7 +11,7 @@ class SceneDrawer(terminal: AsciiPanel) {
         drawer.drawMap(scene.map)
         drawer.outputMessage(scene.message)
         //TODO maybe you should look for player on the map by yourself
-        drawer.outputPlayerState(scene.player)
+        //drawer.outputPlayerState(scene.player)
     }
 
     private fun draw(scene: InventoryScene) {}

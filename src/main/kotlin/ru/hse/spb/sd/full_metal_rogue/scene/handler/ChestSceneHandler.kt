@@ -8,7 +8,7 @@ class ChestSceneHandler(sceneDrawer: SceneDrawer) : SceneHandler(sceneDrawer) {
     override val scene: ChestScene
         get() = TODO("not implemented")
 
-    override fun handleUserInput(key: KeyEvent) {
+    override fun handleUserInput(key: KeyEvent): SceneHandler? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
