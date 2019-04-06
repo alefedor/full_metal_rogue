@@ -1,28 +1,37 @@
 package ru.hse.spb.sd.full_metal_rogue.map
 
-const val DEFAULT_MAP_HEIGHT = 38
-const val DEFAULT_MAP_WIDTH = 85
-
 interface LevelGenerator {
+    companion object {
+        const val DEFAULT_MAP_HEIGHT = 38
+        const val DEFAULT_MAP_WIDTH = 85
+    }
+
     fun generateLevel(width: Int = DEFAULT_MAP_WIDTH, height: Int = DEFAULT_MAP_HEIGHT): MutableGameMap
 }
 
-object CaveLevelGenerator : LevelGenerator {
-    private val enemyCount = 3
+class StandardLevelGenerator(
+    private val mapGenerator: MapGenerator = CaveMapGenerator,
+    private val actorGenerator: ActorGenerator = TrivialActorGenerator,
+    private val mapInhabitator: MapInhabitator = SparseMapInhabitator,
+    private val enemyCount: Int = STANDARD_ENEMY_COUNT
+) : LevelGenerator {
+
+    companion object {
+        private const val STANDARD_ENEMY_COUNT = 3
+    }
 
     override fun generateLevel(width: Int, height: Int): MutableGameMap {
-        val map = CaveMapGenerator.generateMap(width, height)
+        val map = mapGenerator.generateMap(width, height)
 
-        val player = TrivialActorGenerator.generatePlayer()
+        val player = actorGenerator.generatePlayer()
 
-        SparseMapInhabitator.inhabitateWithActor(map, player)
+        mapInhabitator.inhabitateWithActor(map, player)
 
         repeat(enemyCount) {
             val enemy = TrivialActorGenerator.generateEnemy()
-            SparseMapInhabitator.inhabitateWithActor(map, enemy)
+            mapInhabitator.inhabitateWithActor(map, enemy)
         }
 
         return map
     }
-
 }

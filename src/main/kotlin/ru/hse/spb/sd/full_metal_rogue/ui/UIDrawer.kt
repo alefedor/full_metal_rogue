@@ -1,13 +1,13 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.map.DEFAULT_MAP_WIDTH
+import ru.hse.spb.sd.full_metal_rogue.map.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.objects.*
 import java.awt.Color
 
 class UIDrawer(private val terminal: AsciiPanel) {
-    private val mapLeftOffset = terminal.widthInCharacters - DEFAULT_MAP_WIDTH
+    private val mapLeftOffset = terminal.widthInCharacters - LevelGenerator.DEFAULT_MAP_WIDTH
     private val messageOffset = 1
 
     private val enemiesColors = HashMap<String, Color>()
