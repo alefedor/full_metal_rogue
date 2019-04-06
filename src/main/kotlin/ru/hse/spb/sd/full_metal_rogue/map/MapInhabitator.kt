@@ -4,6 +4,9 @@ import ru.hse.spb.sd.full_metal_rogue.objects.Actor
 import ru.hse.spb.sd.full_metal_rogue.objects.FreeSpace
 import kotlin.random.Random
 
+/**
+ * Interface for placing actors into map.
+ */
 interface MapInhabitator {
     fun inhabitateWithActor(map: MutableGameMap, actor: Actor)
 }

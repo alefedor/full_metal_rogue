@@ -1,5 +1,8 @@
 package ru.hse.spb.sd.full_metal_rogue.map
 
+/**
+ * Interface for generation complete level with player and enemies
+ */
 interface LevelGenerator {
     companion object {
         const val DEFAULT_MAP_HEIGHT = 38

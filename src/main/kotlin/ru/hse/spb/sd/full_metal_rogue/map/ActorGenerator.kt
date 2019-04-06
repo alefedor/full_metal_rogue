@@ -4,6 +4,9 @@ import ru.hse.spb.sd.full_metal_rogue.objects.Enemy
 import ru.hse.spb.sd.full_metal_rogue.objects.Player
 import kotlin.random.Random
 
+/**
+ * Interface for generating different actors (players, enemies)
+ */
 interface ActorGenerator {
     fun generatePlayer(): Player
     fun generateEnemy(): Enemy

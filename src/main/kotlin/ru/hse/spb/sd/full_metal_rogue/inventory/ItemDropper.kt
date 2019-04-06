@@ -2,6 +2,9 @@ package ru.hse.spb.sd.full_metal_rogue.inventory
 
 import kotlin.random.Random
 
+/**
+ * Interface for different ways of dropping items
+ */
 interface ItemDropper {
     fun drop(): Item?
 }

@@ -10,6 +10,9 @@ enum class FreeSpaceDensity(val density: Double) {
     Strong(0.5)
 }
 
+/**
+ * Interface for generating empty map consisting only of free spaces and walls
+ */
 interface MapGenerator {
     /**
      * Creates map with walls and free spaces. Objects on the bound are guaranteed to be walls.
