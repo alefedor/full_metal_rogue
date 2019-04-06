@@ -11,7 +11,7 @@ enum class FreeSpaceDensity(val density: Double) {
 }
 
 /**
- * Interface for generating empty map consisting only of free spaces and walls
+ * Interface for generating empty map consisting only of connected free spaces and walls
  */
 interface MapGenerator {
     /**
