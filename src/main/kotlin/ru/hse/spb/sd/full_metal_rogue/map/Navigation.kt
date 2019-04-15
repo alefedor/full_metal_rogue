@@ -6,10 +6,10 @@ data class Position(var x: Int, var y: Int)
 
 fun Position.applyDirection(direction: Direction) {
     when(direction) {
-        Direction.Left -> x--
-        Direction.Right -> x++
-        Direction.Up -> y--
-        Direction.Down -> y++
+        Direction.LEFT -> x--
+        Direction.RIGHT -> x++
+        Direction.UP -> y--
+        Direction.DOWN -> y++
     }
 }
 
@@ -17,10 +17,10 @@ fun Position.applyDirection(direction: Direction) {
 fun Position.distanceTo(other: Position) = Math.abs(x - other.x) + Math.abs(y - other.y)
 
 enum class Direction {
-    Left,
-    Right,
-    Up,
-    Down;
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN;
 
     companion object {
         fun randomDirection(): Direction = Direction.values()[Random.nextInt(Direction.values().size)]
