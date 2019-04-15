@@ -13,13 +13,11 @@ fun Position.applyDirection(direction: Direction) {
     }
 }
 
-fun Position.goToDirection(direction: Direction) = when(direction) {
-        Direction.LEFT -> Position(x - 1, y)
-        Direction.RIGHT -> Position(x + 1, y)
-        Direction.UP -> Position(x, y - 1)
-        Direction.DOWN -> Position(x, y + 1)
-    }
-
+fun Position.goToDirection(direction: Direction): Position {
+    val position = copy()
+    position.applyDirection(direction)
+    return position
+}
 
 /* Manhattan distance */
 fun Position.distanceTo(other: Position) = Math.abs(x - other.x) + Math.abs(y - other.y)
