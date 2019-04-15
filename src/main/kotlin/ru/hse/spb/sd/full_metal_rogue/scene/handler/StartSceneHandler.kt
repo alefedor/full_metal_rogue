@@ -1,7 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
-import ru.hse.spb.sd.full_metal_rogue.map.StandardLevelGenerator
-import ru.hse.spb.sd.full_metal_rogue.map.FileMapLoader
+import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.scene.StartScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent

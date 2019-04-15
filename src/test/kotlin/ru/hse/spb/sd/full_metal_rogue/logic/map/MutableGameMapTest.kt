@@ -1,9 +1,9 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import org.junit.Assert.*
 import org.junit.Test
-import ru.hse.spb.sd.full_metal_rogue.objects.FreeSpace
-import ru.hse.spb.sd.full_metal_rogue.objects.Wall
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.FreeSpace
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.Wall
 
 class MutableGameMapTest {
     @Test

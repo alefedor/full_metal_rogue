@@ -1,9 +1,9 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.map.LevelGenerator
-import ru.hse.spb.sd.full_metal_rogue.map.GameMap
-import ru.hse.spb.sd.full_metal_rogue.objects.*
+import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import java.awt.Color
 
 class UIDrawer(private val terminal: AsciiPanel) {

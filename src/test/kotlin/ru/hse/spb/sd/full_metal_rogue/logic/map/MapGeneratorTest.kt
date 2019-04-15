@@ -1,11 +1,11 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import ru.hse.spb.sd.full_metal_rogue.objects.FreeSpace
-import ru.hse.spb.sd.full_metal_rogue.objects.Wall
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.FreeSpace
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.Wall
 
 @RunWith(Parameterized::class)
 class MapGeneratorTest(val mapGenerator: MapGenerator) {
@@ -69,17 +69,13 @@ class MapGeneratorTest(val mapGenerator: MapGenerator) {
         assertEquals(1, componentsNumber)
     }
 
-    private fun insideMap(position: Position, gameMap: GameMap) =
-        0 <= position.x && position.x < gameMap.width && 0 <= position.y && position.y < gameMap.height
-
     private fun colorComponent(position: Position, color: Int, gameMap: GameMap, cellColor: Array<Array<Int>>) {
         cellColor[position.x][position.y] = color
 
         for (direction in Direction.values()) {
-            val nextPosition = position.copy()
-            nextPosition.applyDirection(direction)
+            val nextPosition = position.goToDirection(direction)
 
-            if (!insideMap(nextPosition, gameMap)) continue
+            if (!gameMap.inBounds(nextPosition)) continue
 
             if (gameMap[nextPosition.x, nextPosition.y] is FreeSpace && cellColor[nextPosition.x][nextPosition.y] == 0)
                 colorComponent(nextPosition, color, gameMap, cellColor)

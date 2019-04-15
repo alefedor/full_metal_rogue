@@ -1,4 +1,4 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import kotlin.random.Random
 
@@ -12,6 +12,14 @@ fun Position.applyDirection(direction: Direction) {
         Direction.DOWN -> y++
     }
 }
+
+fun Position.goToDirection(direction: Direction) = when(direction) {
+        Direction.LEFT -> Position(x - 1, y)
+        Direction.RIGHT -> Position(x + 1, y)
+        Direction.UP -> Position(x, y - 1)
+        Direction.DOWN -> Position(x, y + 1)
+    }
+
 
 /* Manhattan distance */
 fun Position.distanceTo(other: Position) = Math.abs(x - other.x) + Math.abs(y - other.y)

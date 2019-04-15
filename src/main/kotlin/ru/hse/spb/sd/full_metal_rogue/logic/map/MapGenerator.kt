@@ -1,6 +1,6 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
-import ru.hse.spb.sd.full_metal_rogue.objects.FreeSpace
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.FreeSpace
 import kotlin.math.roundToInt
 import kotlin.random.Random
 

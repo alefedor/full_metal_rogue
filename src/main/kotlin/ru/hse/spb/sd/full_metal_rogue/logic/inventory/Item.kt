@@ -1,4 +1,4 @@
-package ru.hse.spb.sd.full_metal_rogue.inventory
+package ru.hse.spb.sd.full_metal_rogue.logic.inventory
 
 class Item(val type: ItemType, val effects: List<Bonus>)
 

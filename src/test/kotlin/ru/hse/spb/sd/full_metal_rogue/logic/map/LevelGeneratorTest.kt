@@ -1,10 +1,12 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import ru.hse.spb.sd.full_metal_rogue.objects.Player
+import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 
 @RunWith(Parameterized::class)
 class LevelGeneratorTest(val levelGenerator: LevelGenerator) {

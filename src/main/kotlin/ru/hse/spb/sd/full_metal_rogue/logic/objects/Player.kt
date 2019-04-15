@@ -1,4 +1,4 @@
-package ru.hse.spb.sd.full_metal_rogue.objects
+package ru.hse.spb.sd.full_metal_rogue.logic.objects
 
 class Player(maxHealth: Int, attackPower: Int) : Actor(maxHealth, attackPower) {
     var totalExperience = 0

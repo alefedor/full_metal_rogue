@@ -1,8 +1,8 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.map.GameMap
-import ru.hse.spb.sd.full_metal_rogue.objects.Player
+import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
 
 

@@ -1,11 +1,11 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import com.google.gson.*
 import java.io.IOException
 import javax.swing.JFileChooser
 import javax.swing.JOptionPane
 import java.lang.reflect.Type
-import ru.hse.spb.sd.full_metal_rogue.objects.*
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 
 
 object FileMapLoader {

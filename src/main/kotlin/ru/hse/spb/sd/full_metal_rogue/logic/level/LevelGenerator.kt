@@ -1,4 +1,6 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.level
+
+import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 
 /**
  * Interface for generation complete level with player and enemies

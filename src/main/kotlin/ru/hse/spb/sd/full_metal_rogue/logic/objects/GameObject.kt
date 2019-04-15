@@ -1,6 +1,6 @@
-package ru.hse.spb.sd.full_metal_rogue.objects
+package ru.hse.spb.sd.full_metal_rogue.logic.objects
 
-import ru.hse.spb.sd.full_metal_rogue.inventory.ItemDropper
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.ItemDropper
 
 sealed class GameObject
 

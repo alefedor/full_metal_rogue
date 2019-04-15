@@ -1,4 +1,4 @@
-package ru.hse.spb.sd.full_metal_rogue.map
+package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import org.junit.Assert.*
 import org.junit.Test
