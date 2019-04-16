@@ -8,10 +8,16 @@ import java.awt.event.KeyEvent
 import java.awt.event.KeyEvent.*
 import kotlin.system.exitProcess
 
+/**
+ * Class that handles user input on a StartScene
+ */
 class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sceneDrawer) {
     override val scene
         get() = StartScene()
 
+    /**
+     * @see [SceneHandler.handleUserInput]
+     */
     override fun handleUserInput(key: KeyEvent): SceneHandler? =
         when (key.keyCode) {
             VK_ESCAPE -> exitProcess(0)

@@ -1,4 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.scene
 
-class StartScene : Scene {
-}
+/**
+ * Representation of main screen for drawing
+ */
+class StartScene : Scene

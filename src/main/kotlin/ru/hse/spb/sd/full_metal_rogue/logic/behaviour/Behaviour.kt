@@ -10,7 +10,7 @@ object PassiveBehaviour : Behaviour {
     override fun makeMove(currentPosition: Position, map: GameMap): Position = currentPosition
 }
 
-object AgressiveBehaviour : Behaviour {
+object AggressiveBehaviour : Behaviour {
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
         val distances = map.calculateDistancesFrom(map.playerPosition())
         val possibleMoves = possibleMoves(currentPosition, map)

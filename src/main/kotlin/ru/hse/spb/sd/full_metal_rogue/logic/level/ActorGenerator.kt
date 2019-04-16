@@ -1,6 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.level
 
-import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.AgressiveBehaviour
+import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.AggressiveBehaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.CowardBehaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.PassiveBehaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Enemy
@@ -17,7 +17,7 @@ interface ActorGenerator {
 
 object TrivialActorGenerator : ActorGenerator {
     private val enemyNames = listOf("oxygen", "water", "acid")
-    private val behaviours = listOf(PassiveBehaviour, AgressiveBehaviour, CowardBehaviour)
+    private val behaviours = listOf(PassiveBehaviour, AggressiveBehaviour, CowardBehaviour)
 
     override fun generateEnemy() = Enemy(20, 3, randomBehaviour(), randomEnemyName())
 

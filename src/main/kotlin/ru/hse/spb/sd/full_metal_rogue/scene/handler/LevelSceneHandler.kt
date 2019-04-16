@@ -6,11 +6,19 @@ import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
 
-class LevelSceneHandler(sceneDrawer: SceneDrawer, private val map: MutableGameMap) : SceneHandler(sceneDrawer) {
-    private var message = ""
+/**
+ * Class that handles user input on a LevelScene
+ */
+class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
+                        private val map: MutableGameMap
+) : SceneHandler(sceneDrawer) {
+    private val messages = mutableListOf<String>()
     override val scene: LevelScene
-        get() = LevelScene(map, message)
+        get() = LevelScene(map, messages)
 
+    /**
+     * @see [SceneHandler.handleUserInput]
+     */
     override fun handleUserInput(key: KeyEvent): SceneHandler? =
         when (key.keyCode) {
             KeyEvent.VK_ESCAPE -> null
@@ -22,51 +30,85 @@ class LevelSceneHandler(sceneDrawer: SceneDrawer, private val map: MutableGameMa
             else -> this
         }
 
-    private fun movePlayer(player: Player, playerMove: Direction, oldPosition: Position): Boolean {
-        val newPosition = oldPosition.goToDirection(playerMove)
-
-        if (map.inBounds(newPosition)) {
-            when (map[newPosition]) {
-                is FreeSpace -> {
-                    map[oldPosition] = FreeSpace
-                    map[newPosition] = player
-                    this.message = ""
-                    return true
-                }
-                is Wall -> this.message = "There is a wall in the way!"
-                is Enemy -> {
-                    // TODO handle mob confrontation
-                }
-            }
-        } else {
-            this.message = "There is a border in the way!"
-        }
-
-        return false
-    }
-
+    /**
+     * Makes enemies and player turns
+     */
     private fun makeGameTurn(playerMove: Direction): SceneHandler {
-        val movedActors = HashSet<Actor>()
+        messages.clear()
+        movePlayer(playerMove)
 
+        val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
             for (y in 0 until map.height) {
-                if (map[x, y] is Actor && !movedActors.contains(map[x, y])) {
-                    when (map[x, y]) {
-                        is Player -> {
-                            val player: Player = map[x, y] as Player
-                            if (movePlayer(player, playerMove, Position(x, y))) {
-                                movedActors.add(player)
-                            }
-                        }
-                        is Enemy -> {
-                            // TODO handle mob movement
-                            //movedActors.add(map[j, i] as Actor)
-                        }
+                val enemy = map[x, y]
+                if (enemy is Enemy && !movedEnemies.contains(enemy)) {
+                    if (moveEnemy(enemy, Position(x, y))) {
+                        return DeathSceneHandler(sceneDrawer, map.player())
                     }
+                    movedEnemies.add(enemy)
                 }
             }
         }
 
         return this
+    }
+
+    /**
+     * Moves player in specified direction
+     */
+    private fun movePlayer(playerMove: Direction) {
+        val currentPosition = map.playerPosition()
+        val targetPosition = currentPosition.goToDirection(playerMove)
+        val targetTile = map[targetPosition]
+
+        if (!map.inBounds(targetPosition) || targetTile is Wall) {
+            messages.add("There is a wall in the way!")
+            return
+        }
+
+        when (targetTile) {
+            is FreeSpace -> {
+                map[targetPosition] = map[currentPosition]
+                map[currentPosition] = FreeSpace
+            }
+
+            is Enemy -> {
+                val player = map.player()
+                targetTile.takeDamage(player.attackPower)
+
+                if (targetTile.isDead) {
+                    messages.add("You have slain the ${targetTile.name}.")
+                    map[targetPosition] = FreeSpace
+                } else {
+                    messages.add("You hit the ${targetTile.name}.")
+                }
+            }
+        }
+    }
+
+    /**
+     * Moves specified enemy from specified position
+     *
+     * @return true if the enemy has slain the player, and false otherwise
+     */
+    private fun moveEnemy(enemy: Enemy, position: Position): Boolean {
+        val targetPosition = enemy.makeMove(position, map)
+        val targetTile = map[targetPosition]
+
+        when(targetTile) {
+            is FreeSpace -> {
+                map[targetPosition] = enemy
+                map[position] = FreeSpace
+            }
+
+            is Player -> {
+                targetTile.takeDamage(enemy.attackPower)
+                if (targetTile.isDead) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 }
