@@ -14,23 +14,20 @@ abstract class BehaviourDecorator(private val behaviour: Behaviour) : Behaviour 
 
 class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
     companion object {
-        private val MIN_CONFUSION_TIME_MILLISECONDS = TimeUnit.SECONDS.toMillis(20).toInt()
-        private val MAX_CONFUSION_TIME_MILLISECONDS = TimeUnit.MINUTES.toMillis(1).toInt()
+        private const val MIN_CONFUSED_TURNS_COUNT = 10
+        private const val MAX_CONFUSED_TURNS_COUNT = 100
     }
 
-    private val timer = Timer(
-        (MIN_CONFUSION_TIME_MILLISECONDS..MAX_CONFUSION_TIME_MILLISECONDS).random(),
-        ActionListener { }
-    )
-
-    init {
-        timer.isRepeats = false
-        timer.start()
-    }
+    private val confusedTurnsCount = (MIN_CONFUSED_TURNS_COUNT..MAX_CONFUSED_TURNS_COUNT).random()
+    private var turnsCount = 0
 
 
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
-        return if (timer.isRunning) makeConfusedMove(currentPosition, map) else super.makeMove(currentPosition, map)
+        return if (turnsCount++ < confusedTurnsCount) {
+            makeConfusedMove(currentPosition, map)
+        } else {
+            super.makeMove(currentPosition, map)
+        }
     }
 
     private fun makeConfusedMove(currentPosition: Position, map: GameMap): Position {
