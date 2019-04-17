@@ -43,7 +43,9 @@ class UIDrawer(private val terminal: AsciiPanel) {
         outputMessageInCenter("You died.", -3)
         outputMessageInCenter("Press Esc to start a new game.", -2)
         outputMessageInCenter("Your final stats:", -1)
-        getPlayerStats(player).forEachIndexed { index, pair ->
+        getPlayerStats(player)
+            .filter { !listOf("CUR HP").contains(it.first) }
+            .forEachIndexed { index, pair ->
             outputMessageInCenter("${pair.first}: ${pair.second}", index)}
     }
 
