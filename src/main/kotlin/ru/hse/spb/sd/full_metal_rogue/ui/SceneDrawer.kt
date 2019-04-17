@@ -31,7 +31,9 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawChestScene(scene: ChestScene) {}
 
-    private fun drawDeathScene(scene: DeathScene) {}
+    private fun drawDeathScene(scene: DeathScene) {
+        drawer.outputDeathMessage(scene.player)
+    }
 
     private fun drawStartScene(scene: StartScene) {
         drawer.outputStartMessage()

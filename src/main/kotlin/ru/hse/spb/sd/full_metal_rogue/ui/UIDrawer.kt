@@ -25,10 +25,8 @@ class UIDrawer(private val terminal: AsciiPanel) {
     }
 
     fun outputPlayerState(player: Player) {
-        outputStateCharacteristic("EXP", player.totalExperience, messageOffset)
-        outputStateCharacteristic("CUR HP", player.currentHealth, messageOffset + 1)
-        outputStateCharacteristic("MAX HP", player.maxHealth, messageOffset + 2)
-        outputStateCharacteristic("ATTACK", player.attackPower, messageOffset + 3)
+        getPlayerStats(player).forEachIndexed { index, pair ->
+                outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
     }
 
     fun outputStartMessage() {
@@ -39,6 +37,14 @@ class UIDrawer(private val terminal: AsciiPanel) {
         outputMessageInCenter("Controls: W-A-S-D for player movement, P to save current map, Esc to exit", +1)
         outputMessageInCenter("Use left and right arrows to navigate between messages " +
                 "appearing in the top left corner", +2)
+    }
+
+    fun outputDeathMessage(player: Player) {
+        outputMessageInCenter("You died.", -3)
+        outputMessageInCenter("Press Esc to start a new game.", -2)
+        outputMessageInCenter("Your final stats:", -1)
+        getPlayerStats(player).forEachIndexed { index, pair ->
+            outputMessageInCenter("${pair.first}: ${pair.second}", index)}
     }
 
     fun clear() {
@@ -86,5 +92,13 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private fun outputMessageInCenter(message: String, centerVerticalOffset: Int) {
         terminal.writeCenter(message, terminal.heightInCharacters / 2 + centerVerticalOffset)
+    }
+
+    private fun getPlayerStats(player: Player): List<Pair<String, Int>> {
+        return listOf(
+            "EXP" to player.totalExperience,
+            "CUR HP" to player.currentHealth,
+            "MAX HP" to player.maxHealth,
+            "ATTACK" to player.attackPower)
     }
 }
