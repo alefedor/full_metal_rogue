@@ -5,6 +5,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
+import kotlin.random.Random
 
 /**
  * Class that handles user input on a LevelScene
@@ -23,31 +24,22 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     override fun handleUserInput(key: KeyEvent): SceneHandler? =
         when (key.keyCode) {
             KeyEvent.VK_ESCAPE -> null
-            KeyEvent.VK_W -> processInputDirection(key, Direction.UP)
-            KeyEvent.VK_S -> processInputDirection(key, Direction.DOWN)
-            KeyEvent.VK_A -> processInputDirection(key, Direction.LEFT)
-            KeyEvent.VK_D -> processInputDirection(key, Direction.RIGHT)
+            KeyEvent.VK_W -> makeGameTurn(Direction.UP)
+            KeyEvent.VK_S -> makeGameTurn(Direction.DOWN)
+            KeyEvent.VK_A -> makeGameTurn(Direction.LEFT)
+            KeyEvent.VK_D -> makeGameTurn(Direction.RIGHT)
             KeyEvent.VK_P -> this.also { FileMapLoader.saveMap(map) }
             KeyEvent.VK_RIGHT -> displayNextMessage()
             KeyEvent.VK_LEFT -> displayPreviousMessage()
             else -> this
         }
 
-    private fun processInputDirection(key: KeyEvent, direction: Direction): SceneHandler? {
-        // using a 'when' statement for possible further extensions
-        return when {
-            key.isShiftDown -> makeGameTurn(direction, MovementType.CONFUSION)
-            else -> makeGameTurn(direction)
-        }
-    }
-
     /**
      * Makes enemies and player turns
      */
-    private fun makeGameTurn(playerMove: Direction,
-                             playerMovementType: MovementType = MovementType.REGULAR): SceneHandler {
+    private fun makeGameTurn(playerMove: Direction): SceneHandler {
         clearMessages()
-        movePlayer(playerMove, playerMovementType)
+        movePlayer(playerMove)
 
         val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
@@ -68,7 +60,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     /**
      * Moves player in specified direction
      */
-    private fun movePlayer(playerMove: Direction, movementType: MovementType) {
+    private fun movePlayer(playerMove: Direction) {
         val currentPosition = map.playerPosition()
         val targetPosition = currentPosition.goToDirection(playerMove)
         val targetTile = map[targetPosition]
@@ -92,7 +84,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                     messages.add("You have slain the ${targetTile.name}.")
                     map[targetPosition] = FreeSpace
                 } else {
-                    if (movementType == MovementType.CONFUSION) {
+                    if ((shouldConfuseEnemy())) {
                         targetTile.getConfused()
                         messages.add("You confused the ${targetTile.name}.")
                     }
@@ -155,8 +147,5 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         currentMessageIndex = 0
     }
 
-    private enum class MovementType {
-        REGULAR,
-        CONFUSION
-    }
+    private fun shouldConfuseEnemy(): Boolean = Random.nextBoolean()
 }

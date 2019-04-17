@@ -15,7 +15,7 @@ abstract class BehaviourDecorator(private val behaviour: Behaviour) : Behaviour 
 class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
     companion object {
         private val MIN_CONFUSION_TIME_MILLISECONDS = TimeUnit.SECONDS.toMillis(20).toInt()
-        private val MAX_CONFUSION_TIME_MILLISECONDS = TimeUnit.MINUTES.toMillis(3).toInt()
+        private val MAX_CONFUSION_TIME_MILLISECONDS = TimeUnit.MINUTES.toMillis(1).toInt()
     }
 
     private val timer = Timer(
