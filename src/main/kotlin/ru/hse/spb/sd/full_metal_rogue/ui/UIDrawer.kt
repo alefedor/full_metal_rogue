@@ -32,13 +32,13 @@ class UIDrawer(private val terminal: AsciiPanel) {
     }
 
     fun outputStartMessage() {
-        terminal.writeCenter("Welcome to Full Metal Rogue.", terminal.heightInCharacters / 2 - 3,
-            AsciiPanel.brightWhite)
-        terminal.writeCenter("Press 1 to generate a random level", terminal.heightInCharacters / 2 - 2)
-        terminal.writeCenter("Press 2 to load a level file from memory", terminal.heightInCharacters / 2 - 1)
-        terminal.writeCenter("Press Esc to exit", terminal.heightInCharacters / 2)
-        terminal.writeCenter("Controls: W-A-S-D for player movement, P to save current map, Esc to exit",
-            terminal.heightInCharacters / 2 + 1)
+        outputMessageInCenter("Welcome to Full Metal Rogue.", -3)
+        outputMessageInCenter("Press 1 to generate a random level", -2)
+        outputMessageInCenter("Press 2 to load a level file from memory", -1)
+        outputMessageInCenter("Press Esc to exit", 0)
+        outputMessageInCenter("Controls: W-A-S-D for player movement, P to save current map, Esc to exit", +1)
+        outputMessageInCenter("Use left and right arrows to navigate between messages " +
+                "appearing in the top left corner", +2)
     }
 
     fun clear() {
@@ -82,5 +82,9 @@ class UIDrawer(private val terminal: AsciiPanel) {
     private fun outputStateCharacteristic(characteristic: String, value: Int, topOffset: Int) {
         terminal.write(characteristic, 0, topOffset, AsciiPanel.white)
         terminal.write("   $value", characteristic.length, topOffset, AsciiPanel.brightGreen)
+    }
+
+    private fun outputMessageInCenter(message: String, centerVerticalOffset: Int) {
+        terminal.writeCenter(message, terminal.heightInCharacters / 2 + centerVerticalOffset)
     }
 }

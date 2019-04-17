@@ -23,8 +23,7 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawLevelScene(scene: LevelScene) {
         drawer.drawMap(scene.map)
-        val message = if (scene.messages.isEmpty()) "" else scene.messages[0]
-        drawer.outputMessage(message)
+        drawer.outputMessage(scene.message)
         drawer.outputPlayerState(getPlayerFromMap(scene.map))
     }
 

@@ -13,8 +13,9 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                         private val map: MutableGameMap
 ) : SceneHandler(sceneDrawer) {
     private val messages = mutableListOf<String>()
+    private var currentMessageIndex = 0
     override val scene: LevelScene
-        get() = LevelScene(map, messages)
+        get() = LevelScene(map, getCurrentMessage())
 
     /**
      * @see [SceneHandler.handleUserInput]
@@ -22,20 +23,31 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     override fun handleUserInput(key: KeyEvent): SceneHandler? =
         when (key.keyCode) {
             KeyEvent.VK_ESCAPE -> null
-            KeyEvent.VK_W -> makeGameTurn(Direction.UP)
-            KeyEvent.VK_S -> makeGameTurn(Direction.DOWN)
-            KeyEvent.VK_A -> makeGameTurn(Direction.LEFT)
-            KeyEvent.VK_D -> makeGameTurn(Direction.RIGHT)
+            KeyEvent.VK_W -> processInputDirection(key, Direction.UP)
+            KeyEvent.VK_S -> processInputDirection(key, Direction.DOWN)
+            KeyEvent.VK_A -> processInputDirection(key, Direction.LEFT)
+            KeyEvent.VK_D -> processInputDirection(key, Direction.RIGHT)
             KeyEvent.VK_P -> this.also { FileMapLoader.saveMap(map) }
+            KeyEvent.VK_RIGHT -> displayNextMessage()
+            KeyEvent.VK_LEFT -> displayPreviousMessage()
             else -> this
         }
+
+    private fun processInputDirection(key: KeyEvent, direction: Direction): SceneHandler? {
+        // using a 'when' statement for possible further extensions
+        return when {
+            key.isShiftDown -> makeGameTurn(direction, MovementType.CONFUSION)
+            else -> makeGameTurn(direction)
+        }
+    }
 
     /**
      * Makes enemies and player turns
      */
-    private fun makeGameTurn(playerMove: Direction): SceneHandler {
-        messages.clear()
-        movePlayer(playerMove)
+    private fun makeGameTurn(playerMove: Direction,
+                             playerMovementType: MovementType = MovementType.REGULAR): SceneHandler {
+        clearMessages()
+        movePlayer(playerMove, playerMovementType)
 
         val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
@@ -56,7 +68,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     /**
      * Moves player in specified direction
      */
-    private fun movePlayer(playerMove: Direction) {
+    private fun movePlayer(playerMove: Direction, movementType: MovementType) {
         val currentPosition = map.playerPosition()
         val targetPosition = currentPosition.goToDirection(playerMove)
         val targetTile = map[targetPosition]
@@ -80,6 +92,10 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                     messages.add("You have slain the ${targetTile.name}.")
                     map[targetPosition] = FreeSpace
                 } else {
+                    if (movementType == MovementType.CONFUSION) {
+                        targetTile.getConfused()
+                        messages.add("You confused the ${targetTile.name}.")
+                    }
                     messages.add("You hit the ${targetTile.name}.")
                 }
             }
@@ -110,5 +126,37 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         }
 
         return false
+    }
+
+    private fun displayNextMessage(): SceneHandler {
+        if (currentMessageIndex + 1 < messages.size) {
+            currentMessageIndex++
+        }
+        return this
+    }
+
+    private fun displayPreviousMessage(): SceneHandler {
+        if (currentMessageIndex - 1 >= 0) {
+            currentMessageIndex--
+        }
+        return this
+    }
+
+    private fun getCurrentMessage(): String {
+        return if (messages.isEmpty()) {
+            ""
+        } else {
+            "${messages[currentMessageIndex]} (${currentMessageIndex + 1}/${messages.size})"
+        }
+    }
+
+    private fun clearMessages() {
+        messages.clear()
+        currentMessageIndex = 0
+    }
+
+    private enum class MovementType {
+        REGULAR,
+        CONFUSION
     }
 }
