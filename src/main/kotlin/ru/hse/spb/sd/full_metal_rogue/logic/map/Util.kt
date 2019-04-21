@@ -18,7 +18,7 @@ fun GameMap.player(): Player = get(playerPosition()) as Player
 
 fun GameMap.inBounds(position: Position) = position.x in 0..(width - 1) && 0 <= position.y && position.y < height
 
-fun GameMap.canPassThrough(position: Position) = inBounds(position) && get(position) !is Wall && get(position) !is Enemy
+fun GameMap.canPassThrough(position: Position) = inBounds(position) && get(position) !is Wall
 
 fun GameMap.calculateDistancesFrom(position: Position): Array<IntArray> {
     check(canPassThrough(position))
@@ -35,7 +35,7 @@ fun GameMap.calculateDistancesFrom(position: Position): Array<IntArray> {
         for (direction in Direction.values()) {
             val next = p.goToDirection(direction)
 
-            if (inBounds(next) && distances[next.x][next.y] == Int.MAX_VALUE) {
+            if (canPassThrough(next) && distances[next.x][next.y] == Int.MAX_VALUE) {
                 distances[next.x][next.y] = distances[p.x][p.y] + 1
                 queue.add(next)
             }
