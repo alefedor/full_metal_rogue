@@ -98,9 +98,11 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private fun getPlayerStats(player: Player): List<Pair<String, Int>> {
         return listOf(
-            "EXP" to player.totalExperience,
             "CUR HP" to player.currentHealth,
             "MAX HP" to player.maxHealth,
-            "ATTACK" to player.attackPower)
+            "ATTACK" to player.attackPower,
+            "LEVEL" to player.level,
+            "CUR EXP" to player.experience,
+            "NEEDED EXP" to player.nextLevelMark)
     }
 }

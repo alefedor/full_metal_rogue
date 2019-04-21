@@ -19,7 +19,7 @@ object TrivialActorGenerator : ActorGenerator {
     private val enemyNames = listOf("oxygen", "water", "acid")
     private val behaviours = listOf(PassiveBehaviour, AggressiveBehaviour, CowardBehaviour)
 
-    override fun generateEnemy() = Enemy(20, 3, randomBehaviour(), randomEnemyName())
+    override fun generateEnemy() = Enemy(20, 3, randomBehaviour(), randomEnemyName(), 10)
 
     override fun generatePlayer() = Player(100, 5)
 

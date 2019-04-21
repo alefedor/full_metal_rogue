@@ -81,7 +81,10 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                 targetTile.takeDamage(player.attackPower)
 
                 if (targetTile.isDead) {
-                    messages.add("You have slain the ${targetTile.name}.")
+                    val isLevelUp = player.earnExperience(targetTile.experienceCost)
+                    messages.add("You have slain the ${targetTile.name} " +
+                            "and earned ${targetTile.experienceCost} experience points " +
+                            "${if (isLevelUp) "(level up!)" else ""}.")
                     map[targetPosition] = FreeSpace
                 } else {
                     if (shouldConfuseEnemy()) {

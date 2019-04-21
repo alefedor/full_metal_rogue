@@ -9,7 +9,8 @@ class Enemy(
     maxHealth: Int,
     attackPower: Int,
     private var behaviour: Behaviour,
-    val name: String
+    val name: String,
+    val experienceCost: Int
 ) : Actor(maxHealth, attackPower) {
     fun makeMove(currentPosition: Position, map: GameMap): Position = behaviour.makeMove(currentPosition, map)
 
