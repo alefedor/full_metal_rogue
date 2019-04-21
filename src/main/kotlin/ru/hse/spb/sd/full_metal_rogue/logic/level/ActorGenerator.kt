@@ -19,8 +19,19 @@ object TrivialActorGenerator : ActorGenerator {
     private val enemyNames = listOf("oxygen", "water", "acid")
     private val behaviours = listOf(PassiveBehaviour, AggressiveBehaviour, CowardBehaviour)
 
-    override fun generateEnemy() = Enemy(20, 3, randomBehaviour(), randomEnemyName(), 10)
+    override fun generateEnemy(): Enemy {
+        val behaviour = randomBehaviour()
 
+        val prefix = when {
+            behaviour is PassiveBehaviour -> "lazy "
+            behaviour is AggressiveBehaviour -> "furious "
+            behaviour is CowardBehaviour -> "coward "
+            else -> ""
+        }
+
+        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10)
+
+    }
     override fun generatePlayer() = Player(100, 5)
 
     private fun randomEnemyName() = enemyNames[Random.nextInt(enemyNames.size)]
