@@ -14,8 +14,8 @@ abstract class BehaviourDecorator(private val behaviour: Behaviour) : Behaviour 
 
 class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
     companion object {
-        private const val MIN_CONFUSED_TURNS_COUNT = 10
-        private const val MAX_CONFUSED_TURNS_COUNT = 100
+        private const val MIN_CONFUSED_TURNS_COUNT = 5
+        private const val MAX_CONFUSED_TURNS_COUNT = 20
     }
 
     private val confusedTurnsCount = (MIN_CONFUSED_TURNS_COUNT..MAX_CONFUSED_TURNS_COUNT).random()

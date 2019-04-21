@@ -16,7 +16,7 @@ fun GameMap.playerPosition(): Position {
 
 fun GameMap.player(): Player = get(playerPosition()) as Player
 
-fun GameMap.inBounds(position: Position) = position.x in 0..(width - 1) && 0 <= position.y && position.y < height
+fun GameMap.inBounds(position: Position) = 0 <= position.x && position.x < width && 0 <= position.y && position.y < height
 
 fun GameMap.canPassThrough(position: Position) = inBounds(position) && get(position) !is Wall
 

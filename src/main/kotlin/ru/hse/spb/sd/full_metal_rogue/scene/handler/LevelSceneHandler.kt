@@ -84,7 +84,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                     messages.add("You have slain the ${targetTile.name}.")
                     map[targetPosition] = FreeSpace
                 } else {
-                    if ((shouldConfuseEnemy())) {
+                    if (shouldConfuseEnemy()) {
                         targetTile.getConfused()
                         messages.add("You confused the ${targetTile.name}.")
                     }
