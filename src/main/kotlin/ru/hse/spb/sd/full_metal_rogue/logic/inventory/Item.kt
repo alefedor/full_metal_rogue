@@ -9,6 +9,16 @@ class Armor(name: String, val effect: Bonus) : Item(name)
 class Bonus(val value: Int, val bonusType: BonusType)
 
 enum class BonusType {
-    Multiplier,
-    Addend
+    MULTIPLIER,
+    ADDEND
+}
+
+fun apply(value: Int, bonus: Bonus) = when(bonus.bonusType) {
+        BonusType.MULTIPLIER -> value * bonus.value
+        BonusType.ADDEND -> value + bonus.value
+    }
+
+fun unapply(value: Int, bonus: Bonus) = when(bonus.bonusType) {
+    BonusType.MULTIPLIER -> value / bonus.value
+    BonusType.ADDEND -> value - bonus.value
 }

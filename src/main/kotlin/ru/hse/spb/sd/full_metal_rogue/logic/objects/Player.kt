@@ -19,11 +19,11 @@ class Player(maxHealth: Int, attackPower: Int) : Actor(maxHealth, attackPower) {
 
     var level = 0
         protected set
-    
-    var weapon: Weapon = Weapon("sharp word", Bonus(0, bonusType = BonusType.Addend), 0.0)
+
+    var weapon: Weapon = Weapon("sharp word", Bonus(0, bonusType = BonusType.ADDEND), 0.0)
         protected set
 
-    var armor: Armor = Armor("mail of faith", Bonus(0, bonusType = BonusType.Addend))
+    var armor: Armor = Armor("mail of faith", Bonus(0, bonusType = BonusType.ADDEND))
         protected  set
 
     fun equip(itemId: Int) {
@@ -36,8 +36,10 @@ class Player(maxHealth: Int, attackPower: Int) : Actor(maxHealth, attackPower) {
                 weapon = item
             }
             is Armor -> {
+                currentHealth = unapply(currentHealth, armor.effect)
                 inventory.add(armor)
                 armor = item
+                currentHealth = apply(currentHealth, armor.effect)
             }
         }
     }
@@ -52,14 +54,21 @@ class Player(maxHealth: Int, attackPower: Int) : Actor(maxHealth, attackPower) {
 
         while (experience >= nextLevelMark) {
             levelUp = true
-            level++
             experience -= nextLevelMark
-            nextLevelMark = (nextLevelMark * NEEDED_EXPERIENCE_RISE).roundToInt()
-            maxHealth = (maxHealth * STATS_RISE).roundToInt()
-            attackPower = (attackPower * STATS_RISE).roundToInt()
-            currentHealth = maxHealth // instant healing on levelling up
+            levelUp()
         }
 
         return levelUp
     }
+
+    private fun levelUp() {
+        level++
+        nextLevelMark = (nextLevelMark * NEEDED_EXPERIENCE_RISE).roundToInt()
+        baseMaxHealth = (baseMaxHealth * STATS_RISE).roundToInt()
+        baseAttackPower = (baseAttackPower * STATS_RISE).roundToInt()
+        currentHealth = maxHealth // instant healing on levelling up
+    }
+
+    override fun calculateMaxHealth() = apply(baseMaxHealth, armor.effect)
+    override fun calculateAttackPower() = apply(baseAttackPower, weapon.effect)
 }

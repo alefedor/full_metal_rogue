@@ -11,14 +11,20 @@ object FreeSpace : GameObject()
 class Chest(private val items: List<ItemDropper>) : GameObject()
 
 abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() {
-    var maxHealth = maxHealthValue
+    protected var baseMaxHealth = maxHealthValue
         protected set
 
-    var currentHealth = maxHealth
+    protected var baseAttackPower = attackPowerValue
         protected set
 
-    var attackPower = attackPowerValue
+    val maxHealth: Int
+        get() = calculateMaxHealth()
+
+    var currentHealth = baseMaxHealth
         protected set
+
+    val attackPower: Int
+        get() = calculateAttackPower()
 
     val isAlive: Boolean
         get() = currentHealth > 0
@@ -29,4 +35,7 @@ abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() 
     fun takeDamage(damage: Int) {
         currentHealth -= damage
     }
+
+    protected open fun calculateMaxHealth() = baseMaxHealth
+    protected open fun calculateAttackPower() = baseAttackPower
 }
