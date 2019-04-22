@@ -1,19 +1,14 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.inventory
 
-sealed class Item(val name: String, val effects: List<Bonus>)
+sealed class Item(val name: String)
 
-class Weapon(name: String, effects: List<Bonus>) : Item(name, effects)
+class Weapon(name: String, val effect: Bonus, val shockChance: Double) : Item(name)
 
-class Armor(name: String, effects: List<Bonus>) : Item(name, effects)
+class Armor(name: String, val effect: Bonus) : Item(name)
 
-class Bonus(val adjective: String, val value: Int, val bonusType: BonusType, val bonusTarget: BonusTarget)
+class Bonus(val value: Int, val bonusType: BonusType)
 
 enum class BonusType {
     Multiplier,
     Addend
-}
-
-enum class BonusTarget {
-    Health,
-    Damage
 }
