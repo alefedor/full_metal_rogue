@@ -7,6 +7,15 @@ import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import java.awt.Color
 
 class UIDrawer(private val terminal: AsciiPanel) {
+    companion object {
+        val CURRENT_HEALTH = "CUR HP"
+        val MAX_HEALTH = "MAX HP"
+        val ATTACK_POWER = "ATTACK"
+        val CURRENT_LEVEL = "LEVEL"
+        val CURRENT_EXPERIENCE = "CUR EXP"
+        val EXPERIENCE_FOR_NEXT_LEVEL = "NEEDED EXP"
+    }
+
     private val mapLeftOffset = terminal.widthInCharacters - LevelGenerator.DEFAULT_MAP_WIDTH
     private val messageOffset = 1
 
@@ -44,7 +53,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
         outputMessageInCenter("Press Esc to start a new game.", -2)
         outputMessageInCenter("Your final stats:", -1)
         getPlayerStats(player)
-            .filter { !listOf("CUR HP").contains(it.first) }
+            .filter { !listOf(CURRENT_HEALTH, EXPERIENCE_FOR_NEXT_LEVEL).contains(it.first) }
             .forEachIndexed { index, pair ->
             outputMessageInCenter("${pair.first}: ${pair.second}", index)}
     }
@@ -103,11 +112,11 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private fun getPlayerStats(player: Player): List<Pair<String, Int>> {
         return listOf(
-            "CUR HP" to player.currentHealth,
-            "MAX HP" to player.maxHealth,
-            "ATTACK" to player.attackPower,
-            "LEVEL" to player.level,
-            "CUR EXP" to player.experience,
-            "NEEDED EXP" to player.nextLevelMark)
+            CURRENT_HEALTH to player.currentHealth,
+            MAX_HEALTH to player.maxHealth,
+            ATTACK_POWER to player.attackPower,
+            CURRENT_LEVEL to player.level,
+            CURRENT_EXPERIENCE to player.experience,
+            EXPERIENCE_FOR_NEXT_LEVEL to player.nextLevelMark)
     }
 }
