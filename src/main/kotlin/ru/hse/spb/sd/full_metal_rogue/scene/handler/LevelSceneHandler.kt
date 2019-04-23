@@ -57,6 +57,11 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         return this
     }
 
+    private fun move(from: Position, to: Position) {
+        map[to] = map[from]
+        map[from] = FreeSpace
+    }
+
     /**
      * Moves player in specified direction
      */
@@ -72,8 +77,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
 
         when (targetTile) {
             is FreeSpace -> {
-                map[targetPosition] = map[currentPosition]
-                map[currentPosition] = FreeSpace
+                move(currentPosition, targetPosition)
             }
 
             is Enemy -> {
@@ -85,7 +89,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                     messages.add("You have slain the ${targetTile.name} " +
                             "and earned ${targetTile.experienceCost} experience points " +
                             "${if (isLevelUp) "(level up!)" else ""}.")
-                    map[targetPosition] = FreeSpace
+                    map[targetPosition] = targetTile.die() ?: FreeSpace
                 } else {
                     if (shouldConfuseEnemy(player)) {
                         targetTile.getConfused()
@@ -93,6 +97,11 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                     }
                     messages.add("You hit the ${targetTile.name}.")
                 }
+            }
+
+            is Chest -> {
+                TODO()
+                // TODO: move player and open chest Inventory screen
             }
         }
     }
@@ -108,8 +117,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
 
         when(targetTile) {
             is FreeSpace -> {
-                map[targetPosition] = enemy
-                map[position] = FreeSpace
+                move(position, targetPosition)
             }
 
             is Player -> {
@@ -117,6 +125,12 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                 if (targetTile.isDead) {
                     return true
                 }
+            }
+
+            is Chest -> {
+                val chest: Chest = targetTile
+                enemy.absorbChest(chest)
+                move(position, targetPosition)
             }
         }
 

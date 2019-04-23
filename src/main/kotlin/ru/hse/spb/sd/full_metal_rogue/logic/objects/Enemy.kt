@@ -11,7 +11,7 @@ class Enemy(
     private var behaviour: Behaviour,
     val name: String,
     val experienceCost: Int,
-    private val chest: Chest
+    private var chest: Chest
 ) : Actor(maxHealth, attackPower) {
     fun makeMove(currentPosition: Position, map: GameMap): Position = behaviour.makeMove(currentPosition, map)
 
@@ -21,5 +21,9 @@ class Enemy(
 
     fun die(): Chest? {
         return if (chest.items.isEmpty()) null else chest
+    }
+
+    fun absorbChest(absorbedChest: Chest) {
+        chest = Chest(chest.items + absorbedChest.items)
     }
 }

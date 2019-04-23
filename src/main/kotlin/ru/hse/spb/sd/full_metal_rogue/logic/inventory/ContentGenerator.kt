@@ -24,7 +24,7 @@ object SimpleContentGenerator : ContentGenerator {
 
     override fun generateChest(): Chest {
         val itemsNumber = Random.nextInt(0, 3)
-        return Chest(List(3) { generateItem() })
+        return Chest(List(itemsNumber) { generateItem() })
     }
 
     override fun generateArmor(): Armor {
