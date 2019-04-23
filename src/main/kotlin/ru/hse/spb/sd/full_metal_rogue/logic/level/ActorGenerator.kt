@@ -29,7 +29,7 @@ object TrivialActorGenerator : ActorGenerator {
             else -> ""
         }
 
-        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10)
+        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10, emptyList())
 
     }
     override fun generatePlayer() = Player(100, 5)
