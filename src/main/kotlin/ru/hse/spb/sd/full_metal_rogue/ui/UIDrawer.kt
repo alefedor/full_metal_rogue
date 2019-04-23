@@ -59,6 +59,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
             is FreeSpace -> drawFreeSpace(x, y)
             is Player-> drawPlayer(x, y)
             is Enemy -> drawEnemy(gameObject, x, y)
+            is Chest -> drawChest(x, y)
         }
     }
 
@@ -81,6 +82,10 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private fun drawWall(x: Int, y: Int) {
         terminal.write(Tile.WALL.glyph, x, y, Tile.WALL.color)
+    }
+
+    private fun drawChest(x: Int, y: Int) {
+        terminal.write(Tile.CHEST.glyph, x, y, Tile.CHEST.color)
     }
 
     private fun drawFreeSpace(x: Int, y: Int) {

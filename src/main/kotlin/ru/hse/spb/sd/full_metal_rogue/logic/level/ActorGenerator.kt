@@ -3,6 +3,7 @@ package ru.hse.spb.sd.full_metal_rogue.logic.level
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.AggressiveBehaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.CowardBehaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.PassiveBehaviour
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.ContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Enemy
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import kotlin.random.Random
@@ -15,9 +16,11 @@ interface ActorGenerator {
     fun generateEnemy(): Enemy
 }
 
-object TrivialActorGenerator : ActorGenerator {
-    private val enemyNames = listOf("oxygen", "water", "acid")
-    private val behaviours = listOf(PassiveBehaviour, AggressiveBehaviour, CowardBehaviour)
+class TrivialActorGenerator(val contentGenerator: ContentGenerator) : ActorGenerator {
+    companion object {
+        private val ENEMY_NAMES = listOf("oxygen", "water", "acid")
+        private val BEHAVIOURS = listOf(PassiveBehaviour, AggressiveBehaviour, CowardBehaviour)
+    }
 
     override fun generateEnemy(): Enemy {
         val behaviour = randomBehaviour()
@@ -29,13 +32,13 @@ object TrivialActorGenerator : ActorGenerator {
             else -> ""
         }
 
-        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10, emptyList())
+        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10, contentGenerator.generateChest())
 
     }
     override fun generatePlayer() = Player(100, 5)
 
-    private fun randomEnemyName() = enemyNames[Random.nextInt(enemyNames.size)]
+    private fun randomEnemyName() = ENEMY_NAMES[Random.nextInt(ENEMY_NAMES.size)]
 
-    private fun randomBehaviour() = behaviours[Random.nextInt(behaviours.size)]
+    private fun randomBehaviour() = BEHAVIOURS[Random.nextInt(BEHAVIOURS.size)]
 
 }

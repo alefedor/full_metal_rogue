@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.level
 
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.SimpleContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 
 /**
@@ -16,7 +17,7 @@ interface LevelGenerator {
 
 class StandardLevelGenerator(
     private val mapGenerator: MapGenerator = CaveMapGenerator,
-    private val actorGenerator: ActorGenerator = TrivialActorGenerator,
+    private val actorGenerator: ActorGenerator = TrivialActorGenerator(SimpleContentGenerator),
     private val mapInhabitator: MapInhabitator = SparseMapInhabitator,
     private val enemyCount: Int = STANDARD_ENEMY_COUNT
 ) : LevelGenerator {
@@ -33,7 +34,7 @@ class StandardLevelGenerator(
         mapInhabitator.inhabitateWithActor(map, player)
 
         repeat(enemyCount) {
-            val enemy = TrivialActorGenerator.generateEnemy()
+            val enemy = actorGenerator.generateEnemy()
             mapInhabitator.inhabitateWithActor(map, enemy)
         }
 

@@ -150,5 +150,5 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         currentMessageIndex = 0
     }
 
-    private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.shockChance
+    private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
 }
