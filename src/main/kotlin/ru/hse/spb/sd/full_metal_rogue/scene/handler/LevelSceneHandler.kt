@@ -87,7 +87,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                             "${if (isLevelUp) "(level up!)" else ""}.")
                     map[targetPosition] = FreeSpace
                 } else {
-                    if (shouldConfuseEnemy()) {
+                    if (shouldConfuseEnemy(player)) {
                         targetTile.getConfused()
                         messages.add("You confused the ${targetTile.name}.")
                     }
@@ -150,5 +150,5 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         currentMessageIndex = 0
     }
 
-    private fun shouldConfuseEnemy(): Boolean = Random.nextBoolean()
+    private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.shockChance
 }

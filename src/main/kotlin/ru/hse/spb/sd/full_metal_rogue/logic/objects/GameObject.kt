@@ -1,6 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.objects
 
-import ru.hse.spb.sd.full_metal_rogue.logic.inventory.ItemDropper
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 
 sealed class GameObject
 
@@ -8,7 +8,7 @@ object Wall : GameObject()
 
 object FreeSpace : GameObject()
 
-class Chest(private val items: List<ItemDropper>) : GameObject()
+class Chest(private val items: List<Item>) : GameObject()
 
 abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() {
     protected var baseMaxHealth = maxHealthValue
