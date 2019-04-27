@@ -25,6 +25,10 @@ class Game : JFrame(), KeyListener {
         repaint()
     }
 
+    companion object {
+        const val SAVE_NAME = "save.txt"
+    }
+
     override fun repaint() {
         scenesStack.peek().repaint()
         super.repaint()

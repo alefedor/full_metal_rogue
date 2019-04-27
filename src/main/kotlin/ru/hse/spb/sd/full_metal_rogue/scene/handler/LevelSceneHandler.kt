@@ -1,10 +1,13 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
+import ru.hse.spb.sd.full_metal_rogue.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
+import java.nio.file.Files
+import java.nio.file.Paths
 import kotlin.random.Random
 
 /**
@@ -28,7 +31,12 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             KeyEvent.VK_S -> makeGameTurn(Direction.DOWN)
             KeyEvent.VK_A -> makeGameTurn(Direction.LEFT)
             KeyEvent.VK_D -> makeGameTurn(Direction.RIGHT)
-            KeyEvent.VK_P -> this.also { FileMapLoader.saveMap(map) }
+            KeyEvent.VK_P -> this.also {
+                val wasSuccess = FileMapLoader.saveMap(map)
+                if (wasSuccess) {
+                    messages.add("Saved current map")
+                }
+            }
             KeyEvent.VK_RIGHT -> displayNextMessage()
             KeyEvent.VK_LEFT -> displayPreviousMessage()
             else -> this
@@ -47,7 +55,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                 val enemy = map[x, y]
                 if (enemy is Enemy && !movedEnemies.contains(enemy)) {
                     if (moveEnemy(enemy, Position(x, y))) {
-                        return DeathSceneHandler(sceneDrawer, map.player())
+                        return handlePlayerDeath()
                     }
                     movedEnemies.add(enemy)
                 }
@@ -99,10 +107,10 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                 }
             }
 
-            is Chest -> {
+            /*is Chest -> {
                 TODO()
                 // TODO: move player and open chest Inventory screen
-            }
+            }*/
         }
     }
 
@@ -165,4 +173,13 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     }
 
     private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
+
+    private fun handlePlayerDeath() : SceneHandler {
+        deleteSave()
+        return DeathSceneHandler(sceneDrawer, map.player())
+    }
+
+    private fun deleteSave() {
+        Files.deleteIfExists(Paths.get(Game.SAVE_NAME))
+    }
 }
