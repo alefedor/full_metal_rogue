@@ -1,7 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
@@ -45,7 +44,7 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawInventoryScene(scene: InventoryScene) {
         drawer.outputHeader("Inventory")
-        drawer.outputInventory(scene.inventoryItems, scene.equipedItems)
+        drawer.outputInventory(scene.inventoryItems, scene.equippedItems)
     }
 
     private fun drawChestScene(scene: ChestScene) {

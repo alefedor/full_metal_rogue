@@ -152,19 +152,34 @@ private class MessageNavigation {
     private val messages = mutableListOf<String>()
     private var currentMessageIndex = 0
 
+    /**
+     * If there is next message, changes current message to it.
+     */
     fun toNextMessage() {
         if (hasNextMessage()) {
             currentMessageIndex++
         }
     }
 
+    /**
+     * Checks if there is a next message.
+     */
     fun hasNextMessage() = currentMessageIndex < messages.lastIndex
 
+    /**
+     * Returns current message.
+     */
     fun getCurrentMessage() =
         if (messages.isEmpty()) "" else "${messages[currentMessageIndex]} (${currentMessageIndex + 1}/${messages.size})"
 
+    /**
+     * Adds new message to end.
+     */
     fun addMessage(message: String) = messages.add(message)
 
+    /**
+     * Removes messages and resets current message.
+     */
     fun clear() {
         messages.clear()
         currentMessageIndex = 0

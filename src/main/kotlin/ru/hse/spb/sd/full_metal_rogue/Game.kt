@@ -14,6 +14,9 @@ import javax.swing.JFrame
 private const val WINDOW_HEIGHT = 40
 private const val WINDOW_WIDTH = 100
 
+/**
+ * Main game class.
+ */
 class Game : JFrame(), KeyListener {
     private val scenesStack = Stack<SceneHandler>()
     private val keyBinder = KeyBinder { scenesStack.peek() }
@@ -28,11 +31,17 @@ class Game : JFrame(), KeyListener {
         repaint()
     }
 
+    /**
+     * Updates screen content.
+     */
     override fun repaint() {
         scenesStack.peek().repaint()
         super.repaint()
     }
 
+    /**
+     * Handles user input.
+     */
     override fun keyPressed(key: KeyEvent) {
         val nextScene = keyBinder.getCommand(key).execute()
         if (nextScene == null) {
@@ -50,7 +59,13 @@ class Game : JFrame(), KeyListener {
     }
 }
 
+/**
+ * Binds keys to commands,
+ */
 private class KeyBinder(private val scene: () -> SceneHandler) {
+    /**
+     * Returns command by key,
+     */
     fun getCommand(key: KeyEvent): Command =
         when (key.keyCode) {
             KeyEvent.VK_ESCAPE -> BackCommand(scene)

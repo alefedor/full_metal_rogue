@@ -7,6 +7,9 @@ import ru.hse.spb.sd.full_metal_rogue.scene.ChestScene
 import ru.hse.spb.sd.full_metal_rogue.scene.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
+/**
+ * Handles user input on a ChestScene.
+ */
 class ChestSceneHandler(chest: Chest,
                         private val player: Player,
                         sceneDrawer: SceneDrawer

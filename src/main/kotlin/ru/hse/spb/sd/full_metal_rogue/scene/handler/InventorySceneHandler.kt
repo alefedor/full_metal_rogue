@@ -10,9 +10,9 @@ import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
  * Handles user input on a InventoryScene.
  */
 class InventorySceneHandler(private val player: Player,
-                            private val sceneDrawer: SceneDrawer
+                            sceneDrawer: SceneDrawer
 ) : SceneHandler(sceneDrawer) {
-    val inventoryMenu = MutableMenu(player.inventory.items())
+    private val inventoryMenu = MutableMenu(player.inventory.items())
     override val scene: InventoryScene
         get() = InventoryScene(inventoryMenu, listOf(player.armor, player.weapon))
 

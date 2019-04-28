@@ -5,7 +5,7 @@ import ru.hse.spb.sd.full_metal_rogue.scene.DeathScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 /**
- * Handles user input on a DeathScene
+ * Handles user input on a DeathScene.
  */
 class DeathSceneHandler(private val sceneDrawer: SceneDrawer,
                         private val player: Player
