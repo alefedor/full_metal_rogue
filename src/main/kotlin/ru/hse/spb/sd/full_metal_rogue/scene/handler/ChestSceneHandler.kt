@@ -9,7 +9,7 @@ import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 class ChestSceneHandler(private val chest: Chest,
                         private val player: Player,
-                        private val sceneDrawer: SceneDrawer
+                        sceneDrawer: SceneDrawer
 ) : SceneHandler(sceneDrawer) {
     private val chestItems
         get() = MutableMenu(chest.items)

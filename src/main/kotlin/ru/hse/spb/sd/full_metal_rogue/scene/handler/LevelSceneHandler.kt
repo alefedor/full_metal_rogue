@@ -45,7 +45,10 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             for (y in 0 until map.height) {
                 val enemy = map[x, y]
                 if (enemy is Enemy && !movedEnemies.contains(enemy)) {
-                    nextScene = moveEnemy(enemy, Position(x, y))
+                    val scene = moveEnemy(enemy, Position(x, y))
+                    if (scene is DeathSceneHandler) {
+                        nextScene = scene
+                    }
                     movedEnemies.add(enemy)
                 }
             }
