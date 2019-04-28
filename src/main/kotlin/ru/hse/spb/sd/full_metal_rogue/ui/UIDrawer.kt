@@ -24,8 +24,15 @@ class UIDrawer(private val terminal: AsciiPanel) {
     private val mapLeftOffset = terminal.widthInCharacters - LevelGenerator.DEFAULT_MAP_WIDTH
     private val messageOffset = 1
     private val leftOffset = 4
-    private val bonusValuePosition = 65
-    private val confusionChancePosition = 80
+    // the following values DO take leftOffset into consideration
+    private val chestBonusValuePosition = 65
+    private val chestConfusionChancePosition = 80
+    private val chestItemTypePosition = 56
+    // the following values DO NOT take leftOffset into consideration
+    // and can be used with any left offset
+    private val inventoryItemTypePosition = 25
+    private val inventoryBonusValuePosition = 32
+    private val inventoryConfusionChancePosition = 40
 
     private val enemiesColors = HashMap<String, Color>()
 
@@ -96,31 +103,41 @@ class UIDrawer(private val terminal: AsciiPanel) {
     /**
      * Outputs a header message in the top left part of the terminal.
      */
-    fun outputHeader(header: String) {
-        terminal.write(header, leftOffset, 0, AsciiPanel.brightYellow)
-    }
-
-    fun outputChest(chestItemMenu: Menu<Item>) {
-        outputItems(chestItemMenu, leftOffset, bonusValuePosition, confusionChancePosition)
+    fun outputHeader(header: String, offset: Int = leftOffset) {
+        terminal.write(header, offset, 0, AsciiPanel.brightYellow)
     }
 
     /**
-     * Outputs items with special handling of the current selected item.
+     * Outputs a chest item menu.
      */
-    // TODO more items than the screen can fit?
-    private fun outputItems(itemMenu: Menu<Item>,
-                    offset: Int = leftOffset,
-                    bonusValuePosition: Int,
-                    confusionChancePosition: Int) {
+    fun outputChest(chestItemMenu: Menu<Item>) {
         outputItemsHeaderForChest()
+        outputMenuItems(chestItemMenu, leftOffset,
+            chestItemTypePosition, chestBonusValuePosition, chestConfusionChancePosition)
+    }
+
+    /**
+     * Outputs inventory item menu and equipped items.
+     */
+    fun outputInventory(inventoryItems: Menu<Item>, equippedItems: List<Item>) {
+        val inventoryOffset = leftOffset + (terminal.widthInCharacters - leftOffset) / 2
+        outputHeader("Equipped items", leftOffset)
+        outputHeader("Inventory", inventoryOffset)
+        outputItemsHeaderForInventory()
+        outputItemsHeaderForInventory(inventoryOffset)
+        outputMenuItems(inventoryItems, inventoryOffset,
+            inventoryOffset + inventoryItemTypePosition,
+            inventoryOffset + inventoryBonusValuePosition,
+            inventoryOffset + inventoryConfusionChancePosition)
+
         var y = 3
-        for (i in 0 until itemMenu.size()) {
-            if (i == itemMenu.currentItemIndex()) {
-                outputItem(itemMenu[i], y++, offset, bonusValuePosition, confusionChancePosition, true)
-            } else {
-                outputItem(itemMenu[i], y++, offset, bonusValuePosition, confusionChancePosition)
-            }
+        for (item in equippedItems) {
+            outputItem(item, y++, leftOffset,
+                leftOffset + inventoryItemTypePosition,
+                leftOffset + inventoryBonusValuePosition,
+                leftOffset + inventoryConfusionChancePosition)
         }
+
     }
 
     /**
@@ -190,19 +207,22 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private fun outputItemsHeaderForChest() {
         terminal.write("Name", leftOffset, 2, AsciiPanel.brightCyan)
-        terminal.write("Bonus Value", bonusValuePosition, 2, AsciiPanel.brightCyan)
-        terminal.write("Confusion Chance", confusionChancePosition, 2, AsciiPanel.brightCyan)
+        terminal.write("Type", chestItemTypePosition, 2, AsciiPanel.brightCyan)
+        terminal.write("Bonus", chestBonusValuePosition, 2, AsciiPanel.brightCyan)
+        terminal.write("Confusion", chestConfusionChancePosition, 2, AsciiPanel.brightCyan)
     }
 
     private fun outputItemsHeaderForInventory(offset: Int = leftOffset) {
         terminal.write("Name", offset, 2, AsciiPanel.brightCyan)
-        terminal.write("Bonus", offset, 2, AsciiPanel.brightCyan)
-        terminal.write("Luck", offset, 2, AsciiPanel.brightCyan)
+        terminal.write("Type", offset + inventoryItemTypePosition, 2, AsciiPanel.brightCyan)
+        terminal.write("Bonus", offset + inventoryBonusValuePosition, 2, AsciiPanel.brightCyan)
+        terminal.write("Conf", offset + inventoryConfusionChancePosition, 2, AsciiPanel.brightCyan)
     }
 
     private fun outputItem(item: Item,
                            y: Int,
                            leftOffset: Int,
+                           itemTypePosition: Int,
                            bonusValuePosition: Int,
                            confusionChancePosition: Int,
                            isCurrentItem: Boolean = false) {
@@ -210,10 +230,12 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.write(item.name, leftOffset, y, itemColor)
         when (item) {
             is Weapon -> {
+                terminal.write('W', itemTypePosition, y, itemColor)
                 outputBonus(item.effect, bonusValuePosition, y, itemColor)
                 terminal.write(item.confusionChance.toString(), confusionChancePosition, y, itemColor)
             }
             is Armor -> {
+                terminal.write('A', itemTypePosition, y, itemColor)
                 outputBonus(item.effect, bonusValuePosition, y, itemColor)
             }
         }
@@ -228,4 +250,18 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.write(bonusValue, x, y, itemColor)
     }
 
+    private fun outputMenuItems(itemMenu: Menu<Item>,
+                                offset: Int = leftOffset,
+                                itemTypePosition: Int,
+                                bonusValuePosition: Int,
+                                confusionChancePosition: Int) {
+        var y = 3
+        for (i in 0 until itemMenu.size()) {
+            if (i == itemMenu.currentItemIndex()) {
+                outputItem(itemMenu[i], y++, offset, itemTypePosition, bonusValuePosition, confusionChancePosition, true)
+            } else {
+                outputItem(itemMenu[i], y++, offset, itemTypePosition, bonusValuePosition, confusionChancePosition)
+            }
+        }
+    }
 }

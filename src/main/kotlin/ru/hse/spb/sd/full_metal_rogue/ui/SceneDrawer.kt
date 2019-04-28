@@ -45,7 +45,7 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawInventoryScene(scene: InventoryScene) {
         drawer.outputHeader("Inventory")
-        //drawer.outputItems(scene.inventoryItems)
+        drawer.outputInventory(scene.inventoryItems, scene.equipedItems)
     }
 
     private fun drawChestScene(scene: ChestScene) {
