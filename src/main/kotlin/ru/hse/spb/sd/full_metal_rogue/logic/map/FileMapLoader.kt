@@ -11,12 +11,17 @@ import java.lang.reflect.Type
 import java.nio.file.Paths
 import javax.swing.JOptionPane
 
-
+/**
+ * Handles save/load of game map to a save file.
+ */
 object FileMapLoader {
     private val gson = GsonBuilder()
         .registerTypeHierarchyAdapter(GameObject::class.java, JsonAdapter.GameObjectAdapter())
         .create()
 
+    /**
+     * Loads map from the save file.
+     */
     fun loadMap(): MutableGameMap? {
         val file = Paths.get(Game.SAVE_NAME).toFile()
         return try {
@@ -30,6 +35,9 @@ object FileMapLoader {
         }
     }
 
+    /**
+     * Writes map to the save file.
+     */
     fun saveMap(map: GameMap): Boolean {
         val serializedMap = gson.toJson(map)
         val file = Paths.get(Game.SAVE_NAME).toFile()

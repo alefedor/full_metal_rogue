@@ -7,6 +7,9 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import java.awt.Color
 
+/**
+ * Handles writing to terminal.
+ */
 class UIDrawer(private val terminal: AsciiPanel) {
     companion object {
         const val CURRENT_HEALTH = "CUR HP"
@@ -25,6 +28,9 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private val enemiesColors = HashMap<String, Color>()
 
+    /**
+     * Draws the game map.
+     */
     fun drawMap(map: GameMap) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
@@ -33,15 +39,25 @@ class UIDrawer(private val terminal: AsciiPanel) {
         }
     }
 
+    /**
+     * Outputs a message in the top left corner of the terminal.
+     */
     fun outputMessage(message: String) {
         terminal.write(message, 0, 0, AsciiPanel.white)
     }
 
+    /**
+     * Outputs player state in the left panel.
+     * The state consists of a characteristic and its value.
+     */
     fun outputPlayerState(player: Player) {
         getPlayerStats(player).forEachIndexed { index, pair ->
                 outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
     }
 
+    /**
+     * Outputs the greeting message.
+     */
     fun outputStartMessage() {
         outputMessageInCenter("Welcome to Full Metal Rogue.", -3)
         outputMessageInCenter("Press 1 to generate a random level", -2)
@@ -52,6 +68,10 @@ class UIDrawer(private val terminal: AsciiPanel) {
                 "appearing in the top left corner", +2)
     }
 
+    /**
+     * Outputs a message in case of player death.
+     * The message includes the final player state.
+     */
     fun outputDeathMessage(player: Player) {
         outputMessageInCenter("You died.", -3)
         outputMessageInCenter("Press Esc to start a new game.", -2)
@@ -62,6 +82,32 @@ class UIDrawer(private val terminal: AsciiPanel) {
             outputMessageInCenter("${pair.first}: ${pair.second}", index)}
     }
 
+    /**
+     * Outputs a header message in the top left part of the terminal.
+     */
+    fun outputHeader(header: String) {
+        terminal.write(header, leftOffset, 0, AsciiPanel.brightYellow)
+    }
+
+    /**
+     * Outputs items with special handling of the current selected item.
+     */
+    // TODO more items than the screen can fit?
+    fun outputItems(items: List<Item>, currentItem: Int) {
+        outputItemsHeader()
+        var y = 3
+        for (i in 0 until items.size) {
+            if (i == currentItem) {
+                outputItem(items[i], y++, true)
+            } else {
+                outputItem(items[i], y++)
+            }
+        }
+    }
+
+    /**
+     * Clears the terminal.
+     */
     fun clear() {
         terminal.clear()
     }
@@ -128,24 +174,6 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.write("Name", leftOffset, 1, AsciiPanel.brightCyan)
         terminal.write("Bonus Value", bonusValuePosition, 1, AsciiPanel.brightCyan)
         terminal.write("Confusion Chance", confusionChancePosition, 1, AsciiPanel.brightCyan)
-    }
-
-    fun outputHeader(header: String) {
-        terminal.write(header, leftOffset, 0, AsciiPanel.brightYellow)
-    }
-
-    // TODO more items than the screen can fit?
-    fun outputItems(items: List<Item>, currentPosition: Int = 3) {
-        outputItemsHeader()
-        var y = currentPosition
-        for (item in items) {
-            if (y == currentPosition) {
-                outputItem(item, y++, true)
-            } else {
-                outputItem(item, y++)
-            }
-
-        }
     }
 
     private fun outputItem(item: Item,

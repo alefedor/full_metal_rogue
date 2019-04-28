@@ -2,16 +2,25 @@ package ru.hse.spb.sd.full_metal_rogue.logic.behaviour
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Position
+import ru.hse.spb.sd.full_metal_rogue.scene.handler.SceneHandler
 import java.awt.event.ActionListener
 import java.util.concurrent.TimeUnit
 import javax.swing.Timer
 
+/**
+ * Decorates a Behaviour object, overriding its makeMove() method.
+ * @see [Behaviour.makeMove]
+ */
 abstract class BehaviourDecorator(private val behaviour: Behaviour) : Behaviour {
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
         return behaviour.makeMove(currentPosition, map)
     }
 }
 
+/**
+ * Makes the next move random for a random number of game turns,
+ * then restores the previous behaviour.
+ */
 class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
     companion object {
         private const val MIN_CONFUSED_TURNS_COUNT = 5

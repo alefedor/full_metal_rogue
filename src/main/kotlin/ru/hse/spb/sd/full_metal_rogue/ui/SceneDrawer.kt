@@ -6,9 +6,24 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
 
-
+/**
+ * Draws scenes in terminal.
+ */
 class SceneDrawer(terminal: AsciiPanel) {
     private val drawer = UIDrawer(terminal)
+
+    fun draw(scene: Scene) {
+        drawer.clear()
+
+        when (scene) {
+            is LevelScene -> drawLevelScene(scene)
+            is InventoryScene -> drawInventoryScene(scene)
+            is ChestScene -> drawChestScene(scene)
+            is DeathScene -> drawDeathScene(scene)
+            is StartScene -> drawStartScene(scene)
+            else -> return
+        }
+    }
 
     private fun getPlayerFromMap(map: GameMap): Player {
         for (i in 0 until map.height) {
@@ -49,18 +64,5 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawStartScene(scene: StartScene) {
         drawer.outputStartMessage()
-    }
-
-    fun draw(scene: Scene) {
-        drawer.clear()
-
-        when (scene) {
-            is LevelScene -> drawLevelScene(scene)
-            is InventoryScene -> drawInventoryScene(scene)
-            is ChestScene -> drawChestScene(scene)
-            is DeathScene -> drawDeathScene(scene)
-            is StartScene -> drawStartScene(scene)
-            else -> return
-        }
     }
 }
