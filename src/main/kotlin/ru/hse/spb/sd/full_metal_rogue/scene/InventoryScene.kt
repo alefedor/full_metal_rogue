@@ -1,4 +1,5 @@
 package ru.hse.spb.sd.full_metal_rogue.scene
 
-class InventoryScene : Scene {
-}
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Inventory
+
+class InventoryScene(val inventory: Inventory, val currentItem: Int) : Scene

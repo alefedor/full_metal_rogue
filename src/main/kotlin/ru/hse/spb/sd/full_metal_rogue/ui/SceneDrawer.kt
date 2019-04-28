@@ -50,12 +50,12 @@ class SceneDrawer(terminal: AsciiPanel) {
             items.add(inventory[i])
         }
         drawer.outputHeader("Inventory")
-        drawer.outputItems(items)
+        drawer.outputItems(items, scene.currentItem)
     }
 
     private fun drawChestScene(scene: ChestScene) {
         drawer.outputHeader("Chest")
-        drawer.outputItems(scene.chest.items)
+        drawer.outputItems(scene.chest.items, scene.currentItem)
     }
 
     private fun drawDeathScene(scene: DeathScene) {

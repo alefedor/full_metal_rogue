@@ -22,9 +22,13 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         get() = LevelScene(map, messages.getCurrentMessage())
 
     /**
+     * Saves the current map.
      * @see SceneHandler.backAction
      */
-    override fun backAction(): SceneHandler? = null
+    override fun backAction(): SceneHandler? {
+        FileMapLoader.saveMap(map)
+        return null
+    }
 
     /**
      * Returns InventorySceneHandler to be replaced by it.
