@@ -17,8 +17,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         get() = LevelScene(map, messages.getCurrentMessage())
 
     /**
-     * Saves the current map.
-     * @see SceneHandler.backAction
+     * Saves the current map and exits current scene.
      */
     override fun backAction(): SceneHandler? {
         FileMapLoader.saveMap(map)
@@ -28,7 +27,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     /**
      * Creates LevelSceneHandler for player's current inventory.
      */
-    override fun selectAction(): SceneHandler? = InventorySceneHandler(sceneDrawer, map.player().inventory)
+    override fun selectAction(): SceneHandler? = InventorySceneHandler(map.player(), sceneDrawer)
 
     /**
      * Makes game turn.

@@ -24,6 +24,6 @@ class Enemy(
     }
 
     fun absorbChest(absorbedChest: Chest) {
-        chest = Chest(chest.items + absorbedChest.items)
+        chest.items.addAll(absorbedChest.items)
     }
 }

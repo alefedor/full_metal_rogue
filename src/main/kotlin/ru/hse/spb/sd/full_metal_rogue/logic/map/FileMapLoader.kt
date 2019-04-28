@@ -28,11 +28,8 @@ object FileMapLoader {
         val file = Paths.get(SAVE_NAME).toFile()
         return try {
             gson.fromJson(file.readText(), MutableGameMap::class.java)
-        } catch (exception: IOException) {
-            showErrorDialog("Unable to read file.")
-            null
-        } catch (exception: JsonSyntaxException) {
-            showErrorDialog("Malformed map.")
+        } catch (exception: Exception) {
+            showErrorDialog("Unable to load previous save.")
             null
         }
     }
@@ -53,7 +50,7 @@ object FileMapLoader {
         try {
             file.writeText(serializedMap)
         } catch (exception: IOException) {
-            showErrorDialog("Unable to write to file.")
+            showErrorDialog("Unable to save the game.")
             return false
         }
 

@@ -1,7 +1,5 @@
 package ru.hse.spb.sd.full_metal_rogue.scene
 
-import java.lang.IllegalArgumentException
-
 interface Menu<T> {
     fun size(): Int
 

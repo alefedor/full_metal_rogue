@@ -8,7 +8,7 @@ object Wall : GameObject()
 
 object FreeSpace : GameObject()
 
-class Chest(val items: List<Item>) : GameObject()
+class Chest(val items: MutableList<Item>) : GameObject()
 
 abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() {
     protected var baseMaxHealth = maxHealthValue

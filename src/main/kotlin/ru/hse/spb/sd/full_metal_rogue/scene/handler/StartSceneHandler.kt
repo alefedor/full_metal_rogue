@@ -26,8 +26,8 @@ class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sce
      */
     override fun directionAction(direction: Direction): SceneHandler? {
         when(direction) {
-            Direction.UP -> menu.toNextItem()
-            Direction.DOWN -> menu.toPreviousItem()
+            Direction.UP -> menu.toPreviousItem()
+            Direction.DOWN -> menu.toNextItem()
         }
         return this
     }
