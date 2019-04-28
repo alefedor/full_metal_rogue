@@ -63,7 +63,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
         val options = listOf("Continue", "Start a new game")
         val pos = if (currentPosition < 0 || currentPosition >= options.size) 0 else currentPosition
 
-        outputMessageInCenter("Welcome to Full Metal Rogue.", -3)
+        outputMessageInCenter("Welcome to Full Metal Rogue.", -4)
         var offset = -2
         options.forEachIndexed { i, s ->
             if (i == pos) {
@@ -73,6 +73,7 @@ class UIDrawer(private val terminal: AsciiPanel) {
             }
             offset++
         }
+        offset += 2
         outputMessageInCenter("Press Esc to exit", offset)
         outputMessageInCenter("Press E to choose an option", offset + 1)
         outputMessageInCenter("Controls: W-A-S-D for player movement, Esc to exit", offset + 2)
@@ -99,18 +100,25 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.write(header, leftOffset, 0, AsciiPanel.brightYellow)
     }
 
+    fun outputChest(chestItemMenu: Menu<Item>) {
+        outputItems(chestItemMenu, leftOffset, bonusValuePosition, confusionChancePosition)
+    }
+
     /**
      * Outputs items with special handling of the current selected item.
      */
     // TODO more items than the screen can fit?
-    fun outputItems(itemMenu: Menu<Item>) {
-        outputItemsHeader()
+    private fun outputItems(itemMenu: Menu<Item>,
+                    offset: Int = leftOffset,
+                    bonusValuePosition: Int,
+                    confusionChancePosition: Int) {
+        outputItemsHeaderForChest()
         var y = 3
         for (i in 0 until itemMenu.size()) {
             if (i == itemMenu.currentItemIndex()) {
-                outputItem(itemMenu[i], y++, true)
+                outputItem(itemMenu[i], y++, offset, bonusValuePosition, confusionChancePosition, true)
             } else {
-                outputItem(itemMenu[i], y++)
+                outputItem(itemMenu[i], y++, offset, bonusValuePosition, confusionChancePosition)
             }
         }
     }
@@ -180,14 +188,23 @@ class UIDrawer(private val terminal: AsciiPanel) {
             EXPERIENCE_FOR_NEXT_LEVEL to player.nextLevelMark)
     }
 
-    private fun outputItemsHeader() {
-        terminal.write("Name", leftOffset, 1, AsciiPanel.brightCyan)
-        terminal.write("Bonus Value", bonusValuePosition, 1, AsciiPanel.brightCyan)
-        terminal.write("Confusion Chance", confusionChancePosition, 1, AsciiPanel.brightCyan)
+    private fun outputItemsHeaderForChest() {
+        terminal.write("Name", leftOffset, 2, AsciiPanel.brightCyan)
+        terminal.write("Bonus Value", bonusValuePosition, 2, AsciiPanel.brightCyan)
+        terminal.write("Confusion Chance", confusionChancePosition, 2, AsciiPanel.brightCyan)
+    }
+
+    private fun outputItemsHeaderForInventory(offset: Int = leftOffset) {
+        terminal.write("Name", offset, 2, AsciiPanel.brightCyan)
+        terminal.write("Bonus", offset, 2, AsciiPanel.brightCyan)
+        terminal.write("Luck", offset, 2, AsciiPanel.brightCyan)
     }
 
     private fun outputItem(item: Item,
                            y: Int,
+                           leftOffset: Int,
+                           bonusValuePosition: Int,
+                           confusionChancePosition: Int,
                            isCurrentItem: Boolean = false) {
         val itemColor = if (isCurrentItem) AsciiPanel.green else AsciiPanel.white
         terminal.write(item.name, leftOffset, y, itemColor)
