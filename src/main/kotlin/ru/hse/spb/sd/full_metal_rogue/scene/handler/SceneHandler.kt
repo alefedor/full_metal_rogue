@@ -5,7 +5,7 @@ import ru.hse.spb.sd.full_metal_rogue.scene.Scene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 /**
- * Class that handles user input on a Scene
+ * Handles user input on a Scene.
  */
 abstract class SceneHandler(private val sceneDrawer: SceneDrawer) {
     protected abstract val scene: Scene
