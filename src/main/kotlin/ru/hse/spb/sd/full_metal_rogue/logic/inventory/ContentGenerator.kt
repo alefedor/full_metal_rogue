@@ -3,6 +3,9 @@ package ru.hse.spb.sd.full_metal_rogue.logic.inventory
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Chest
 import kotlin.random.Random
 
+/**
+ * Interface for generating items and chests.
+ */
 interface ContentGenerator {
     fun generateChest(): Chest
     fun generateItem(): Item

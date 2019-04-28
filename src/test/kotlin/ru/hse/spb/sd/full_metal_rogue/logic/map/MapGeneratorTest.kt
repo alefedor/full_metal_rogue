@@ -73,7 +73,7 @@ class MapGeneratorTest(val mapGenerator: MapGenerator) {
         cellColor[position.x][position.y] = color
 
         for (direction in Direction.values()) {
-            val nextPosition = position.goToDirection(direction)
+            val nextPosition = apply(position, direction)
 
             if (!gameMap.inBounds(nextPosition)) continue
 

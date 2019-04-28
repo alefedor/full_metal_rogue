@@ -11,6 +11,10 @@ interface MapInhabitator {
     fun inhabitateWithActor(map: MutableGameMap, actor: Actor)
 }
 
+/**
+ * Inhabitator which places actors randomly on map.
+ * Cells which are distant from another actors are more likely to be chosen.
+ */
 object SparseMapInhabitator : MapInhabitator {
     override fun inhabitateWithActor(map: MutableGameMap, actor: Actor) {
         val actorPositions = mutableListOf<Position>()
