@@ -11,8 +11,7 @@ class ChestSceneHandler(private val chest: Chest,
                         private val player: Player,
                         sceneDrawer: SceneDrawer
 ) : SceneHandler(sceneDrawer) {
-    private val chestItems
-        get() = MutableMenu(chest.items)
+    private val chestItems = MutableMenu(chest.items)
     override val scene: ChestScene
         get() = ChestScene(chestItems)
 
@@ -23,8 +22,8 @@ class ChestSceneHandler(private val chest: Chest,
      */
     override fun directionAction(direction: Direction): SceneHandler? {
         when(direction) {
-            Direction.UP -> chestItems.toNextItem()
-            Direction.DOWN -> chestItems.toPreviousItem()
+            Direction.UP -> chestItems.toPreviousItem()
+            Direction.DOWN -> chestItems.toNextItem()
         }
         return this
     }
@@ -35,8 +34,8 @@ class ChestSceneHandler(private val chest: Chest,
     override fun selectAction(): SceneHandler? {
         if (chestItems.size() != 0) {
             val currentItem = chestItems.currentItem()
+            chestItems.removeCurrentItem()
             player.inventory.add(currentItem)
-            chest.items.removeAt(chestItems.currentItemIndex())
         }
         return this
     }
