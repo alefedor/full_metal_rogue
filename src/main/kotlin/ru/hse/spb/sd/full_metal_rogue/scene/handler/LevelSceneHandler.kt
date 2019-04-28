@@ -98,7 +98,8 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             }
 
             is Chest -> {
-                // TODO: move player and open chest Inventory screen
+                move(currentPosition, targetPosition)
+                return ChestSceneHandler(targetTile, map.player(), sceneDrawer)
             }
         }
 

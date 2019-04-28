@@ -44,18 +44,13 @@ class SceneDrawer(terminal: AsciiPanel) {
     }
 
     private fun drawInventoryScene(scene: InventoryScene) {
-        val inventory = scene.inventory
-        val items = mutableListOf<Item>()
-        for (i in 0 until inventory.size) {
-            items.add(inventory[i])
-        }
         drawer.outputHeader("Inventory")
-        drawer.outputItems(items, scene.currentItem)
+        drawer.outputItems(scene.inventoryItems)
     }
 
     private fun drawChestScene(scene: ChestScene) {
         drawer.outputHeader("Chest")
-        drawer.outputItems(scene.chest.items, scene.currentItem)
+        drawer.outputItems(scene.chestItems)
     }
 
     private fun drawDeathScene(scene: DeathScene) {

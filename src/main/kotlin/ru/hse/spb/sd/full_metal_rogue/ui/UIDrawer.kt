@@ -5,6 +5,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
+import ru.hse.spb.sd.full_metal_rogue.scene.Menu
 import java.awt.Color
 
 /**
@@ -93,14 +94,14 @@ class UIDrawer(private val terminal: AsciiPanel) {
      * Outputs items with special handling of the current selected item.
      */
     // TODO more items than the screen can fit?
-    fun outputItems(items: List<Item>, currentItem: Int) {
+    fun outputItems(itemMenu: Menu<Item>) {
         outputItemsHeader()
         var y = 3
-        for (i in 0 until items.size) {
-            if (i == currentItem) {
-                outputItem(items[i], y++, true)
+        for (i in 0 until itemMenu.size()) {
+            if (i == itemMenu.currentItemIndex()) {
+                outputItem(itemMenu[i], y++, true)
             } else {
-                outputItem(items[i], y++)
+                outputItem(itemMenu[i], y++)
             }
         }
     }
