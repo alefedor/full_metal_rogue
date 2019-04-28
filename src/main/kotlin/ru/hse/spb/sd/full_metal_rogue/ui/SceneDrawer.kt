@@ -1,13 +1,29 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
 
-
+/**
+ * Draws scenes in terminal.
+ */
 class SceneDrawer(terminal: AsciiPanel) {
     private val drawer = UIDrawer(terminal)
+
+    fun draw(scene: Scene) {
+        drawer.clear()
+
+        when (scene) {
+            is LevelScene -> drawLevelScene(scene)
+            is InventoryScene -> drawInventoryScene(scene)
+            is ChestScene -> drawChestScene(scene)
+            is DeathScene -> drawDeathScene(scene)
+            is StartScene -> drawStartScene(scene)
+            else -> return
+        }
+    }
 
     private fun getPlayerFromMap(map: GameMap): Player {
         for (i in 0 until map.height) {
@@ -27,9 +43,20 @@ class SceneDrawer(terminal: AsciiPanel) {
         drawer.outputPlayerState(getPlayerFromMap(scene.map))
     }
 
-    private fun drawInventoryScene(scene: InventoryScene) {}
+    private fun drawInventoryScene(scene: InventoryScene) {
+        val inventory = scene.inventory
+        val items = mutableListOf<Item>()
+        for (i in 0 until inventory.size) {
+            items.add(inventory[i])
+        }
+        drawer.outputHeader("Inventory")
+        drawer.outputItems(items)
+    }
 
-    private fun drawChestScene(scene: ChestScene) {}
+    private fun drawChestScene(scene: ChestScene) {
+        drawer.outputHeader("Chest")
+        drawer.outputItems(scene.chest.items)
+    }
 
     private fun drawDeathScene(scene: DeathScene) {
         drawer.outputDeathMessage(scene.player)
@@ -37,18 +64,5 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawStartScene(scene: StartScene) {
         drawer.outputStartMessage()
-    }
-
-    fun draw(scene: Scene) {
-        drawer.clear()
-
-        when (scene) {
-            is LevelScene -> drawLevelScene(scene)
-            is InventoryScene -> drawInventoryScene(scene)
-            is ChestScene -> drawChestScene(scene)
-            is DeathScene -> drawDeathScene(scene)
-            is StartScene -> drawStartScene(scene)
-            else -> return
-        }
     }
 }

@@ -1,11 +1,14 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
+import ru.hse.spb.sd.full_metal_rogue.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.scene.InventoryScene
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.lang.Integer.max
 import kotlin.random.Random
 
@@ -29,7 +32,12 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             KeyEvent.VK_S -> makeGameTurn(Direction.DOWN)
             KeyEvent.VK_A -> makeGameTurn(Direction.LEFT)
             KeyEvent.VK_D -> makeGameTurn(Direction.RIGHT)
-            KeyEvent.VK_P -> this.also { FileMapLoader.saveMap(map) }
+            KeyEvent.VK_P -> this.also {
+                val wasSuccess = FileMapLoader.saveMap(map)
+                if (wasSuccess) {
+                    messages.addMessage("Saved current map")
+                }
+            }
             KeyEvent.VK_RIGHT -> this.also { messages.toNextMessage() }
             KeyEvent.VK_LEFT -> this.also { messages.toPrevMessage() }
             KeyEvent.VK_E -> InventorySceneHandler(sceneDrawer, map.player().inventory)
@@ -126,6 +134,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             is Actor -> {
                 targetTile.takeDamage(enemy.attackPower)
                 if (targetTile.isDead && targetTile is Player) {
+                    Files.deleteIfExists(Paths.get(Game.SAVE_NAME))
                     return DeathSceneHandler(sceneDrawer, targetTile)
                 } else if (targetTile.isDead && targetTile is Enemy) {
                     map[targetPosition] = targetTile.die() ?: FreeSpace

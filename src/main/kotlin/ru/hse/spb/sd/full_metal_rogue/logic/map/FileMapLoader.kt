@@ -1,32 +1,31 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import com.google.gson.*
+import ru.hse.spb.sd.full_metal_rogue.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.Behaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Inventory
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.GameObject
 import java.io.IOException
-import javax.swing.JFileChooser
-import javax.swing.JOptionPane
 import java.lang.reflect.Type
-import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
+import java.nio.file.Paths
+import javax.swing.JOptionPane
 
-
+/**
+ * Handles save/load of game map to a save file.
+ */
 object FileMapLoader {
     private val gson = GsonBuilder()
         .registerTypeHierarchyAdapter(GameObject::class.java, JsonAdapter.GameObjectAdapter())
         .create()
 
+    /**
+     * Loads map from the save file.
+     */
     fun loadMap(): MutableGameMap? {
-        val fileChooser = JFileChooser()
-        val returnValue = fileChooser.showOpenDialog(null)
+        val file = Paths.get(Game.SAVE_NAME).toFile()
         return try {
-            when (returnValue) {
-                JFileChooser.APPROVE_OPTION -> gson.fromJson(
-                    fileChooser.selectedFile.readText(), MutableGameMap::class.java
-                )
-                JFileChooser.ERROR_OPTION -> null.also { showErrorDialog("Unable to select file.") }
-                else -> null
-            }
+            gson.fromJson(file.readText(), MutableGameMap::class.java)
         } catch (exception: IOException) {
             showErrorDialog("Unable to read file.")
             null
@@ -36,21 +35,20 @@ object FileMapLoader {
         }
     }
 
-    fun saveMap(map: GameMap) {
+    /**
+     * Writes map to the save file.
+     */
+    fun saveMap(map: GameMap): Boolean {
         val serializedMap = gson.toJson(map)
-        val fileChooser = JFileChooser()
-        val returnValue = fileChooser.showSaveDialog(null)
-
+        val file = Paths.get(Game.SAVE_NAME).toFile()
         try {
-            when (returnValue) {
-                JFileChooser.APPROVE_OPTION -> fileChooser.selectedFile.writeText(serializedMap)
-                JFileChooser.ERROR_OPTION -> showErrorDialog("Unable to select file.")
-                else -> {
-                }
-            }
+            file.writeText(serializedMap)
         } catch (exception: IOException) {
             showErrorDialog("Unable to write to file.")
+            return false
         }
+
+        return true
     }
 
     private fun showErrorDialog(message: String) =

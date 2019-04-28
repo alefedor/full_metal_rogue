@@ -1,26 +1,36 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import java.awt.Color
 
+/**
+ * Handles writing to terminal.
+ */
 class UIDrawer(private val terminal: AsciiPanel) {
     companion object {
-        val CURRENT_HEALTH = "CUR HP"
-        val MAX_HEALTH = "MAX HP"
-        val ATTACK_POWER = "ATTACK"
-        val CURRENT_LEVEL = "LEVEL"
-        val CURRENT_EXPERIENCE = "CUR EXP"
-        val EXPERIENCE_FOR_NEXT_LEVEL = "NEEDED EXP"
+        const val CURRENT_HEALTH = "CUR HP"
+        const val MAX_HEALTH = "MAX HP"
+        const val ATTACK_POWER = "ATTACK"
+        const val CURRENT_LEVEL = "LEVEL"
+        const val CURRENT_EXPERIENCE = "CUR EXP"
+        const val EXPERIENCE_FOR_NEXT_LEVEL = "NEEDED EXP"
     }
 
     private val mapLeftOffset = terminal.widthInCharacters - LevelGenerator.DEFAULT_MAP_WIDTH
     private val messageOffset = 1
+    private val leftOffset = 4
+    private val bonusValuePosition = 65
+    private val confusionChancePosition = 80
 
     private val enemiesColors = HashMap<String, Color>()
 
+    /**
+     * Draws the game map.
+     */
     fun drawMap(map: GameMap) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
@@ -29,15 +39,25 @@ class UIDrawer(private val terminal: AsciiPanel) {
         }
     }
 
+    /**
+     * Outputs a message in the top left corner of the terminal.
+     */
     fun outputMessage(message: String) {
         terminal.write(message, 0, 0, AsciiPanel.white)
     }
 
+    /**
+     * Outputs player state in the left panel.
+     * The state consists of a characteristic and its value.
+     */
     fun outputPlayerState(player: Player) {
         getPlayerStats(player).forEachIndexed { index, pair ->
                 outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
     }
 
+    /**
+     * Outputs the greeting message.
+     */
     fun outputStartMessage() {
         outputMessageInCenter("Welcome to Full Metal Rogue.", -3)
         outputMessageInCenter("Press 1 to generate a random level", -2)
@@ -48,6 +68,10 @@ class UIDrawer(private val terminal: AsciiPanel) {
                 "appearing in the top left corner", +2)
     }
 
+    /**
+     * Outputs a message in case of player death.
+     * The message includes the final player state.
+     */
     fun outputDeathMessage(player: Player) {
         outputMessageInCenter("You died.", -3)
         outputMessageInCenter("Press Esc to start a new game.", -2)
@@ -58,6 +82,32 @@ class UIDrawer(private val terminal: AsciiPanel) {
             outputMessageInCenter("${pair.first}: ${pair.second}", index)}
     }
 
+    /**
+     * Outputs a header message in the top left part of the terminal.
+     */
+    fun outputHeader(header: String) {
+        terminal.write(header, leftOffset, 0, AsciiPanel.brightYellow)
+    }
+
+    /**
+     * Outputs items with special handling of the current selected item.
+     */
+    // TODO more items than the screen can fit?
+    fun outputItems(items: List<Item>, currentItem: Int) {
+        outputItemsHeader()
+        var y = 3
+        for (i in 0 until items.size) {
+            if (i == currentItem) {
+                outputItem(items[i], y++, true)
+            } else {
+                outputItem(items[i], y++)
+            }
+        }
+    }
+
+    /**
+     * Clears the terminal.
+     */
     fun clear() {
         terminal.clear()
     }
@@ -119,4 +169,36 @@ class UIDrawer(private val terminal: AsciiPanel) {
             CURRENT_EXPERIENCE to player.experience,
             EXPERIENCE_FOR_NEXT_LEVEL to player.nextLevelMark)
     }
+
+    private fun outputItemsHeader() {
+        terminal.write("Name", leftOffset, 1, AsciiPanel.brightCyan)
+        terminal.write("Bonus Value", bonusValuePosition, 1, AsciiPanel.brightCyan)
+        terminal.write("Confusion Chance", confusionChancePosition, 1, AsciiPanel.brightCyan)
+    }
+
+    private fun outputItem(item: Item,
+                           y: Int,
+                           isCurrentItem: Boolean = false) {
+        val itemColor = if (isCurrentItem) AsciiPanel.green else AsciiPanel.white
+        terminal.write(item.name, leftOffset, y, itemColor)
+        when (item) {
+            is Weapon -> {
+                outputBonus(item.effect, bonusValuePosition, y, itemColor)
+                terminal.write(item.confusionChance.toString(), confusionChancePosition, y, itemColor)
+            }
+            is Armor -> {
+                outputBonus(item.effect, bonusValuePosition, y, itemColor)
+            }
+        }
+    }
+
+    private fun outputBonus(effect: Bonus, x: Int, y: Int, itemColor: Color = AsciiPanel.white) {
+        val bonusSign = when (effect.bonusType) {
+            BonusType.MULTIPLIER -> "*"
+            BonusType.ADDEND -> "+"
+        }
+        val bonusValue = "$bonusSign${effect.value}"
+        terminal.write(bonusValue, x, y, itemColor)
+    }
+
 }
