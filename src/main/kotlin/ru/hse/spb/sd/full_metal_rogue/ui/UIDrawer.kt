@@ -59,14 +59,23 @@ class UIDrawer(private val terminal: AsciiPanel) {
     /**
      * Outputs the greeting message.
      */
-    fun outputStartMessage() {
+    fun outputStartMessage(currentPosition: Int) {
+        val options = listOf("Continue", "Start a new game")
+        val pos = if (currentPosition < 0 || currentPosition >= options.size) 0 else currentPosition
+
         outputMessageInCenter("Welcome to Full Metal Rogue.", -3)
-        outputMessageInCenter("Press 1 to generate a random level", -2)
-        outputMessageInCenter("Press 2 to load a level file from memory", -1)
-        outputMessageInCenter("Press Esc to exit", 0)
-        outputMessageInCenter("Controls: W-A-S-D for player movement, P to save current map, Esc to exit", +1)
-        outputMessageInCenter("Use left and right arrows to navigate between messages " +
-                "appearing in the top left corner", +2)
+        var offset = -2
+        options.forEachIndexed { i, s ->
+            if (i == pos) {
+                outputMessageInCenter(s, offset, AsciiPanel.brightCyan)
+            } else {
+                outputMessageInCenter(s, offset)
+            }
+            offset++
+        }
+        outputMessageInCenter("Press Esc to exit", offset)
+        outputMessageInCenter("Press E to choose an option", offset + 1)
+        outputMessageInCenter("Controls: W-A-S-D for player movement, Esc to exit", offset + 2)
     }
 
     /**
@@ -157,8 +166,8 @@ class UIDrawer(private val terminal: AsciiPanel) {
         terminal.write("   $value", characteristic.length, topOffset, AsciiPanel.brightGreen)
     }
 
-    private fun outputMessageInCenter(message: String, centerVerticalOffset: Int) {
-        terminal.writeCenter(message, terminal.heightInCharacters / 2 + centerVerticalOffset)
+    private fun outputMessageInCenter(message: String, centerVerticalOffset: Int, color: Color = AsciiPanel.white) {
+        terminal.writeCenter(message, terminal.heightInCharacters / 2 + centerVerticalOffset, color)
     }
 
     private fun getPlayerStats(player: Player): List<Pair<String, Int>> {

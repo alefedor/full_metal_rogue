@@ -58,6 +58,6 @@ class SceneDrawer(terminal: AsciiPanel) {
     }
 
     private fun drawStartScene(scene: StartScene) {
-        drawer.outputStartMessage()
+        drawer.outputStartMessage(scene.mainMenu.currentItemIndex())
     }
 }
