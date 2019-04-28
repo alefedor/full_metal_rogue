@@ -14,7 +14,7 @@ interface Menu<T> {
 
 class MutableMenu<T>(private val items: MutableList<T>) : Menu<T> {
     private var currentItemIndex = 0
-    var enebled = true
+    var enabled = true
 
     override fun size(): Int = items.size
 
@@ -24,7 +24,7 @@ class MutableMenu<T>(private val items: MutableList<T>) : Menu<T> {
 
     override fun currentItem(): T = items[currentItemIndex]
 
-    override fun isEnabled() = enebled
+    override fun isEnabled() = enabled
 
     fun removeCurrentItem() {
         items.removeAt(currentItemIndex)
