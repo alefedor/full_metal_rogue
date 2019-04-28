@@ -2,7 +2,6 @@ package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.InventoryScene
-import ru.hse.spb.sd.full_metal_rogue.scene.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 /**

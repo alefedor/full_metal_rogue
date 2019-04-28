@@ -57,6 +57,9 @@ object FileMapLoader {
         JOptionPane.showMessageDialog(null, message, "", JOptionPane.ERROR_MESSAGE)
 }
 
+/**
+ * Map serialization/deserialization.
+ */
 private object JsonAdapter {
     private val itemGson = GsonBuilder()
         .registerTypeHierarchyAdapter(Item::class.java, HierarchyAdapter<Item>())
@@ -70,7 +73,7 @@ private object JsonAdapter {
         .registerTypeHierarchyAdapter(GameObject::class.java, HierarchyAdapter<GameObject>(baseGson))
         .create()
 
-    class HierarchyAdapter<T : Any>(private val baseGson: Gson = Gson()) : JsonSerializer<T>, JsonDeserializer<T> {
+    private class HierarchyAdapter<T : Any>(private val baseGson: Gson = Gson()) : JsonSerializer<T>, JsonDeserializer<T> {
         override fun serialize(
             gameObject: T,
             interfaceType: Type,
