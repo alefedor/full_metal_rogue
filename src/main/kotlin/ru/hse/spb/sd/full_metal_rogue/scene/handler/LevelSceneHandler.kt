@@ -32,12 +32,16 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     override fun selectAction(): SceneHandler? = InventorySceneHandler(sceneDrawer, map.player().inventory)
 
     /**
-     * Makes enemies' and player's turns.
+     * Makes game turn.
      */
     override fun directionAction(playerMove: Direction): SceneHandler {
+        if (messages.hasNextMessage()) {
+            messages.toNextMessage()
+            return this
+        }
         messages.clear()
-        var nextScene = movePlayer(playerMove)
 
+        var nextScene = movePlayer(playerMove)
         val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
             for (y in 0 until map.height) {
@@ -58,7 +62,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     }
 
     /**
-     * Moves player in specified direction
+     * Moves player in specified direction.
      */
     private fun movePlayer(playerMove: Direction): SceneHandler {
         val currentPosition = map.playerPosition()
@@ -105,7 +109,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
 
     /**
-     * Moves specified enemy from specified position
+     * Moves specified enemy from specified position.
      */
     private fun moveEnemy(enemy: Enemy, position: Position): SceneHandler {
         val targetPosition = enemy.makeMove(position, map)
@@ -140,20 +144,19 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
 }
 
 /**
- * Handles navigation through multiple messages.
+ * Handles navigation through multiple game messages.
  */
 private class MessageNavigation {
     private val messages = mutableListOf<String>()
     private var currentMessageIndex = 0
 
     fun toNextMessage() {
-        currentMessageIndex = max(currentMessageIndex + 1, messages.size)
+        if (hasNextMessage()) {
+            currentMessageIndex++
+        }
     }
 
-    fun toPrevMessage() {
-        currentMessageIndex = max(currentMessageIndex - 1, 0)
-
-    }
+    fun hasNextMessage() = currentMessageIndex < messages.lastIndex
 
     fun getCurrentMessage() =
         if (messages.isEmpty()) "" else "${messages[currentMessageIndex]} (${currentMessageIndex + 1}/${messages.size})"
