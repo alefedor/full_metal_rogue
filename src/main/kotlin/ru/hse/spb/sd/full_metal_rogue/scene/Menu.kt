@@ -10,7 +10,7 @@ interface Menu<T> {
     fun currentItem(): T
 }
 
-class MutableMenu<T>(private val items: List<T>) : Menu<T> {
+class MutableMenu<T>(private val items: MutableList<T>) : Menu<T> {
     private var currentItemIndex = 0
 
     override fun size(): Int = items.size
@@ -20,6 +20,10 @@ class MutableMenu<T>(private val items: List<T>) : Menu<T> {
     override fun currentItemIndex(): Int = currentItemIndex
 
     override fun currentItem(): T = items[currentItemIndex]
+
+    fun removeCurrentItem() = items.removeAt(currentItemIndex)
+
+    fun add(item: T) = items.add(item)
 
     fun toNextItem() {
         if (currentItemIndex < items.lastIndex) {

@@ -10,12 +10,12 @@ import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
  */
 class InventorySceneHandler(private val player: Player,
                             private val sceneDrawer: SceneDrawer
-) : SceneHandler(sceneDrawer) {
+) : SceneHandler(sceneDrawer) {/*
     val equipedItemsMenu
         get() = MutableMenu(listOf(player.weapon, player.armor))
     val inventoryItemsMenu
         get() = MutableMenu(player.inventory.items())
-    val inventoryMenu = MutableMenu(listOf(equipedItemsMenu, inventoryItemsMenu))
+    val inventoryMenu = MutableMenu(listOf(equipedItemsMenu, inventoryItemsMenu))*/
     override val scene: InventoryScene
         get() = TODO("not implemented")
 

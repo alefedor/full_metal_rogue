@@ -12,7 +12,7 @@ import kotlin.system.exitProcess
  * Handles user input on a StartScene
  */
 class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sceneDrawer) {
-    private val menu = MutableMenu(listOf(MainMenuItem.CONTINUE, MainMenuItem.NEW_GAME))
+    private val menu = MutableMenu(mutableListOf(MainMenuItem.CONTINUE, MainMenuItem.NEW_GAME))
     override val scene
         get() = StartScene(menu)
 
