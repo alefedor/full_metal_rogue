@@ -26,7 +26,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     }
 
     /**
-     * Returns InventorySceneHandler to be replaced by it.
+     * Creates LevelSceneHandler for player's current inventory.
      */
     override fun selectAction(): SceneHandler? = InventorySceneHandler(sceneDrawer, map.player().inventory)
 

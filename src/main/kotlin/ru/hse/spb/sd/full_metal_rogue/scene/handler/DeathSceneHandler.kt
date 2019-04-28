@@ -14,7 +14,7 @@ class DeathSceneHandler(private val sceneDrawer: SceneDrawer,
         get() = DeathScene(player)
 
     /**
-     * Returns InventorySceneHandler to be replaced by it.
+     * Returns a new StartScene, which is to be output by the same SceneDrawer.
      */
     override fun backAction(): SceneHandler? = StartSceneHandler(sceneDrawer)
 }
