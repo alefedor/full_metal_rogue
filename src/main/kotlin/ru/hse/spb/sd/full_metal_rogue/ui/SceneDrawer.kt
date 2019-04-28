@@ -1,6 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
@@ -27,9 +28,20 @@ class SceneDrawer(terminal: AsciiPanel) {
         drawer.outputPlayerState(getPlayerFromMap(scene.map))
     }
 
-    private fun drawInventoryScene(scene: InventoryScene) {}
+    private fun drawInventoryScene(scene: InventoryScene) {
+        val inventory = scene.inventory
+        val items = mutableListOf<Item>()
+        for (i in 0 until inventory.size) {
+            items.add(inventory[i])
+        }
+        drawer.outputHeader("Inventory")
+        drawer.outputItems(items)
+    }
 
-    private fun drawChestScene(scene: ChestScene) {}
+    private fun drawChestScene(scene: ChestScene) {
+        drawer.outputHeader("Chest")
+        drawer.outputItems(scene.chest.items)
+    }
 
     private fun drawDeathScene(scene: DeathScene) {
         drawer.outputDeathMessage(scene.player)

@@ -1,6 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
@@ -8,16 +9,19 @@ import java.awt.Color
 
 class UIDrawer(private val terminal: AsciiPanel) {
     companion object {
-        val CURRENT_HEALTH = "CUR HP"
-        val MAX_HEALTH = "MAX HP"
-        val ATTACK_POWER = "ATTACK"
-        val CURRENT_LEVEL = "LEVEL"
-        val CURRENT_EXPERIENCE = "CUR EXP"
-        val EXPERIENCE_FOR_NEXT_LEVEL = "NEEDED EXP"
+        const val CURRENT_HEALTH = "CUR HP"
+        const val MAX_HEALTH = "MAX HP"
+        const val ATTACK_POWER = "ATTACK"
+        const val CURRENT_LEVEL = "LEVEL"
+        const val CURRENT_EXPERIENCE = "CUR EXP"
+        const val EXPERIENCE_FOR_NEXT_LEVEL = "NEEDED EXP"
     }
 
     private val mapLeftOffset = terminal.widthInCharacters - LevelGenerator.DEFAULT_MAP_WIDTH
     private val messageOffset = 1
+    private val leftOffset = 4
+    private val bonusValuePosition = 65
+    private val confusionChancePosition = 80
 
     private val enemiesColors = HashMap<String, Color>()
 
@@ -119,4 +123,54 @@ class UIDrawer(private val terminal: AsciiPanel) {
             CURRENT_EXPERIENCE to player.experience,
             EXPERIENCE_FOR_NEXT_LEVEL to player.nextLevelMark)
     }
+
+    private fun outputItemsHeader() {
+        terminal.write("Name", leftOffset, 1, AsciiPanel.brightCyan)
+        terminal.write("Bonus Value", bonusValuePosition, 1, AsciiPanel.brightCyan)
+        terminal.write("Confusion Chance", confusionChancePosition, 1, AsciiPanel.brightCyan)
+    }
+
+    fun outputHeader(header: String) {
+        terminal.write(header, leftOffset, 0, AsciiPanel.brightYellow)
+    }
+
+    // TODO more items than the screen can fit?
+    fun outputItems(items: List<Item>, currentPosition: Int = 3) {
+        outputItemsHeader()
+        var y = currentPosition
+        for (item in items) {
+            if (y == currentPosition) {
+                outputItem(item, y++, true)
+            } else {
+                outputItem(item, y++)
+            }
+
+        }
+    }
+
+    private fun outputItem(item: Item,
+                           y: Int,
+                           isCurrentItem: Boolean = false) {
+        val itemColor = if (isCurrentItem) AsciiPanel.green else AsciiPanel.white
+        terminal.write(item.name, leftOffset, y, itemColor)
+        when (item) {
+            is Weapon -> {
+                outputBonus(item.effect, bonusValuePosition, y, itemColor)
+                terminal.write(item.confusionChance.toString(), confusionChancePosition, y, itemColor)
+            }
+            is Armor -> {
+                outputBonus(item.effect, bonusValuePosition, y, itemColor)
+            }
+        }
+    }
+
+    private fun outputBonus(effect: Bonus, x: Int, y: Int, itemColor: Color = AsciiPanel.white) {
+        val bonusSign = when (effect.bonusType) {
+            BonusType.MULTIPLIER -> "*"
+            BonusType.ADDEND -> "+"
+        }
+        val bonusValue = "$bonusSign${effect.value}"
+        terminal.write(bonusValue, x, y, itemColor)
+    }
+
 }
