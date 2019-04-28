@@ -1,8 +1,8 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
+import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.scene.Scene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
-import java.awt.event.KeyEvent
 
 /**
  * Class that handles user input on a Scene
@@ -16,9 +16,23 @@ abstract class SceneHandler(private val sceneDrawer: SceneDrawer) {
     fun repaint() = sceneDrawer.draw(scene)
 
     /**
-     * Handles user input
+     * Handles back action
      *
-     * @return null to return to previous SceneHandler or next SceneHandler
+     * @return next SceneHandler or null to return to previous SceneHandler
      */
-    abstract fun handleUserInput(key: KeyEvent): SceneHandler?
+    open fun backAction(): SceneHandler? = this
+
+    /**
+     * Handles select action
+     *
+     * @return next SceneHandler or null to return to previous SceneHandler
+     */
+    open fun selectAction(): SceneHandler? = this
+
+    /**
+     * Handles direction action
+     *
+     * @return next SceneHandler or null to return to previous SceneHandler
+     */
+    open fun directionAction(direction: Direction): SceneHandler? = this
 }

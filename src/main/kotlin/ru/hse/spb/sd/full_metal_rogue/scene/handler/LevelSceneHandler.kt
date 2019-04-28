@@ -3,7 +3,6 @@ package ru.hse.spb.sd.full_metal_rogue.scene.handler
 import ru.hse.spb.sd.full_metal_rogue.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
-import ru.hse.spb.sd.full_metal_rogue.scene.InventoryScene
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
@@ -23,31 +22,19 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
         get() = LevelScene(map, messages.getCurrentMessage())
 
     /**
-     * @see [SceneHandler.handleUserInput]
+     * @see SceneHandler.backAction
      */
-    override fun handleUserInput(key: KeyEvent): SceneHandler? =
-        when (key.keyCode) {
-            KeyEvent.VK_ESCAPE -> null
-            KeyEvent.VK_W -> makeGameTurn(Direction.UP)
-            KeyEvent.VK_S -> makeGameTurn(Direction.DOWN)
-            KeyEvent.VK_A -> makeGameTurn(Direction.LEFT)
-            KeyEvent.VK_D -> makeGameTurn(Direction.RIGHT)
-            KeyEvent.VK_P -> this.also {
-                val wasSuccess = FileMapLoader.saveMap(map)
-                if (wasSuccess) {
-                    messages.addMessage("Saved current map")
-                }
-            }
-            KeyEvent.VK_RIGHT -> this.also { messages.toNextMessage() }
-            KeyEvent.VK_LEFT -> this.also { messages.toPrevMessage() }
-            KeyEvent.VK_E -> InventorySceneHandler(sceneDrawer, map.player().inventory)
-            else -> this
-        }
+    override fun backAction(): SceneHandler? = null
 
     /**
-     * Makes enemies and player turns
+     * Returns InventorySceneHandler to be replaced by it.
      */
-    private fun makeGameTurn(playerMove: Direction): SceneHandler {
+    override fun selectAction(): SceneHandler? = InventorySceneHandler(sceneDrawer, map.player().inventory)
+
+    /**
+     * Makes enemies' and player's turns.
+     */
+    override fun directionAction(playerMove: Direction): SceneHandler {
         messages.clear()
         var nextScene = movePlayer(playerMove)
 
