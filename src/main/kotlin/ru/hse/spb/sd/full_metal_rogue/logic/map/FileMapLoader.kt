@@ -1,7 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import com.google.gson.*
-import ru.hse.spb.sd.full_metal_rogue.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.Behaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Inventory
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
@@ -16,10 +15,7 @@ import javax.swing.JOptionPane
  * Handles save/load of game map to a save file.
  */
 object FileMapLoader {
-    const val SAVE_NAME = "save.txt"
-    private val gson = GsonBuilder()
-        .registerTypeHierarchyAdapter(GameObject::class.java, JsonAdapter.GameObjectAdapter())
-        .create()
+    private const val SAVE_NAME = "save.txt"
 
     /**
      * Loads map from the save file.
@@ -27,7 +23,7 @@ object FileMapLoader {
     fun loadMap(): MutableGameMap? {
         val file = Paths.get(SAVE_NAME).toFile()
         return try {
-            gson.fromJson(file.readText(), MutableGameMap::class.java)
+            JsonAdapter.gameObjectGson.fromJson(file.readText(), MutableGameMap::class.java)
         } catch (exception: Exception) {
             showErrorDialog("Unable to load previous save.")
             null
@@ -45,7 +41,7 @@ object FileMapLoader {
      * Writes map to the save file.
      */
     fun saveMap(map: GameMap): Boolean {
-        val serializedMap = gson.toJson(map)
+        val serializedMap = JsonAdapter.gameObjectGson.toJson(map)
         val file = Paths.get(SAVE_NAME).toFile()
         try {
             file.writeText(serializedMap)
@@ -62,38 +58,19 @@ object FileMapLoader {
 }
 
 private object JsonAdapter {
-    class GameObjectAdapter : JsonSerializer<GameObject>, JsonDeserializer<GameObject> {
-        private val gson = GsonBuilder()
-            .registerTypeHierarchyAdapter(Behaviour::class.java, HierarchyAdapter<Behaviour>())
-            .registerTypeHierarchyAdapter(Inventory::class.java, HierarchyAdapter<Inventory>())
-            .registerTypeHierarchyAdapter(Item::class.java, HierarchyAdapter<Item>())
-            .create()
+    private val itemGson = GsonBuilder()
+        .registerTypeHierarchyAdapter(Item::class.java, HierarchyAdapter<Item>())
+        .create()
+    private val baseGson = GsonBuilder()
+        .registerTypeHierarchyAdapter(Behaviour::class.java, HierarchyAdapter<Behaviour>())
+        .registerTypeHierarchyAdapter(Inventory::class.java, HierarchyAdapter<Inventory>(itemGson))
+        .registerTypeHierarchyAdapter(Item::class.java, HierarchyAdapter<Item>())
+        .create()
+    val gameObjectGson: Gson = GsonBuilder()
+        .registerTypeHierarchyAdapter(GameObject::class.java, HierarchyAdapter<GameObject>(baseGson))
+        .create()
 
-        override fun serialize(
-            gameObject: GameObject,
-            interfaceType: Type,
-            context: JsonSerializationContext
-        ): JsonElement {
-            val wrapper = JsonObject()
-            wrapper.addProperty("type", gameObject::class.java.name)
-            wrapper.add("data", gson.toJsonTree(gameObject))
-            return wrapper
-        }
-
-        override fun deserialize(
-            elem: JsonElement,
-            interfaceType: Type,
-            context: JsonDeserializationContext
-        ): GameObject {
-            val wrapper = elem as JsonObject
-            val typeName = get(wrapper, "type")
-            val data = get(wrapper, "data")
-            val actualType = typeForName(typeName)
-            return gson.fromJson(data, actualType)
-        }
-    }
-
-    class HierarchyAdapter<T : Any> : JsonSerializer<T>, JsonDeserializer<T> {
+    class HierarchyAdapter<T : Any>(private val baseGson: Gson = Gson()) : JsonSerializer<T>, JsonDeserializer<T> {
         override fun serialize(
             gameObject: T,
             interfaceType: Type,
@@ -101,7 +78,7 @@ private object JsonAdapter {
         ): JsonElement {
             val wrapper = JsonObject()
             wrapper.addProperty("type", gameObject::class.java.name)
-            wrapper.add("data", Gson().toJsonTree(gameObject))
+            wrapper.add("data", baseGson.toJsonTree(gameObject))
             return wrapper
         }
 
@@ -114,7 +91,7 @@ private object JsonAdapter {
             val typeName = get(wrapper, "type")
             val data = get(wrapper, "data")
             val actualType = typeForName(typeName)
-            return Gson().fromJson(data, actualType)
+            return baseGson.fromJson(data, actualType)
         }
     }
 
