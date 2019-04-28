@@ -21,7 +21,12 @@ class MutableMenu<T>(private val items: MutableList<T>) : Menu<T> {
 
     override fun currentItem(): T = items[currentItemIndex]
 
-    fun removeCurrentItem() = items.removeAt(currentItemIndex)
+    fun removeCurrentItem() {
+        items.removeAt(currentItemIndex)
+        if (currentItemIndex > items.lastIndex && currentItemIndex != 0) {
+            currentItemIndex--
+        }
+    }
 
     fun add(item: T) = items.add(item)
 
