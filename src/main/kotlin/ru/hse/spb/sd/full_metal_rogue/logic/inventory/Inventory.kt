@@ -5,7 +5,7 @@ interface Inventory {
     fun add(item: Item)
     fun pop(itemId: Int)
     operator fun get(itemId: Int): Item
-    fun items(): List<Item>
+    fun items(): MutableList<Item>
 }
 
 class SimpleInventory : Inventory {
@@ -23,5 +23,5 @@ class SimpleInventory : Inventory {
 
     override fun get(itemId: Int) = items[itemId]
 
-    override fun items(): List<Item> = items
+    override fun items() = items
 }
