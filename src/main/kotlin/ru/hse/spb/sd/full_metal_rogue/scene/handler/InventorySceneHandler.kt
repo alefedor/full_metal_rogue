@@ -15,9 +15,9 @@ class InventorySceneHandler(private val player: Player,
         get() = MutableMenu(listOf(player.weapon, player.armor))
     val inventoryItemsMenu
         get() = MutableMenu(player.inventory.items())
-
-
-
+    val inventoryMenu = MutableMenu(listOf(equipedItemsMenu, inventoryItemsMenu))
     override val scene: InventoryScene
         get() = TODO("not implemented")
+
+
 }
