@@ -67,7 +67,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
      */
     private fun movePlayer(playerMove: Direction): SceneHandler {
         val currentPosition = map.playerPosition()
-        val targetPosition = currentPosition.goToDirection(playerMove)
+        val targetPosition = apply(currentPosition, playerMove)
         val targetTile = map[targetPosition]
 
         if (!map.inBounds(targetPosition) || targetTile is Wall) {

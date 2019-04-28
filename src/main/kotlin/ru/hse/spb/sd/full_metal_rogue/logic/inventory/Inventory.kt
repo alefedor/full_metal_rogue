@@ -1,5 +1,8 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.inventory
 
+/**
+ * An abstraction for an inventory of a player.
+ */
 interface Inventory {
     val size: Int
     fun add(item: Item)

@@ -20,6 +20,9 @@ interface MapGenerator {
     fun generateMap(width: Int, height: Int, density: FreeSpaceDensity = FreeSpaceDensity.Medium): MutableGameMap
 }
 
+/**
+ * Generator for maps of cave type.
+ */
 object CaveMapGenerator : MapGenerator {
 
     override fun generateMap(width: Int, height: Int, density: FreeSpaceDensity): MutableGameMap {
