@@ -1,29 +1,50 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
+import ru.hse.spb.sd.full_metal_rogue.scene.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.scene.StartScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
-import java.awt.event.KeyEvent
-import java.awt.event.KeyEvent.*
 import kotlin.system.exitProcess
 
 /**
  * Handles user input on a StartScene
  */
 class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sceneDrawer) {
+    private val menu = MutableMenu(listOf(MainMenuItem.CONTINUE, MainMenuItem.NEW_GAME))
     override val scene
-        get() = StartScene()
+        get() = StartScene(menu)
 
-    /*
-    override fun handleUserInput(key: KeyEvent): SceneHandler? =
-        when (key.keyCode) {
-            VK_ESCAPE -> exitProcess(0)
-            VK_1 -> LevelSceneHandler(sceneDrawer, StandardLevelGenerator().generateLevel())
-            VK_2 -> {
+    /**
+     * Exits the game.
+     */
+    override fun backAction() = exitProcess(0)
+
+    /**
+     * Changes current main menu item.
+     */
+    override fun directionAction(direction: Direction): SceneHandler? {
+        when(direction) {
+            Direction.UP -> menu.toNextItem()
+            Direction.DOWN -> menu.toPreviousItem()
+        }
+        return this
+    }
+
+    /**
+     * Selects current main menu item.
+     */
+    override fun selectAction(): SceneHandler? =
+        when(menu.currentItem()) {
+            MainMenuItem.NEW_GAME -> LevelSceneHandler(sceneDrawer, StandardLevelGenerator().generateLevel())
+            MainMenuItem.CONTINUE -> {
                 val map = FileMapLoader.loadMap()
                 if(map != null) LevelSceneHandler(sceneDrawer, map) else this
             }
-            else -> this
-        }*/
+        }
+
+    enum class MainMenuItem {
+        NEW_GAME, CONTINUE
+    }
 }

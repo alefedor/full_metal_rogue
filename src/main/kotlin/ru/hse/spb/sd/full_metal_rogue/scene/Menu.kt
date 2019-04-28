@@ -8,15 +8,11 @@ interface Menu<T> {
     operator fun get(index: Int): T
 
     fun currentItemIndex(): Int
+
+    fun currentItem(): T
 }
 
 class MutableMenu<T>(private val items: List<T>) : Menu<T> {
-    init {
-        if (items.isEmpty()) {
-            throw IllegalArgumentException("Menu can't be empty")
-        }
-    }
-
     private var currentItemIndex = 0
 
     override fun size(): Int = items.size
@@ -24,6 +20,8 @@ class MutableMenu<T>(private val items: List<T>) : Menu<T> {
     override fun get(index: Int): T = items[index]
 
     override fun currentItemIndex(): Int = currentItemIndex
+
+    override fun currentItem(): T = items[currentItemIndex]
 
     fun toNextItem() {
         if (currentItemIndex < items.lastIndex) {
