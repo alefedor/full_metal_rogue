@@ -8,6 +8,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.GameObject
 import java.io.IOException
 import java.lang.reflect.Type
+import java.nio.file.Files
 import java.nio.file.Paths
 import javax.swing.JOptionPane
 
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane
  * Handles save/load of game map to a save file.
  */
 object FileMapLoader {
+    const val SAVE_NAME = "save.txt"
     private val gson = GsonBuilder()
         .registerTypeHierarchyAdapter(GameObject::class.java, JsonAdapter.GameObjectAdapter())
         .create()
@@ -23,7 +25,7 @@ object FileMapLoader {
      * Loads map from the save file.
      */
     fun loadMap(): MutableGameMap? {
-        val file = Paths.get(Game.SAVE_NAME).toFile()
+        val file = Paths.get(SAVE_NAME).toFile()
         return try {
             gson.fromJson(file.readText(), MutableGameMap::class.java)
         } catch (exception: IOException) {
@@ -36,11 +38,18 @@ object FileMapLoader {
     }
 
     /**
+     * Deletes save file.
+     */
+    fun deleteMap() {
+        Files.deleteIfExists(Paths.get(SAVE_NAME))
+    }
+
+    /**
      * Writes map to the save file.
      */
     fun saveMap(map: GameMap): Boolean {
         val serializedMap = gson.toJson(map)
-        val file = Paths.get(Game.SAVE_NAME).toFile()
+        val file = Paths.get(SAVE_NAME).toFile()
         try {
             file.writeText(serializedMap)
         } catch (exception: IOException) {

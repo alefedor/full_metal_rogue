@@ -10,8 +10,4 @@ class InventorySceneHandler(private val sceneDrawer: SceneDrawer,
 ) : SceneHandler(sceneDrawer) {
     override val scene: InventoryScene
         get() = TODO("not implemented")
-
-    override fun handleUserInput(key: KeyEvent): SceneHandler? {
-        TODO("not implemented")
-    }
 }

@@ -1,14 +1,9 @@
 package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
-import ru.hse.spb.sd.full_metal_rogue.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
-import java.awt.event.KeyEvent
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.lang.Integer.max
 import kotlin.random.Random
 
 /**
@@ -129,7 +124,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             is Actor -> {
                 targetTile.takeDamage(enemy.attackPower)
                 if (targetTile.isDead && targetTile is Player) {
-                    Files.deleteIfExists(Paths.get(Game.SAVE_NAME))
+                    FileMapLoader.deleteMap()
                     return DeathSceneHandler(sceneDrawer, targetTile)
                 } else if (targetTile.isDead && targetTile is Enemy) {
                     map[targetPosition] = targetTile.die() ?: FreeSpace

@@ -15,9 +15,7 @@ class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sce
     override val scene
         get() = StartScene()
 
-    /**
-     * @see [SceneHandler.handleUserInput]
-     */
+    /*
     override fun handleUserInput(key: KeyEvent): SceneHandler? =
         when (key.keyCode) {
             VK_ESCAPE -> exitProcess(0)
@@ -27,5 +25,5 @@ class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sce
                 if(map != null) LevelSceneHandler(sceneDrawer, map) else this
             }
             else -> this
-        }
+        }*/
 }
