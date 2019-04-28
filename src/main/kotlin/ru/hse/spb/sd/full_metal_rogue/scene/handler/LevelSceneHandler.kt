@@ -2,21 +2,22 @@ package ru.hse.spb.sd.full_metal_rogue.scene.handler
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
+import ru.hse.spb.sd.full_metal_rogue.scene.InventoryScene
 import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
+import java.lang.Integer.max
 import kotlin.random.Random
 
 /**
- * Class that handles user input on a LevelScene
+ * Handles user input on a LevelScene.
  */
 class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                         private val map: MutableGameMap
 ) : SceneHandler(sceneDrawer) {
-    private val messages = mutableListOf<String>()
-    private var currentMessageIndex = 0
+    private val messages = MessageNavigation()
     override val scene: LevelScene
-        get() = LevelScene(map, getCurrentMessage())
+        get() = LevelScene(map, messages.getCurrentMessage())
 
     /**
      * @see [SceneHandler.handleUserInput]
@@ -29,8 +30,9 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             KeyEvent.VK_A -> makeGameTurn(Direction.LEFT)
             KeyEvent.VK_D -> makeGameTurn(Direction.RIGHT)
             KeyEvent.VK_P -> this.also { FileMapLoader.saveMap(map) }
-            KeyEvent.VK_RIGHT -> displayNextMessage()
-            KeyEvent.VK_LEFT -> displayPreviousMessage()
+            KeyEvent.VK_RIGHT -> this.also { messages.toNextMessage() }
+            KeyEvent.VK_LEFT -> this.also { messages.toPrevMessage() }
+            KeyEvent.VK_E -> InventorySceneHandler(sceneDrawer, map.player().inventory)
             else -> this
         }
 
@@ -38,23 +40,21 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
      * Makes enemies and player turns
      */
     private fun makeGameTurn(playerMove: Direction): SceneHandler {
-        clearMessages()
-        movePlayer(playerMove)
+        messages.clear()
+        var nextScene = movePlayer(playerMove)
 
         val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
             for (y in 0 until map.height) {
                 val enemy = map[x, y]
                 if (enemy is Enemy && !movedEnemies.contains(enemy)) {
-                    if (moveEnemy(enemy, Position(x, y))) {
-                        return DeathSceneHandler(sceneDrawer, map.player())
-                    }
+                    nextScene = moveEnemy(enemy, Position(x, y))
                     movedEnemies.add(enemy)
                 }
             }
         }
 
-        return this
+        return nextScene
     }
 
     private fun move(from: Position, to: Position) {
@@ -65,14 +65,14 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     /**
      * Moves player in specified direction
      */
-    private fun movePlayer(playerMove: Direction) {
+    private fun movePlayer(playerMove: Direction): SceneHandler {
         val currentPosition = map.playerPosition()
         val targetPosition = currentPosition.goToDirection(playerMove)
         val targetTile = map[targetPosition]
 
         if (!map.inBounds(targetPosition) || targetTile is Wall) {
-            messages.add("There is a wall in the way!")
-            return
+            messages.addMessage("There is a wall in the way!")
+            return this
         }
 
         when (targetTile) {
@@ -86,44 +86,49 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
 
                 if (targetTile.isDead) {
                     val isLevelUp = player.earnExperience(targetTile.experienceCost)
-                    messages.add("You have slain the ${targetTile.name} " +
+                    messages.addMessage("You have slain the ${targetTile.name} " +
                             "and earned ${targetTile.experienceCost} experience points " +
                             "${if (isLevelUp) "(level up!)" else ""}.")
                     map[targetPosition] = targetTile.die() ?: FreeSpace
                 } else {
                     if (shouldConfuseEnemy(player)) {
                         targetTile.getConfused()
-                        messages.add("You confused the ${targetTile.name}.")
+                        messages.addMessage("You confused the ${targetTile.name}.")
                     }
-                    messages.add("You hit the ${targetTile.name}.")
+                    messages.addMessage("You hit the ${targetTile.name}.")
                 }
             }
 
             is Chest -> {
-                TODO()
                 // TODO: move player and open chest Inventory screen
             }
         }
+
+        return this
     }
+
+    private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
 
     /**
      * Moves specified enemy from specified position
-     *
-     * @return true if the enemy has slain the player, and false otherwise
      */
-    private fun moveEnemy(enemy: Enemy, position: Position): Boolean {
+    private fun moveEnemy(enemy: Enemy, position: Position): SceneHandler {
         val targetPosition = enemy.makeMove(position, map)
-        val targetTile = map[targetPosition]
+        if (targetPosition == position) {
+            return this
+        }
 
-        when(targetTile) {
+        when(val targetTile = map[targetPosition]) {
             is FreeSpace -> {
                 move(position, targetPosition)
             }
 
-            is Player -> {
+            is Actor -> {
                 targetTile.takeDamage(enemy.attackPower)
-                if (targetTile.isDead) {
-                    return true
+                if (targetTile.isDead && targetTile is Player) {
+                    return DeathSceneHandler(sceneDrawer, targetTile)
+                } else if (targetTile.isDead && targetTile is Enemy) {
+                    map[targetPosition] = targetTile.die() ?: FreeSpace
                 }
             }
 
@@ -134,35 +139,33 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
             }
         }
 
-        return false
-    }
-
-    private fun displayNextMessage(): SceneHandler {
-        if (currentMessageIndex + 1 < messages.size) {
-            currentMessageIndex++
-        }
         return this
     }
+}
 
-    private fun displayPreviousMessage(): SceneHandler {
-        if (currentMessageIndex - 1 >= 0) {
-            currentMessageIndex--
-        }
-        return this
+/**
+ * Handles navigation through multiple messages.
+ */
+private class MessageNavigation {
+    private val messages = mutableListOf<String>()
+    private var currentMessageIndex = 0
+
+    fun toNextMessage() {
+        currentMessageIndex = max(currentMessageIndex + 1, messages.size)
     }
 
-    private fun getCurrentMessage(): String {
-        return if (messages.isEmpty()) {
-            ""
-        } else {
-            "${messages[currentMessageIndex]} (${currentMessageIndex + 1}/${messages.size})"
-        }
+    fun toPrevMessage() {
+        currentMessageIndex = max(currentMessageIndex - 1, 0)
+
     }
 
-    private fun clearMessages() {
+    fun getCurrentMessage() =
+        if (messages.isEmpty()) "" else "${messages[currentMessageIndex]} (${currentMessageIndex + 1}/${messages.size})"
+
+    fun addMessage(message: String) = messages.add(message)
+
+    fun clear() {
         messages.clear()
         currentMessageIndex = 0
     }
-
-    private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
 }

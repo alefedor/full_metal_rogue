@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent.*
 import kotlin.system.exitProcess
 
 /**
- * Class that handles user input on a StartScene
+ * Handles user input on a StartScene
  */
 class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sceneDrawer) {
     override val scene

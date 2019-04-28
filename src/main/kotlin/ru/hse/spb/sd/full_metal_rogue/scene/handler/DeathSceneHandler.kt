@@ -6,7 +6,7 @@ import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
 
 /**
- * Class that handles user input on a DeathScene
+ * Handles user input on a DeathScene
  */
 class DeathSceneHandler(private val sceneDrawer: SceneDrawer,
                         private val player: Player

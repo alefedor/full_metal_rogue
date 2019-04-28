@@ -1,4 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.scene
 
-interface Scene {
-}
+/**
+ * Representation of any displayable screen.
+ */
+interface Scene

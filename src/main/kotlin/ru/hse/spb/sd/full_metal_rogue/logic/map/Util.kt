@@ -1,6 +1,5 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.map
 
-import ru.hse.spb.sd.full_metal_rogue.logic.objects.Enemy
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Wall
 import java.util.*
