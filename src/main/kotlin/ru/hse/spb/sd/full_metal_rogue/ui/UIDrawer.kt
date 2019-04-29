@@ -188,7 +188,8 @@ class UIDrawer(private val terminal: AsciiPanel) {
 
     private fun outputStateCharacteristic(characteristic: String, value: Int, topOffset: Int) {
         terminal.write(characteristic, 0, topOffset, AsciiPanel.white)
-        terminal.write("   $value", characteristic.length, topOffset, AsciiPanel.brightGreen)
+        val valueStartPosition = mapLeftOffset - 1 - value.toString().length
+        terminal.write("$value", valueStartPosition, topOffset, AsciiPanel.brightGreen)
     }
 
     private fun outputMessageInCenter(message: String, centerVerticalOffset: Int, color: Color = AsciiPanel.white) {
