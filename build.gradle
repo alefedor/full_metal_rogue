@@ -10,10 +10,10 @@ sourceCompatibility = 1.8
 
 jar {
     manifest {
-        attributes 'Main-Class': 'ru.hse.sd.full_metal_rogue.MainK'
+        attributes 'Main-Class': 'ru.hse.spb.sd.full_metal_rogue.MainKt'
     }
 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 repositories {
     mavenCentral()
