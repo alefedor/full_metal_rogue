@@ -17,15 +17,14 @@ private const val WINDOW_WIDTH = 100
 /**
  * Main game class.
  */
-class Game : JFrame(), KeyListener {
+class Game : JFrame() {
     private val scenesStack = Stack<SceneHandler>()
-    private val keyBinder = KeyBinder { scenesStack.peek() }
 
     init {
         val terminal = AsciiPanel(WINDOW_WIDTH, WINDOW_HEIGHT)
         add(terminal)
         pack()
-        addKeyListener(this)
+        addKeyListener(KeyBinder())
         val sceneDrawer = SceneDrawer(terminal)
         scenesStack.push(StartSceneHandler(sceneDrawer))
         repaint()
@@ -40,10 +39,10 @@ class Game : JFrame(), KeyListener {
     }
 
     /**
-     * Handles user input.
+     * Handles command.
      */
-    override fun keyPressed(key: KeyEvent) {
-        val nextScene = keyBinder.getCommand(key).execute()
+    fun executeCommand(command: Command) {
+        val nextScene = command.execute()
         if (nextScene == null) {
             scenesStack.pop()
         } else if (nextScene != scenesStack.peek()) {
@@ -52,28 +51,30 @@ class Game : JFrame(), KeyListener {
         repaint()
     }
 
-    override fun keyTyped(p0: KeyEvent?) {
-    }
-
-    override fun keyReleased(p0: KeyEvent?) {
-    }
-}
-
-/**
- * Binds keys to commands,
- */
-private class KeyBinder(private val scene: () -> SceneHandler) {
     /**
-     * Returns command by key,
+     * Listens to user input and binds keys to commands,
      */
-    fun getCommand(key: KeyEvent): Command =
-        when (key.keyCode) {
-            KeyEvent.VK_ESCAPE -> BackCommand(scene)
-            KeyEvent.VK_W -> DirectionCommand(scene, Direction.UP)
-            KeyEvent.VK_S -> DirectionCommand(scene, Direction.DOWN)
-            KeyEvent.VK_A -> DirectionCommand(scene, Direction.LEFT)
-            KeyEvent.VK_D -> DirectionCommand(scene, Direction.RIGHT)
-            KeyEvent.VK_E -> SelectCommand(scene)
-            else -> IdleCommand(scene)
+    private inner class KeyBinder : KeyListener {
+        /**
+         * Maps input key to command and passes it to [Game]
+         */
+        override fun keyPressed(key: KeyEvent) {
+            val command = when (key.keyCode) {
+                KeyEvent.VK_ESCAPE -> BackCommand(scenesStack.peek())
+                KeyEvent.VK_W -> DirectionCommand(scenesStack.peek(), Direction.UP)
+                KeyEvent.VK_S -> DirectionCommand(scenesStack.peek(), Direction.DOWN)
+                KeyEvent.VK_A -> DirectionCommand(scenesStack.peek(), Direction.LEFT)
+                KeyEvent.VK_D -> DirectionCommand(scenesStack.peek(), Direction.RIGHT)
+                KeyEvent.VK_E -> SelectCommand(scenesStack.peek())
+                else -> IdleCommand(scenesStack.peek())
+            }
+            executeCommand(command)
         }
+
+        override fun keyTyped(key: KeyEvent) {
+        }
+
+        override fun keyReleased(key: KeyEvent) {
+        }
+    }
 }

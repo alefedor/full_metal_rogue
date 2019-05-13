@@ -5,7 +5,6 @@ import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.Behaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Inventory
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.GameObject
-import java.io.IOException
 import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -23,7 +22,9 @@ object FileMapLoader {
     fun loadMap(): MutableGameMap? {
         val file = Paths.get(SAVE_NAME).toFile()
         return try {
-            JsonAdapter.gameObjectGson.fromJson(file.readText(), MutableGameMap::class.java)
+            val map = JsonAdapter.gameObjectGson.fromJson(file.readText(), MutableGameMap::class.java)
+            map.assertContainsPlayer()
+            map
         } catch (exception: Exception) {
             showErrorDialog("Unable to load previous save.")
             null
@@ -45,7 +46,7 @@ object FileMapLoader {
         val file = Paths.get(SAVE_NAME).toFile()
         try {
             file.writeText(serializedMap)
-        } catch (exception: IOException) {
+        } catch (exception: Exception) {
             showErrorDialog("Unable to save the game.")
             return false
         }
@@ -60,7 +61,7 @@ object FileMapLoader {
 /**
  * Map serialization/deserialization.
  */
-private object JsonAdapter {
+object JsonAdapter {
     private val itemGson = GsonBuilder()
         .registerTypeHierarchyAdapter(Item::class.java, HierarchyAdapter<Item>())
         .create()

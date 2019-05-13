@@ -1,6 +1,5 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.map
 
-import ru.hse.spb.sd.full_metal_rogue.logic.objects.Actor
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Wall
 import java.util.*
@@ -15,6 +14,13 @@ fun GameMap.playerPosition(): Position {
                 return Position(x, y)
 
     throw IllegalStateException("No player on the map, but player position queried")
+}
+
+/**
+ * Throws exception [IllegalStateException] if the GameMap doesn't contain player.
+ */
+fun GameMap.assertContainsPlayer() {
+    playerPosition()
 }
 
 /**
