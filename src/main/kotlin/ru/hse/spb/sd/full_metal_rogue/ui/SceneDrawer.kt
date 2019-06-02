@@ -4,16 +4,19 @@ import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.scene.*
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.*
 
 /**
  * Draws scenes in terminal.
  */
 class SceneDrawer(terminal: AsciiPanel) {
-    private val drawer = UIDrawer(terminal)
+    private val levelSceneUIDrawer = LevelSceneUIDrawer(terminal)
+    private val inventorySceneUIDrawer = InventorySceneUIDrawer(terminal)
+    private val chestSceneUIDrawer = ChestSceneUIDrawer(terminal)
+    private val deathSceneUIDrawer = DeathSceneUIDrawer(terminal)
+    private val startSceneUIDrawer = StartSceneUIDrawer(terminal)
 
     fun draw(scene: Scene) {
-        drawer.clear()
-
         when (scene) {
             is LevelScene -> drawLevelScene(scene)
             is InventoryScene -> drawInventoryScene(scene)
@@ -37,26 +40,31 @@ class SceneDrawer(terminal: AsciiPanel) {
     }
 
     private fun drawLevelScene(scene: LevelScene) {
-        drawer.drawMap(scene.map)
-        drawer.outputMessage(scene.message)
-        drawer.outputPlayerState(getPlayerFromMap(scene.map))
+        levelSceneUIDrawer.clear()
+        levelSceneUIDrawer.drawMap(scene.map)
+        levelSceneUIDrawer.outputMessage(scene.message)
+        levelSceneUIDrawer.outputPlayerState(getPlayerFromMap(scene.map))
     }
 
     private fun drawInventoryScene(scene: InventoryScene) {
-        drawer.outputHeader("Inventory")
-        drawer.outputInventory(scene.inventoryItems, scene.equippedItems)
+        inventorySceneUIDrawer.clear()
+        inventorySceneUIDrawer.outputHeader("Inventory")
+        inventorySceneUIDrawer.outputInventory(scene.inventoryItems, scene.equippedItems)
     }
 
     private fun drawChestScene(scene: ChestScene) {
-        drawer.outputHeader("Chest")
-        drawer.outputChest(scene.chestItems)
+        chestSceneUIDrawer.clear()
+        chestSceneUIDrawer.outputHeader("Chest")
+        chestSceneUIDrawer.outputChest(scene.chestItems)
     }
 
     private fun drawDeathScene(scene: DeathScene) {
-        drawer.outputDeathMessage(scene.player)
+        deathSceneUIDrawer.clear()
+        deathSceneUIDrawer.outputDeathMessage(scene.player)
     }
 
     private fun drawStartScene(scene: StartScene) {
-        drawer.outputStartMessage(scene.mainMenu.currentItemIndex())
+        startSceneUIDrawer.clear()
+        startSceneUIDrawer.outputStartMessage(scene.mainMenu.currentItemIndex())
     }
 }
