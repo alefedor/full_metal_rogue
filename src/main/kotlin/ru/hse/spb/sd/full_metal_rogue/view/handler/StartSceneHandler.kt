@@ -5,13 +5,12 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.view.StartView
-import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import kotlin.system.exitProcess
 
 /**
  * Handles user input on a StartView
  */
-class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sceneDrawer) {
+class StartSceneHandler : SceneHandler() {
     private val menu = MutableMenu(mutableListOf(MainMenuItem.CONTINUE, MainMenuItem.NEW_GAME))
     override val view
         get() = StartView(menu)
@@ -37,10 +36,10 @@ class StartSceneHandler(private val sceneDrawer: SceneDrawer) : SceneHandler(sce
      */
     override fun selectAction(): SceneHandler? =
         when(menu.currentItem()) {
-            MainMenuItem.NEW_GAME -> LevelSceneHandler(sceneDrawer, StandardLevelGenerator().generateLevel())
+            MainMenuItem.NEW_GAME -> LevelSceneHandler(StandardLevelGenerator().generateLevel())
             MainMenuItem.CONTINUE -> {
                 val map = FileMapLoader.loadMap()
-                if(map != null) LevelSceneHandler(sceneDrawer, map) else this
+                if(map != null) LevelSceneHandler(map) else this
             }
         }
 

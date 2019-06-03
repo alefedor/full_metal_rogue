@@ -4,14 +4,11 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.InventoryView
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
-import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 /**
  * Handles user input on a InventoryView.
  */
-class InventorySceneHandler(private val player: Player,
-                            sceneDrawer: SceneDrawer
-) : SceneHandler(sceneDrawer) {
+class InventorySceneHandler(private val player: Player) : SceneHandler() {
     private val inventoryMenu = MutableMenu(player.inventory.items())
     override val view: InventoryView
         get() = InventoryView(inventoryMenu, listOf(player.armor, player.weapon))

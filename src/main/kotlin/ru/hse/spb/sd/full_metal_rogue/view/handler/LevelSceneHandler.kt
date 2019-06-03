@@ -3,15 +3,12 @@ package ru.hse.spb.sd.full_metal_rogue.view.handler
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.view.LevelView
-import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import kotlin.random.Random
 
 /**
  * Handles user input on a LevelView.
  */
-class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
-                        private val map: MutableGameMap
-) : SceneHandler(sceneDrawer) {
+class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
     private val messages = MessageNavigation()
     override val view: LevelView
         get() = LevelView(map, messages.getCurrentMessage())
@@ -27,7 +24,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
     /**
      * Creates LevelSceneHandler for player's current inventory.
      */
-    override fun selectAction(): SceneHandler? = InventorySceneHandler(map.player(), sceneDrawer)
+    override fun selectAction(): SceneHandler? = InventorySceneHandler(map.player())
 
     /**
      * Makes game turn.
@@ -101,7 +98,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
 
             is Chest -> {
                 move(currentPosition, targetPosition)
-                return ChestSceneHandler(targetTile, map.player(), sceneDrawer)
+                return ChestSceneHandler(targetTile, map.player())
             }
         }
 
@@ -128,7 +125,7 @@ class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                 targetTile.takeDamage(enemy.attackPower)
                 if (targetTile.isDead && targetTile is Player) {
                     FileMapLoader.deleteMap()
-                    return DeathSceneHandler(sceneDrawer, targetTile)
+                    return DeathSceneHandler(targetTile)
                 } else if (targetTile.isDead && targetTile is Enemy) {
                     map[targetPosition] = targetTile.die() ?: FreeSpace
                 }
