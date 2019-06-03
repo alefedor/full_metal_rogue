@@ -33,6 +33,6 @@ class LevelGeneratorTest(val levelGenerator: LevelGenerator) {
                 if (level[x, y] is Player)
                     numberOfPlayers++
 
-        assertEquals(1, numberOfPlayers)
+        assertEquals(0, numberOfPlayers)
     }
 }

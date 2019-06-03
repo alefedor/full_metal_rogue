@@ -1,10 +1,12 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
 import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import java.awt.event.KeyEvent
+import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 
-class SinglePlayerController : Controller() {
-    private val game = Game()
+class SinglePlayerController(map: MutableGameMap) : Controller() {
+    private val game = Game(map)
 
     init {
         game.join(PLAYER_NAME)

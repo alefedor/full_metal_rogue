@@ -1,7 +1,5 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
-import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
-import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.View
@@ -27,8 +25,6 @@ class Game(map: MutableGameMap) {
                     playerList.add(gameObject.name)
             }
     }
-
-    constructor(levelGenerator: LevelGenerator = StandardLevelGenerator()): this(levelGenerator.generateLevel()) {}
 
     fun join(playerName: String) {
         if (playerName in playerList)
