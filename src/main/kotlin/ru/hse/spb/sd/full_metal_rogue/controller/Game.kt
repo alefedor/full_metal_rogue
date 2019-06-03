@@ -43,10 +43,16 @@ class Game(private val map: MutableGameMap) {
     }
 
     fun makeTurn(playerName: String, command: Command) {
-        when (command) {
+        val newHandler = when (command) {
             is BackCommand -> handlersStack.peek().backAction()
             is SelectCommand -> handlersStack.peek().selectAction(playerName)
             is DirectionCommand -> handlersStack.peek().directionAction(playerName, command.direction)
+        }
+
+        when (newHandler) {
+            null -> handlersStack.pop()
+            handlersStack.peek() -> {}
+            else -> handlersStack.push(newHandler)
         }
     }
 }
