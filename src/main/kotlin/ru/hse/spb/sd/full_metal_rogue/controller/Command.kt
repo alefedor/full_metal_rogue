@@ -12,5 +12,3 @@ class DirectionCommand(val direction: Direction) : Command()
 object SelectCommand : Command()
 
 object BackCommand : Command()
-
-object IdleCommand : Command()

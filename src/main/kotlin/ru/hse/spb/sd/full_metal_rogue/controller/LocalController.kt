@@ -19,7 +19,7 @@ class LocalController : Controller() {
             SelectCommand -> handlersStack.peek().selectAction()
             BackCommand -> handlersStack.peek().backAction()
             is DirectionCommand -> handlersStack.peek().directionAction(command.direction)
-            IdleCommand -> handlersStack.peek()
+            null -> return
         }
         if (nextHandler == null) {
             handlersStack.pop()
