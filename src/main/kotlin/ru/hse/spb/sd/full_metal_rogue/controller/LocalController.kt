@@ -6,7 +6,7 @@ import ru.hse.spb.sd.full_metal_rogue.view.handler.StartSceneHandler
 import java.awt.event.KeyEvent
 import java.util.*
 
-class LocalController : Controller {
+class LocalController : Controller() {
     private val handlersStack = Stack<SceneHandler>()
 
     init {
@@ -15,7 +15,11 @@ class LocalController : Controller {
     }
 
     override fun handleKey(key: KeyEvent) {
-        TODO("not implemented")
+        when (val command = mapKey(key)) {
+            SelectCommand -> handlersStack.peek().selectAction()
+            BackCommand -> handlersStack.peek().backAction()
+            is DirectionCommand -> handlersStack.peek().directionAction(command.direction)
+        }
     }
 
     private fun sentCurrentView() {
