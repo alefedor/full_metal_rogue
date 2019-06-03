@@ -19,7 +19,7 @@ class InventorySceneHandler(private val player: Player) : GameSceneHandler() {
      * Changes current inventory item.
      */
     override fun directionAction(playerName: String, direction: Direction): GameSceneHandler? {
-        when(direction) {
+        when (direction) {
             Direction.UP -> inventoryMenu.toPreviousItem()
             Direction.DOWN -> inventoryMenu.toNextItem()
         }
