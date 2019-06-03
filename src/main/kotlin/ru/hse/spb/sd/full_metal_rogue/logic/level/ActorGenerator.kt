@@ -12,7 +12,7 @@ import kotlin.random.Random
  * Interface for generating different actors (players, enemies)
  */
 interface ActorGenerator {
-    fun generatePlayer(): Player
+    fun generatePlayer(name: String): Player
     fun generateEnemy(): Enemy
 }
 
@@ -35,7 +35,7 @@ class TrivialActorGenerator(val contentGenerator: ContentGenerator) : ActorGener
         return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10, contentGenerator.generateChest())
 
     }
-    override fun generatePlayer() = Player(100, 5)
+    override fun generatePlayer(name: String) = Player(100, 5, name)
 
     private fun randomEnemyName() = ENEMY_NAMES[Random.nextInt(ENEMY_NAMES.size)]
 

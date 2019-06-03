@@ -3,7 +3,7 @@ package ru.hse.spb.sd.full_metal_rogue.logic.objects
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import kotlin.math.roundToInt
 
-class Player(maxHealth: Int, attackPower: Int) : Actor(maxHealth, attackPower) {
+class Player(maxHealth: Int, attackPower: Int, val name: String) : Actor(maxHealth, attackPower) {
     companion object {
         const val NEEDED_EXPERIENCE_RISE = 1.2
         const val STATS_RISE = 1.11

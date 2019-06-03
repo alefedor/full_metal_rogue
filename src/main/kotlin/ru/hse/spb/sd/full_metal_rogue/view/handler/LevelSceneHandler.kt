@@ -8,7 +8,7 @@ import kotlin.random.Random
 /**
  * Handles user input on a LevelView.
  */
-class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
+class LevelSceneHandler(private val map: MutableGameMap) : GameSceneHandler() {
     private val messages = MessageNavigation()
     override val view: LevelView
         get() = LevelView(map, messages.getCurrentMessage())
@@ -16,7 +16,7 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
     /**
      * Saves the current map and exits current view.
      */
-    override fun backAction(): SceneHandler? {
+    override fun backAction(): GameSceneHandler? {
         FileMapLoader.saveMap(map)
         return null
     }
@@ -24,19 +24,19 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
     /**
      * Creates LevelSceneHandler for player's current inventory.
      */
-    override fun selectAction(): SceneHandler? = InventorySceneHandler(map.player())
+    override fun selectAction(playerName: String): GameSceneHandler? = InventorySceneHandler(map.player(playerName))
 
     /**
      * Makes game turn.
      */
-    override fun directionAction(playerMove: Direction): SceneHandler {
+    override fun directionAction(playerName: String, playerMove: Direction): GameSceneHandler {
         if (messages.hasNextMessage()) {
             messages.toNextMessage()
             return this
         }
         messages.clear()
 
-        var nextScene = movePlayer(playerMove)
+        var nextScene = movePlayer(playerName, playerMove)
         val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
             for (y in 0 until map.height) {
@@ -62,8 +62,8 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
     /**
      * Moves player in specified direction.
      */
-    private fun movePlayer(playerMove: Direction): SceneHandler {
-        val currentPosition = map.playerPosition()
+    private fun movePlayer(playerName: String, playerMove: Direction): GameSceneHandler {
+        val currentPosition = map.playerPosition(playerName)
         val targetPosition = apply(currentPosition, playerMove)
         val targetTile = map[targetPosition]
 
@@ -78,7 +78,7 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
             }
 
             is Enemy -> {
-                val player = map.player()
+                val player = map.player(playerName)
                 targetTile.takeDamage(player.attackPower)
 
                 if (targetTile.isDead) {
@@ -99,7 +99,7 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
 
             is Chest -> {
                 move(currentPosition, targetPosition)
-                return ChestSceneHandler(targetTile, map.player())
+                return ChestSceneHandler(targetTile, map.player(playerName))
             }
         }
 
@@ -111,7 +111,7 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
     /**
      * Moves specified enemy from specified position.
      */
-    private fun moveEnemy(enemy: Enemy, position: Position): SceneHandler {
+    private fun moveEnemy(enemy: Enemy, position: Position): GameSceneHandler {
         val targetPosition = enemy.makeMove(position, map)
         if (targetPosition == position) {
             return this

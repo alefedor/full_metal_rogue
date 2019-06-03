@@ -7,11 +7,13 @@ import java.util.*
 /**
  * Finds player in the GameMap and returns its position.
  */
-fun GameMap.playerPosition(): Position {
+fun GameMap.playerPosition(name: String): Position {
     for (x in 0 until width)
-        for (y in 0 until height)
-            if (get(x, y) is Player)
+        for (y in 0 until height) {
+            val gameObject = get(x, y)
+            if (gameObject is Player && gameObject.name == name)
                 return Position(x, y)
+        }
 
     throw IllegalStateException("No player on the map, but player position queried")
 }
@@ -19,14 +21,14 @@ fun GameMap.playerPosition(): Position {
 /**
  * Throws exception [IllegalStateException] if the GameMap doesn't contain player.
  */
-fun GameMap.assertContainsPlayer() {
-    playerPosition()
+fun GameMap.assertContainsPlayer(name: String) {
+    playerPosition(name)
 }
 
 /**
  * Finds player in the GameMap and returns it.
  */
-fun GameMap.player(): Player = get(playerPosition()) as Player
+fun GameMap.player(name: String): Player = get(playerPosition(name)) as Player
 
 /**
  * Checks whether a position in inside map constraints.

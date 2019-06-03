@@ -29,10 +29,6 @@ class StandardLevelGenerator(
     override fun generateLevel(width: Int, height: Int): MutableGameMap {
         val map = mapGenerator.generateMap(width, height)
 
-        val player = actorGenerator.generatePlayer()
-
-        mapInhabitator.inhabitateWithActor(map, player)
-
         repeat(enemyCount) {
             val enemy = actorGenerator.generateEnemy()
             mapInhabitator.inhabitateWithActor(map, enemy)

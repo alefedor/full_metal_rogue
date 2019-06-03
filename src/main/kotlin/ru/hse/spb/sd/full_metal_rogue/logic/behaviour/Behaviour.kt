@@ -21,10 +21,11 @@ object PassiveBehaviour : Behaviour {
  */
 object AggressiveBehaviour : Behaviour {
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
-        val distances = map.calculateDistancesFrom(map.playerPosition())
+        TODO()
+        /*val distances = map.calculateDistancesFrom(map.playerPosition())
         val aggressiveMove = possibleMoves(currentPosition, map).minWith(compareBy({distances[it.x][it.y]}))
 
-        return aggressiveMove!!
+        return aggressiveMove!!*/
     }
 }
 
@@ -33,10 +34,11 @@ object AggressiveBehaviour : Behaviour {
  */
 object CowardBehaviour : Behaviour {
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
-        val distances = map.calculateDistancesFrom(map.playerPosition())
+        TODO()
+        /*val distances = map.calculateDistancesFrom(map.playerPosition())
         val cowardMove = possibleMoves(currentPosition, map).maxWith(compareBy({distances[it.x][it.y]}))
 
-        return cowardMove!!
+        return cowardMove!!*/
     }
 }
 

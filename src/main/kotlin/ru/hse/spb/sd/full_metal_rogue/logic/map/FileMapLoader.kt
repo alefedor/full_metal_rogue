@@ -1,6 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.map
 
 import com.google.gson.*
+import ru.hse.spb.sd.full_metal_rogue.controller.SinglePlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.Behaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Inventory
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
@@ -23,7 +24,7 @@ object FileMapLoader {
         val file = Paths.get(SAVE_NAME).toFile()
         return try {
             val map = JsonAdapter.gameObjectGson.fromJson(file.readText(), MutableGameMap::class.java)
-            map.assertContainsPlayer()
+            map.assertContainsPlayer(SinglePlayerController.PLAYER_NAME)
             map
         } catch (exception: Exception) {
             showErrorDialog("Unable to load previous save.")

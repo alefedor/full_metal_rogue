@@ -8,17 +8,17 @@ import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 /**
  * Handles user input on a InventoryView.
  */
-class InventorySceneHandler(private val player: Player) : SceneHandler() {
+class InventorySceneHandler(private val player: Player) : GameSceneHandler() {
     private val inventoryMenu = MutableMenu(player.inventory.items())
     override val view: InventoryView
         get() = InventoryView(inventoryMenu, listOf(player.armor, player.weapon))
 
-    override fun backAction(): SceneHandler? = null
+    override fun backAction(): GameSceneHandler? = null
 
     /**
      * Changes current inventory item.
      */
-    override fun directionAction(direction: Direction): SceneHandler? {
+    override fun directionAction(playerName: String, direction: Direction): GameSceneHandler? {
         when(direction) {
             Direction.UP -> inventoryMenu.toPreviousItem()
             Direction.DOWN -> inventoryMenu.toNextItem()
@@ -29,7 +29,7 @@ class InventorySceneHandler(private val player: Player) : SceneHandler() {
     /**
      * Equips current item.
      */
-    override fun selectAction(): SceneHandler? {
+    override fun selectAction(playerName: String): GameSceneHandler? {
         if (inventoryMenu.size() != 0) {
             player.equip(inventoryMenu.currentItemIndex())
         }
