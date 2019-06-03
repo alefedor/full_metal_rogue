@@ -38,7 +38,7 @@ abstract class UIDrawer(protected val terminal: AsciiPanel) {
      */
     fun outputPlayerState(player: Player) {
         getPlayerStats(player).forEachIndexed { index, pair ->
-                outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
+            outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
     }
 
     /**
@@ -55,7 +55,11 @@ abstract class UIDrawer(protected val terminal: AsciiPanel) {
         terminal.clear()
     }
 
-    protected fun outputMessageInCenter(message: String, centerVerticalOffset: Int, color: Color = AsciiPanel.white) {
+    protected fun outputMessageInCenter(
+        message: String,
+        centerVerticalOffset: Int,
+        color: Color = AsciiPanel.white
+    ) {
         terminal.writeCenter(message, terminal.heightInCharacters / 2 + centerVerticalOffset, color)
     }
 
@@ -70,12 +74,12 @@ abstract class UIDrawer(protected val terminal: AsciiPanel) {
     }
 
     protected fun outputItem(item: Item,
-                           y: Int,
-                           leftOffset: Int,
-                           itemTypePosition: Int,
-                           bonusValuePosition: Int,
-                           confusionChancePosition: Int,
-                           isCurrentItem: Boolean = false) {
+                             y: Int,
+                             leftOffset: Int,
+                             itemTypePosition: Int,
+                             bonusValuePosition: Int,
+                             confusionChancePosition: Int,
+                             isCurrentItem: Boolean = false) {
         val itemColor = if (isCurrentItem) AsciiPanel.green else AsciiPanel.white
         terminal.write(item.name, leftOffset, y, itemColor)
         when (item) {

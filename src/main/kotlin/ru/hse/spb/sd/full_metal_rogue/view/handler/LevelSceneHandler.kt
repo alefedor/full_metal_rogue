@@ -90,9 +90,10 @@ class LevelSceneHandler(private val map: MutableGameMap) : SceneHandler() {
                 } else {
                     if (shouldConfuseEnemy(player)) {
                         targetTile.getConfused()
-                        messages.addMessage("You confused the ${targetTile.name}.")
+                        messages.addMessage("You hit and confused the ${targetTile.name}.")
+                    } else {
+                        messages.addMessage("You hit the ${targetTile.name}.")
                     }
-                    messages.addMessage("You hit the ${targetTile.name}.")
                 }
             }
 

@@ -65,6 +65,27 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawStartScene(scene: StartView) {
         startSceneUIDrawer.clear()
-        startSceneUIDrawer.outputStartMessage(scene.mainMenu.currentItemIndex())
+        startSceneUIDrawer.outputGameTitle()
+        when {
+            scene.isSinglePlayerMenu() -> {
+                startSceneUIDrawer.outputMenuItems(
+                    scene.mainMenu.currentItemIndex(),
+                    startSceneUIDrawer.singlePlayerOptions
+                )
+            }
+            scene.isMultiPlayerMenu() -> {
+                startSceneUIDrawer.outputMenuItems(
+                    scene.mainMenu.currentItemIndex(),
+                    startSceneUIDrawer.multiPlayerOptions
+                )
+            }
+            else -> {
+                startSceneUIDrawer.outputMenuItems(
+                    scene.mainMenu.currentItemIndex(),
+                    startSceneUIDrawer.defaultMenuOptions
+                )
+            }
+        }
+        startSceneUIDrawer.outputHelpMessage()
     }
 }

@@ -83,4 +83,6 @@ class MutableMenu<T>(private val items: MutableList<T>) : Menu<T> {
             currentItemIndex--
         }
     }
+
+    fun getItemsList() = items
 }
