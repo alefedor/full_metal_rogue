@@ -11,6 +11,7 @@ class LocalController : Controller {
 
     init {
         handlersStack.push(StartSceneHandler())
+        sentCurrentView()
     }
 
     override fun handleKey(key: KeyEvent) {

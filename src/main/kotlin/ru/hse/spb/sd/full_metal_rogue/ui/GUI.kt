@@ -10,14 +10,22 @@ import javax.swing.JFrame
 private const val WINDOW_HEIGHT = 40
 private const val WINDOW_WIDTH = 100
 
-class GUI : JFrame(), KeyListener {
+class GUI : JFrame() {
     private val drawer: SceneDrawer
 
     init {
         val terminal = AsciiPanel(WINDOW_WIDTH, WINDOW_HEIGHT)
         add(terminal)
         pack()
-        addKeyListener(this)
+        addKeyListener(object : KeyListener {
+            override fun keyPressed(key: KeyEvent) {
+                GameState.currentController.handleKey(key)
+            }
+
+            override fun keyTyped(key: KeyEvent) {}
+
+            override fun keyReleased(key: KeyEvent) {}
+        })
         drawer = SceneDrawer(terminal)
     }
 
@@ -25,12 +33,4 @@ class GUI : JFrame(), KeyListener {
         drawer.draw(view)
         super.repaint()
     }
-
-    override fun keyPressed(key: KeyEvent) {
-        GameState.currentController.handleKey(key)
-    }
-
-    override fun keyTyped(key: KeyEvent) {}
-
-    override fun keyReleased(key: KeyEvent) {}
 }
