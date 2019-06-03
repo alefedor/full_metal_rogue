@@ -1,5 +1,8 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
+import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
+import ru.hse.spb.sd.full_metal_rogue.controller.SinglePlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
@@ -22,6 +25,9 @@ class StartSceneHandler(
 ) : SceneHandler() {
     override val view
         get() = StartView(menu)
+
+    private lateinit var host: String
+    private lateinit var gameName: String
 
     /**
      * Exits the game.
@@ -48,8 +54,7 @@ class StartSceneHandler(
      * Selects current main menu item.
      */
     override fun selectAction(): SceneHandler? =
-        TODO() // logic for single player and multiplayer
-        /*when (view.mainMenu.currentItem()) {
+        when (view.mainMenu.currentItem()) {
             MainMenuItem.SINGLEPLAYER -> {
                 val newMenu = MutableMenu(
                     mutableListOf(
@@ -58,13 +63,19 @@ class StartSceneHandler(
                 )
                 StartSceneHandler(newMenu)
             }
-            MainMenuItem.SINGLEPLAYER_NEW_GAME -> LevelSceneHandler(StandardLevelGenerator().generateLevel())
+            MainMenuItem.SINGLEPLAYER_NEW_GAME -> {
+                GameState.currentController = SinglePlayerController(StandardLevelGenerator().generateLevel())
+                this
+            }
             MainMenuItem.SINGLEPLAYER_CONTINUE -> {
                 val map = FileMapLoader.loadMap()
-                if (map != null) LevelSceneHandler(map) else this
+                if (map != null) {
+                    GameState.currentController = SinglePlayerController(map)
+                }
+                this
             }
             MainMenuItem.MULTIPLAYER -> {
-                val host = createInputDialog("Input host name", "Server host")
+                host = createInputDialog("Input host name", "Server host")
                 // create local controller
                 val newMenu = MutableMenu(
                     mutableListOf(
@@ -76,16 +87,16 @@ class StartSceneHandler(
             // change controller to the local controller that we previously created
             MainMenuItem.MULTIPLAYER_JOIN -> {
                 val playerName = createInputDialog("Input player name", "Game player")
-                // TODO get names from server???
+                GameState.currentController = MultiPlayerController(host, gameName)
                 val gameNamesList = mutableListOf<String>()
                 GameListSceneHandler(gameNamesList)
                 StartSceneHandler(menu)
             }
             MainMenuItem.MULTIPLAYER_NEW_GAME -> {
-                val gameTitle = createInputDialog("Input game name", "Game")
+                gameName = createInputDialog("Input game name", "Game")
                 StartSceneHandler(menu)
             }
-        }*/
+        }
 
     private fun createInputDialog(message: String, title: String) = JOptionPane.showInputDialog(
         null,
