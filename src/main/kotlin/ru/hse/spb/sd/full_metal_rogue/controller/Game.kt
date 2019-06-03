@@ -46,7 +46,7 @@ class Game(private val map: MutableGameMap) {
         when (command) {
             is BackCommand -> handlersStack.peek().backAction()
             is SelectCommand -> handlersStack.peek().selectAction(playerName)
-            is DirectionCommand -> handlersStack.peek().selectAction(playerName)
+            is DirectionCommand -> handlersStack.peek().directionAction(playerName, command.direction)
         }
     }
 }
