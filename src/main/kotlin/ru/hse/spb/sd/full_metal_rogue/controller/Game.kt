@@ -26,16 +26,16 @@ class Game(private val map: MutableGameMap) {
             for (y in 0 until map.height) {
                 val gameObject = map.get(x, y)
                 if (gameObject is Player)
-                    playerList.add(gameObject.name)
+                    join(gameObject.name)
             }
     }
 
-    fun join(playerName: String) {
+    fun join(playerName: String): Boolean {
         if (playerName in playerList)
-            throw IllegalArgumentException("Player with such name already exists")
-
+            return false
         playerList.add(playerName)
         SparseMapInhabitator.inhabitateWithActor(map, TrivialActorGenerator(SimpleContentGenerator).generatePlayer(playerName))
+        return true
     }
 
     fun removePlayer(playerName: String) {
