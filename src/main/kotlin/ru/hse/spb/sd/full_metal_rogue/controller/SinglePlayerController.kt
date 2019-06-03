@@ -13,7 +13,8 @@ class SinglePlayerController(map: MutableGameMap) : Controller() {
     }
 
     override fun handleKey(key: KeyEvent) {
-        game.makeTurn(PLAYER_NAME, mapKey(key))
+        val command = mapKey(key) ?: return
+        game.makeTurn(PLAYER_NAME, command)
         GameState.gui.draw(game.view)
     }
 

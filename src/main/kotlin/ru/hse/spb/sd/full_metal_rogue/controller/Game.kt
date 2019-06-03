@@ -42,7 +42,6 @@ class Game(private val map: MutableGameMap) {
             is BackCommand -> handlersStack.peek().backAction()
             is SelectCommand -> handlersStack.peek().selectAction(playerName)
             is DirectionCommand -> handlersStack.peek().selectAction(playerName)
-            is IdleCommand -> {}
         }
     }
 }
