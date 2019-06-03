@@ -15,10 +15,16 @@ class LocalController : Controller() {
     }
 
     override fun handleKey(key: KeyEvent) {
-        when (val command = mapKey(key)) {
+        val nextHandler = when (val command = mapKey(key)) {
             SelectCommand -> handlersStack.peek().selectAction()
             BackCommand -> handlersStack.peek().backAction()
             is DirectionCommand -> handlersStack.peek().directionAction(command.direction)
+            IdleCommand -> handlersStack.peek()
+        }
+        if (nextHandler == null) {
+            handlersStack.pop()
+        } else if (nextHandler != handlersStack.peek()) {
+            handlersStack.push(nextHandler)
         }
         sendCurrentView()
     }
