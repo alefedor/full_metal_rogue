@@ -18,6 +18,17 @@ fun GameMap.playerPosition(name: String): Position {
     throw IllegalStateException("No player on the map, but player position queried")
 }
 
+fun GameMap.playerPositions(): List<Position> {
+    val playerPositions = mutableListOf<Position>()
+    for (x in 0 until width)
+        for (y in 0 until height) {
+            val gameObject = get(x, y)
+            if (gameObject is Player)
+                playerPositions.add(Position(x, y))
+        }
+    return playerPositions
+}
+
 /**
  * Throws exception [IllegalStateException] if the GameMap doesn't contain player.
  */
@@ -43,14 +54,14 @@ fun GameMap.canPassThrough(position: Position) = inBounds(position) && get(posit
 /**
  * Calculates distances from the position to all other position considering only paths through traversable positions.
  */
-fun GameMap.calculateDistancesFrom(position: Position): Array<IntArray> {
-    check(canPassThrough(position))
+fun GameMap.calculateDistancesFrom(positions: List<Position>): Array<IntArray> {
+    positions.forEach { check(canPassThrough(it)) }
 
     val distances = Array(width) { IntArray(height) { Int.MAX_VALUE } }
 
     val queue = LinkedList<Position>()
-    queue.add(position)
-    distances[position.x][position.y] = 0
+    positions.forEach { queue.add(it) }
+    positions.forEach { distances[it.x][it.y] = 0 }
 
     while (queue.isNotEmpty()) {
         val p = queue.poll()
