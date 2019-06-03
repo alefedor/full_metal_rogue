@@ -9,7 +9,6 @@ enum Command {
     DOWN = 3;
     LEFT = 4;
     RIGHT = 5;
-    JOIN = 6;
 }
 
 message Action {
@@ -36,8 +35,18 @@ message View {
     string json = 1;
 }
 
+message SubscribeGameRequest {
+    string gameName = 1;
+    string playerName = 2;
+}
+
+message SendCommandResponse {
+
+}
+
 service FullMetalRogueServer {
-    rpc joinGame(stream Action) returns (stream View) {}
+    rpc subscribeGame(SubscribeGameRequest) returns (stream View) {}
+    rpc sendCommand(Action) returns (SendCommandResponse) {}
     rpc getGameList(GameListRequest) returns (GameListResponse) {}
     rpc createGame(CreateGameRequest) returns (CreateGameResponse) {}
 }

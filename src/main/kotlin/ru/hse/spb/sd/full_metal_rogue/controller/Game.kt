@@ -9,6 +9,8 @@ class Game(private val name: String) {
     @Volatile
     var currentPlayer: String? = null
 
+    val playerList = mutableListOf<String>()
+
     fun join(playerName: String) {
 
     }
