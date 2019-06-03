@@ -3,12 +3,15 @@ package ru.hse.spb.sd.full_metal_rogue.logic.objects
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import kotlin.math.roundToInt
 
-class Player(maxHealth: Int, attackPower: Int, val name: String) : Actor(maxHealth, attackPower) {
+class Player(maxHealth: Int, attackPower: Int, name: String) : Actor(maxHealth, attackPower, name, 0) {
     companion object {
         const val NEEDED_EXPERIENCE_RISE = 1.2
         const val STATS_RISE = 1.11
         const val INITIAL_NEEDED_EXPERIENCE = 10
     }
+
+    override val experienceCost: Int
+        get() = experience // all experience of killed player
 
     val inventory: Inventory = SimpleInventory()
 
@@ -54,7 +57,6 @@ class Player(maxHealth: Int, attackPower: Int, val name: String) : Actor(maxHeal
 
         while (experience >= nextLevelMark) {
             levelUp = true
-            experience -= nextLevelMark
             levelUp()
         }
 
@@ -63,10 +65,17 @@ class Player(maxHealth: Int, attackPower: Int, val name: String) : Actor(maxHeal
 
     private fun levelUp() {
         level++
-        nextLevelMark = (nextLevelMark * NEEDED_EXPERIENCE_RISE).roundToInt()
+        nextLevelMark += (nextLevelMark * NEEDED_EXPERIENCE_RISE).roundToInt()
         baseMaxHealth = (baseMaxHealth * STATS_RISE).roundToInt()
         baseAttackPower = (baseAttackPower * STATS_RISE).roundToInt()
         currentHealth = maxHealth // instant healing on levelling up
+    }
+
+    override fun die(): Chest? {
+        val chest = Chest(inventory.items().toMutableList())
+        chest.items.add(weapon)
+        chest.items.add(armor)
+        return chest
     }
 
     override fun calculateMaxHealth() = apply(baseMaxHealth, armor.effect)

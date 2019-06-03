@@ -1,12 +1,17 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
 import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
+import ru.hse.spb.sd.full_metal_rogue.logic.map.playerPositions
+import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
+import ru.hse.spb.sd.full_metal_rogue.view.handler.DeathSceneHandler
+import ru.hse.spb.sd.full_metal_rogue.view.handler.LevelSceneHandler
 import java.awt.event.KeyEvent
 import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 
-class SinglePlayerController(map: MutableGameMap) : Controller() {
+class SinglePlayerController(private val map: MutableGameMap) : Controller() {
     private val game = Game(map)
 
     init {
@@ -16,17 +21,26 @@ class SinglePlayerController(map: MutableGameMap) : Controller() {
 
     override fun handleKey(key: KeyEvent) {
         val command = mapKey(key) ?: return
-        game.makeTurn(PLAYER_NAME, command)
+        if (!wasDeath)
+            game.makeTurn(PLAYER_NAME, command)
         drawView()
     }
 
     private fun drawView() {
-        val view = game.view
-        if (view == null) {
+        val view = if (wasDeath) null else game.getView(PLAYER_NAME)
 
-        } else {
-            GameState.gui.draw(view)
+        if (view == null) {
+            // save and delete is available only in single player mode
+            if (map.playerPositions().isEmpty())
+                FileMapLoader.deleteMap()
+            else
+                FileMapLoader.saveMap(map)
+            return
         }
+
+        checkView(view)
+
+        GameState.gui.draw(view)
     }
 
     companion object {

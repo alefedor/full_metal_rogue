@@ -29,6 +29,16 @@ fun GameMap.playerPositions(): List<Position> {
     return playerPositions
 }
 
+fun GameMap.hasPlayer(name: String): Boolean {
+    for (x in 0 until width)
+        for (y in 0 until height) {
+            val gameObject = get(x, y)
+            if (gameObject is Player && gameObject.name == name)
+                return true
+        }
+    return false
+}
+
 /**
  * Throws exception [IllegalStateException] if the GameMap doesn't contain player.
  */
