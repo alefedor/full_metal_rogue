@@ -10,6 +10,7 @@ class SinglePlayerController(map: MutableGameMap) : Controller() {
 
     init {
         game.join(PLAYER_NAME)
+        GameState.gui.draw(game.view)
     }
 
     override fun handleKey(key: KeyEvent) {

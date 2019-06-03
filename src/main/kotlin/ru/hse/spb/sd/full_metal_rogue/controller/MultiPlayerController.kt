@@ -5,7 +5,7 @@ import io.grpc.ManagedChannelBuilder
 import java.awt.event.KeyEvent
 
 class MultiPlayerController(private val host: String, private val gameName: String) : Controller() {
-    private val channel = ManagedChannelBuilder.forAddress(host, 10000)
+    private val channel = ManagedChannelBuilder.forAddress(host, 10000).usePlaintext().build()
 
     override fun handleKey(key: KeyEvent) {
         TODO("not implemented")
