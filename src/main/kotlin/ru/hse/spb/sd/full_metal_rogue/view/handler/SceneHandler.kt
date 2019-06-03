@@ -1,19 +1,19 @@
-package ru.hse.spb.sd.full_metal_rogue.scene.handler
+package ru.hse.spb.sd.full_metal_rogue.view.handler
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
-import ru.hse.spb.sd.full_metal_rogue.scene.Scene
+import ru.hse.spb.sd.full_metal_rogue.view.View
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 /**
- * Handles user input on a Scene.
+ * Handles user input on a View.
  */
 abstract class SceneHandler(private val sceneDrawer: SceneDrawer) {
-    protected abstract val scene: Scene
+    protected abstract val view: View
 
     /**
-     * Redraws scene with updated state
+     * Redraws view with updated state
      */
-    fun repaint() = sceneDrawer.draw(scene)
+    fun repaint() = sceneDrawer.draw(view)
 
     /**
      * Handles back action

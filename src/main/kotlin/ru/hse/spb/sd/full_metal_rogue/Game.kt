@@ -2,9 +2,9 @@ package ru.hse.spb.sd.full_metal_rogue
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
-import ru.hse.spb.sd.full_metal_rogue.scene.command.*
-import ru.hse.spb.sd.full_metal_rogue.scene.handler.SceneHandler
-import ru.hse.spb.sd.full_metal_rogue.scene.handler.StartSceneHandler
+import ru.hse.spb.sd.full_metal_rogue.view.command.*
+import ru.hse.spb.sd.full_metal_rogue.view.handler.SceneHandler
+import ru.hse.spb.sd.full_metal_rogue.view.handler.StartSceneHandler
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener

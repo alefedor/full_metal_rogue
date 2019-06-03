@@ -2,7 +2,7 @@ package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
-import ru.hse.spb.sd.full_metal_rogue.scene.Menu
+import ru.hse.spb.sd.full_metal_rogue.view.Menu
 
 class InventorySceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     // the following values DO NOT take leftOffset into consideration

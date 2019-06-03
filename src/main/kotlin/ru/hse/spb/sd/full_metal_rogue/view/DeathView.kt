@@ -1,8 +1,8 @@
-package ru.hse.spb.sd.full_metal_rogue.scene
+package ru.hse.spb.sd.full_metal_rogue.view
 
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 
 /**
  * Representation of death screen.
  */
-class DeathScene(val player: Player) : Scene
+class DeathView(val player: Player) : View

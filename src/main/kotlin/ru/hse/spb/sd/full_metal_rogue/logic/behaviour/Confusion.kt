@@ -2,10 +2,6 @@ package ru.hse.spb.sd.full_metal_rogue.logic.behaviour
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Position
-import ru.hse.spb.sd.full_metal_rogue.scene.handler.SceneHandler
-import java.awt.event.ActionListener
-import java.util.concurrent.TimeUnit
-import javax.swing.Timer
 
 /**
  * Decorates a Behaviour object, overriding its makeMove() method.

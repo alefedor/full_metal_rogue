@@ -1,7 +1,7 @@
-package ru.hse.spb.sd.full_metal_rogue.scene.command
+package ru.hse.spb.sd.full_metal_rogue.view.command
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
-import ru.hse.spb.sd.full_metal_rogue.scene.handler.SceneHandler
+import ru.hse.spb.sd.full_metal_rogue.view.handler.SceneHandler
 
 /**
  * Represents move command.

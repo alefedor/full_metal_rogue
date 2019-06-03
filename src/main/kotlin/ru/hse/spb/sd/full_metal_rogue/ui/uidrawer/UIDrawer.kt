@@ -4,7 +4,7 @@ import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
-import ru.hse.spb.sd.full_metal_rogue.scene.Menu
+import ru.hse.spb.sd.full_metal_rogue.view.Menu
 import java.awt.Color
 
 /**

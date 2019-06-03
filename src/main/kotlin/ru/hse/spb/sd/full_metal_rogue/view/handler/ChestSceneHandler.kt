@@ -1,22 +1,22 @@
-package ru.hse.spb.sd.full_metal_rogue.scene.handler
+package ru.hse.spb.sd.full_metal_rogue.view.handler
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Chest
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
-import ru.hse.spb.sd.full_metal_rogue.scene.ChestScene
-import ru.hse.spb.sd.full_metal_rogue.scene.MutableMenu
+import ru.hse.spb.sd.full_metal_rogue.view.ChestView
+import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 
 /**
- * Handles user input on a ChestScene.
+ * Handles user input on a ChestView.
  */
 class ChestSceneHandler(chest: Chest,
                         private val player: Player,
                         sceneDrawer: SceneDrawer
 ) : SceneHandler(sceneDrawer) {
     private val chestItems = MutableMenu(chest.items)
-    override val scene: ChestScene
-        get() = ChestScene(chestItems)
+    override val view: ChestView
+        get() = ChestView(chestItems)
 
     override fun backAction(): SceneHandler? = null
 

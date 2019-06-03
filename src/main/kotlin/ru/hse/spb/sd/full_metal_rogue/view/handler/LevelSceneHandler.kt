@@ -1,23 +1,23 @@
-package ru.hse.spb.sd.full_metal_rogue.scene.handler
+package ru.hse.spb.sd.full_metal_rogue.view.handler
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
-import ru.hse.spb.sd.full_metal_rogue.scene.LevelScene
+import ru.hse.spb.sd.full_metal_rogue.view.LevelView
 import ru.hse.spb.sd.full_metal_rogue.ui.SceneDrawer
 import kotlin.random.Random
 
 /**
- * Handles user input on a LevelScene.
+ * Handles user input on a LevelView.
  */
 class LevelSceneHandler(private val sceneDrawer: SceneDrawer,
                         private val map: MutableGameMap
 ) : SceneHandler(sceneDrawer) {
     private val messages = MessageNavigation()
-    override val scene: LevelScene
-        get() = LevelScene(map, messages.getCurrentMessage())
+    override val view: LevelView
+        get() = LevelView(map, messages.getCurrentMessage())
 
     /**
-     * Saves the current map and exits current scene.
+     * Saves the current map and exits current view.
      */
     override fun backAction(): SceneHandler? {
         FileMapLoader.saveMap(map)
