@@ -8,7 +8,7 @@ import ru.hse.spb.sd.full_metal_rogue.view.handler.LevelSceneHandler
 import java.lang.IllegalArgumentException
 import java.util.*
 
-class Game(map: MutableGameMap) {
+class Game(private val map: MutableGameMap) {
     val view: View
         get() = handlersStack.peek().view
 
@@ -29,13 +29,20 @@ class Game(map: MutableGameMap) {
     fun join(playerName: String) {
         if (playerName in playerList)
             throw IllegalArgumentException("Player with such name already exists")
+
+        playerList.add(playerName)
     }
 
     fun removePlayer(playerName: String) {
-
+        TODO()
     }
 
     fun makeTurn(playerName: String, command: Command) {
-
+        when (command) {
+            is BackCommand -> handlersStack.peek().backAction()
+            is SelectCommand -> handlersStack.peek().selectAction(playerName)
+            is DirectionCommand -> handlersStack.peek().selectAction(playerName)
+            is IdleCommand -> {}
+        }
     }
 }
