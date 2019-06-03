@@ -1,6 +1,10 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
+import ru.hse.spb.sd.full_metal_rogue.logic.inventory.SimpleContentGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.level.ActorGenerator
+import ru.hse.spb.sd.full_metal_rogue.logic.level.TrivialActorGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
+import ru.hse.spb.sd.full_metal_rogue.logic.map.SparseMapInhabitator
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import ru.hse.spb.sd.full_metal_rogue.view.handler.GameSceneHandler
@@ -31,6 +35,7 @@ class Game(private val map: MutableGameMap) {
             throw IllegalArgumentException("Player with such name already exists")
 
         playerList.add(playerName)
+        SparseMapInhabitator.inhabitateWithActor(map, TrivialActorGenerator(SimpleContentGenerator).generatePlayer(playerName))
     }
 
     fun removePlayer(playerName: String) {
