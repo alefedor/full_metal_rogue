@@ -3,9 +3,21 @@ package ru.hse.spb.sd.full_metal_rogue.grpc
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
 
 class FullMetalRogueService : FullMetalRogueServerGrpc.FullMetalRogueServerImplBase() {
-    override fun joinGame(
+    /**
+     */
+    override fun subscribeGame(
+        request: ru.hse.spb.sd.full_metal_rogue.Server.SubscribeGameRequest,
         responseObserver: io.grpc.stub.StreamObserver<ru.hse.spb.sd.full_metal_rogue.Server.View>
-    ): io.grpc.stub.StreamObserver<ru.hse.spb.sd.full_metal_rogue.Server.Action> {
+    ) {
+        TODO()
+    }
+
+    /**
+     */
+    override fun sendCommand(
+        request: ru.hse.spb.sd.full_metal_rogue.Server.Action,
+        responseObserver: io.grpc.stub.StreamObserver<ru.hse.spb.sd.full_metal_rogue.Server.SendCommandResponse>
+    ) {
         TODO()
     }
 
