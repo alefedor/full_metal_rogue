@@ -23,7 +23,7 @@ class SinglePlayerController(map: MutableGameMap) : Controller() {
     private fun drawView() {
         val view = game.view
         if (view == null) {
-            GameState.currentController = LocalController()
+
         } else {
             GameState.gui.draw(view)
         }

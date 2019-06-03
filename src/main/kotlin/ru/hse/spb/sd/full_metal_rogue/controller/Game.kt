@@ -7,21 +7,20 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.SparseMapInhabitator
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.View
-import ru.hse.spb.sd.full_metal_rogue.view.handler.GameSceneHandler
 import ru.hse.spb.sd.full_metal_rogue.view.handler.LevelSceneHandler
-import java.lang.IllegalArgumentException
+import ru.hse.spb.sd.full_metal_rogue.view.handler.SceneHandler
 import java.util.*
 
 class Game(private val map: MutableGameMap) {
     val view: View?
-        get() = if (handlersStack.isNotEmpty()) handlersStack.peek().view else null
+        get() = if (handlersStack.isNotEmpty()) handlersStack.peek().view else levelScene.view
 
     private val playerList = mutableListOf<String>()
 
-    private val handlersStack = Stack<GameSceneHandler>()
+    private val levelScene = LevelSceneHandler(map)
+    private val handlersStack = Stack<SceneHandler>()
 
     init {
-        handlersStack.push(LevelSceneHandler(map))
         for (x in 0 until map.width)
             for (y in 0 until map.height) {
                 val gameObject = map.get(x, y)
@@ -43,15 +42,17 @@ class Game(private val map: MutableGameMap) {
     }
 
     fun makeTurn(playerName: String, command: Command) {
+        val activeHandler = if (handlersStack.empty()) levelScene.withPlayer(playerName) else handlersStack.peek()
+
         val newHandler = when (command) {
-            is BackCommand -> handlersStack.peek().backAction()
-            is SelectCommand -> handlersStack.peek().selectAction(playerName)
-            is DirectionCommand -> handlersStack.peek().directionAction(playerName, command.direction)
+            is BackCommand -> activeHandler.backAction()
+            is SelectCommand -> activeHandler.selectAction()
+            is DirectionCommand -> activeHandler.directionAction(command.direction)
         }
 
         when (newHandler) {
             null -> handlersStack.pop()
-            handlersStack.peek() -> {}
+            activeHandler -> {}
             else -> handlersStack.push(newHandler)
         }
     }

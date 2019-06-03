@@ -8,140 +8,146 @@ import kotlin.random.Random
 /**
  * Handles user input on a LevelView.
  */
-class LevelSceneHandler(private val map: MutableGameMap) : GameSceneHandler() {
+class LevelSceneHandler(private val map: MutableGameMap) {
     private var backActionOccured = false
     private val messages = MessageNavigation()
-    override val view: LevelView?
+    val view: LevelView?
         get() = if (backActionOccured) null else LevelView(map, messages.getCurrentMessage())
 
-    /**
-     * Saves the current map and exits current view.
-     */
-    override fun backAction(): GameSceneHandler? {
-        backActionOccured = true
-        FileMapLoader.saveMap(map)
-        return null
-    }
+    fun withPlayer(playerName: String) = LevelSceneHandlerWithPlayer(playerName)
 
-    /**
-     * Creates LevelSceneHandler for player's current inventory.
-     */
-    override fun selectAction(playerName: String): GameSceneHandler? = InventorySceneHandler(map.player(playerName))
-
-    /**
-     * Makes game turn.
-     */
-    override fun directionAction(playerName: String, playerMove: Direction): GameSceneHandler {
-        if (messages.hasNextMessage()) {
-            messages.toNextMessage()
+    inner class LevelSceneHandlerWithPlayer(private val playerName: String) : SceneHandler() {
+        override val view: LevelView?
+            get() = this@LevelSceneHandler.view
+        /**
+         * Saves the current map and exits current view.
+         */
+        override fun backAction(): SceneHandler? {
+            backActionOccured = true
+            FileMapLoader.saveMap(map)
             return this
         }
-        messages.clear()
 
-        var nextScene = movePlayer(playerName, playerMove)
-        val movedEnemies = HashSet<Actor>()
-        for (x in 0 until map.width) {
-            for (y in 0 until map.height) {
-                val enemy = map[x, y]
-                if (enemy is Enemy && !movedEnemies.contains(enemy)) {
-                    val scene = moveEnemy(enemy, Position(x, y))
-                    if (scene is DeathSceneHandler) {
-                        nextScene = scene
+        /**
+         * Creates LevelSceneHandler for player's current inventory.
+         */
+        override fun selectAction(): SceneHandler? = InventorySceneHandler(map.player(playerName))
+
+        /**
+         * Makes game turn.
+         */
+        override fun directionAction(playerMove: Direction): SceneHandler {
+            if (messages.hasNextMessage()) {
+                messages.toNextMessage()
+                return this
+            }
+            messages.clear()
+
+            var nextScene = movePlayer(playerName, playerMove)
+            val movedEnemies = HashSet<Actor>()
+            for (x in 0 until map.width) {
+                for (y in 0 until map.height) {
+                    val enemy = map[x, y]
+                    if (enemy is Enemy && !movedEnemies.contains(enemy)) {
+                        val scene = moveEnemy(enemy, Position(x, y))
+                        if (scene is DeathSceneHandler) {
+                            nextScene = scene
+                        }
+                        movedEnemies.add(enemy)
                     }
-                    movedEnemies.add(enemy)
                 }
             }
+
+            return nextScene
         }
 
-        return nextScene
-    }
-
-    private fun move(from: Position, to: Position) {
-        map[to] = map[from]
-        map[from] = FreeSpace
-    }
-
-    /**
-     * Moves player in specified direction.
-     */
-    private fun movePlayer(playerName: String, playerMove: Direction): GameSceneHandler {
-        val currentPosition = map.playerPosition(playerName)
-        val targetPosition = apply(currentPosition, playerMove)
-        val targetTile = map[targetPosition]
-
-        if (!map.inBounds(targetPosition) || targetTile is Wall) {
-            messages.addMessage("There is a wall in the way!")
-            return this
+        private fun move(from: Position, to: Position) {
+            map[to] = map[from]
+            map[from] = FreeSpace
         }
 
-        when (targetTile) {
-            is FreeSpace -> {
-                move(currentPosition, targetPosition)
+        /**
+         * Moves player in specified direction.
+         */
+        private fun movePlayer(playerName: String, playerMove: Direction): SceneHandler {
+            val currentPosition = map.playerPosition(playerName)
+            val targetPosition = apply(currentPosition, playerMove)
+            val targetTile = map[targetPosition]
+
+            if (!map.inBounds(targetPosition) || targetTile is Wall) {
+                messages.addMessage("There is a wall in the way!")
+                return this
             }
 
-            is Enemy -> {
-                val player = map.player(playerName)
-                targetTile.takeDamage(player.attackPower)
+            when (targetTile) {
+                is FreeSpace -> {
+                    move(currentPosition, targetPosition)
+                }
 
-                if (targetTile.isDead) {
-                    val isLevelUp = player.earnExperience(targetTile.experienceCost)
-                    messages.addMessage("You have slain the ${targetTile.name} " +
-                            "and earned ${targetTile.experienceCost} experience points " +
-                            "${if (isLevelUp) "(level up!)" else ""}.")
-                    map[targetPosition] = targetTile.die() ?: FreeSpace
-                } else {
-                    if (shouldConfuseEnemy(player)) {
-                        targetTile.getConfused()
-                        messages.addMessage("You hit and confused the ${targetTile.name}.")
+                is Enemy -> {
+                    val player = map.player(playerName)
+                    targetTile.takeDamage(player.attackPower)
+
+                    if (targetTile.isDead) {
+                        val isLevelUp = player.earnExperience(targetTile.experienceCost)
+                        messages.addMessage("You have slain the ${targetTile.name} " +
+                                "and earned ${targetTile.experienceCost} experience points " +
+                                "${if (isLevelUp) "(level up!)" else ""}.")
+                        map[targetPosition] = targetTile.die() ?: FreeSpace
                     } else {
-                        messages.addMessage("You hit the ${targetTile.name}.")
+                        if (shouldConfuseEnemy(player)) {
+                            targetTile.getConfused()
+                            messages.addMessage("You hit and confused the ${targetTile.name}.")
+                        } else {
+                            messages.addMessage("You hit the ${targetTile.name}.")
+                        }
                     }
+                }
+
+                is Chest -> {
+                    move(currentPosition, targetPosition)
+                    return ChestSceneHandler(targetTile, map.player(playerName))
                 }
             }
 
-            is Chest -> {
-                move(currentPosition, targetPosition)
-                return ChestSceneHandler(targetTile, map.player(playerName))
-            }
-        }
-
-        return this
-    }
-
-    private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
-
-    /**
-     * Moves specified enemy from specified position.
-     */
-    private fun moveEnemy(enemy: Enemy, position: Position): GameSceneHandler {
-        val targetPosition = enemy.makeMove(position, map)
-        if (targetPosition == position) {
             return this
         }
 
-        when(val targetTile = map[targetPosition]) {
-            is FreeSpace -> {
-                move(position, targetPosition)
+        private fun shouldConfuseEnemy(player: Player): Boolean = Random.nextDouble() < player.weapon.confusionChance
+
+        /**
+         * Moves specified enemy from specified position.
+         */
+        private fun moveEnemy(enemy: Enemy, position: Position): SceneHandler {
+            val targetPosition = enemy.makeMove(position, map)
+            if (targetPosition == position) {
+                return this
             }
 
-            is Actor -> {
-                targetTile.takeDamage(enemy.attackPower)
-                if (targetTile.isDead && targetTile is Player) {
-                    FileMapLoader.deleteMap()
-                    return DeathSceneHandler(targetTile)
-                } else if (targetTile.isDead && targetTile is Enemy) {
-                    map[targetPosition] = targetTile.die() ?: FreeSpace
+            when(val targetTile = map[targetPosition]) {
+                is FreeSpace -> {
+                    move(position, targetPosition)
+                }
+
+                is Actor -> {
+                    targetTile.takeDamage(enemy.attackPower)
+                    if (targetTile.isDead && targetTile is Player) {
+                        FileMapLoader.deleteMap()
+                        return DeathSceneHandler(targetTile)
+                    } else if (targetTile.isDead && targetTile is Enemy) {
+                        map[targetPosition] = targetTile.die() ?: FreeSpace
+                    }
+                }
+
+                is Chest -> {
+                    val chest: Chest = targetTile
+                    enemy.absorbChest(chest)
+                    move(position, targetPosition)
                 }
             }
 
-            is Chest -> {
-                val chest: Chest = targetTile
-                enemy.absorbChest(chest)
-                move(position, targetPosition)
-            }
+            return this
         }
-
-        return this
     }
 }
 
