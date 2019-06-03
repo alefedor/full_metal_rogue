@@ -26,7 +26,9 @@ class LocalController : Controller() {
         } else if (nextHandler != handlersStack.peek()) {
             handlersStack.push(nextHandler)
         }
-        sendCurrentView()
+        if (this == GameState.currentController) {
+            sendCurrentView()
+        }
     }
 
     private fun sendCurrentView() {
