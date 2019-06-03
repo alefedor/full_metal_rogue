@@ -32,7 +32,7 @@ abstract class SceneHandler {
 }
 
 abstract class GameSceneHandler {
-    abstract val view: View
+    abstract val view: View?
 
     /**
      * Handles back action

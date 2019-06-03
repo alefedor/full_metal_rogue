@@ -2,6 +2,7 @@ package ru.hse.spb.sd.full_metal_rogue.controller
 
 import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
+import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.awt.event.KeyEvent
 import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 
@@ -10,13 +11,22 @@ class SinglePlayerController(map: MutableGameMap) : Controller() {
 
     init {
         game.join(PLAYER_NAME)
-        GameState.gui.draw(game.view)
+        drawView()
     }
 
     override fun handleKey(key: KeyEvent) {
         val command = mapKey(key) ?: return
         game.makeTurn(PLAYER_NAME, command)
-        GameState.gui.draw(game.view)
+        drawView()
+    }
+
+    private fun drawView() {
+        val view = game.view
+        if (view == null) {
+            GameState.currentController = LocalController()
+        } else {
+            GameState.gui.draw(view)
+        }
     }
 
     companion object {

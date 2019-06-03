@@ -13,8 +13,8 @@ import java.lang.IllegalArgumentException
 import java.util.*
 
 class Game(private val map: MutableGameMap) {
-    val view: View
-        get() = handlersStack.peek().view
+    val view: View?
+        get() = if (handlersStack.isNotEmpty()) handlersStack.peek().view else null
 
     private val playerList = mutableListOf<String>()
 

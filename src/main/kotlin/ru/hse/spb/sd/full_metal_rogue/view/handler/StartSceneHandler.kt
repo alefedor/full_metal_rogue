@@ -1,6 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
 import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.controller.Game
 import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
 import ru.hse.spb.sd.full_metal_rogue.controller.SinglePlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator

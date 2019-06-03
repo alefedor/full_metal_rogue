@@ -9,14 +9,16 @@ import kotlin.random.Random
  * Handles user input on a LevelView.
  */
 class LevelSceneHandler(private val map: MutableGameMap) : GameSceneHandler() {
+    private var backActionOccured = false
     private val messages = MessageNavigation()
-    override val view: LevelView
-        get() = LevelView(map, messages.getCurrentMessage())
+    override val view: LevelView?
+        get() = if (backActionOccured) null else LevelView(map, messages.getCurrentMessage())
 
     /**
      * Saves the current map and exits current view.
      */
     override fun backAction(): GameSceneHandler? {
+        backActionOccured = true
         FileMapLoader.saveMap(map)
         return null
     }

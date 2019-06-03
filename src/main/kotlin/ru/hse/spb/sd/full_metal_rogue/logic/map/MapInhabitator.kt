@@ -22,7 +22,7 @@ object SparseMapInhabitator : MapInhabitator {
 
         for (x in 0 until map.width)
             for (y in 0 until map.height) {
-                if (map[x, y] == FreeSpace)
+                if (map[x, y] is FreeSpace)
                     freeSpacePositions.add(Position(x, y))
                 if (map[x, y] is Actor)
                     actorPositions.add(Position(x, y))
