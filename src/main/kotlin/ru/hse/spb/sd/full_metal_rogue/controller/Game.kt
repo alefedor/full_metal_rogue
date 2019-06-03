@@ -2,7 +2,7 @@ package ru.hse.spb.sd.full_metal_rogue.controller
 
 import ru.hse.spb.sd.full_metal_rogue.view.View
 
-class Game(private val name: String) {
+class Game {
     val view: View
         get() = TODO()
     @Volatile
