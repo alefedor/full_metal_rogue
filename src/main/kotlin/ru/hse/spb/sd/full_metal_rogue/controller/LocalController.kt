@@ -1,7 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
 import ru.hse.spb.sd.full_metal_rogue.GameState
-import ru.hse.spb.sd.full_metal_rogue.view.View
 import ru.hse.spb.sd.full_metal_rogue.view.handler.SceneHandler
 import ru.hse.spb.sd.full_metal_rogue.view.handler.StartSceneHandler
 import java.awt.event.KeyEvent
