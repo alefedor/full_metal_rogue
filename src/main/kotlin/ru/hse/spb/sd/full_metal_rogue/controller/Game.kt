@@ -26,7 +26,7 @@ class Game(private val map: MutableGameMap) {
             for (y in 0 until map.height) {
                 val gameObject = map.get(x, y)
                 if (gameObject is Player)
-                    join(gameObject.name)
+                    playerList.add(gameObject.name)
             }
     }
 
