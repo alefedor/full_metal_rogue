@@ -48,7 +48,8 @@ class StartSceneHandler(
      * Selects current main menu item.
      */
     override fun selectAction(): SceneHandler? =
-        when (view.mainMenu.currentItem()) {
+        TODO() // logic for single player and multiplayer
+        /*when (view.mainMenu.currentItem()) {
             MainMenuItem.SINGLEPLAYER -> {
                 val newMenu = MutableMenu(
                     mutableListOf(
@@ -84,7 +85,7 @@ class StartSceneHandler(
                 val gameTitle = createInputDialog("Input game name", "Game")
                 StartSceneHandler(menu)
             }
-        }
+        }*/
 
     private fun createInputDialog(message: String, title: String) = JOptionPane.showInputDialog(
         null,
