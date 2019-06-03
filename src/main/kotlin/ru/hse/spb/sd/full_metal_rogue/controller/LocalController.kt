@@ -11,7 +11,7 @@ class LocalController : Controller() {
 
     init {
         handlersStack.push(StartSceneHandler())
-        sentCurrentView()
+        sendCurrentView()
     }
 
     override fun handleKey(key: KeyEvent) {
@@ -20,9 +20,10 @@ class LocalController : Controller() {
             BackCommand -> handlersStack.peek().backAction()
             is DirectionCommand -> handlersStack.peek().directionAction(command.direction)
         }
+        sendCurrentView()
     }
 
-    private fun sentCurrentView() {
+    private fun sendCurrentView() {
         val currentView = handlersStack.peek().view
         GameState.gui.draw(currentView)
     }
