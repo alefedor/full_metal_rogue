@@ -1,5 +1,8 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
+import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.controller.Client
+import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.GameListView
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
@@ -7,8 +10,8 @@ import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 /**
  * Handles user input on a GameListSceneHandler.
  */
-class GameListSceneHandler(gameNames: MutableList<String>) : SceneHandler() {
-    private val gameNamesMenu = MutableMenu(gameNames)
+class GameListSceneHandler(private val client: Client, private val playerName: String) : SceneHandler() {
+    private val gameNamesMenu = MutableMenu(client.getGameList().toMutableList())
     override val view: GameListView
         get() = GameListView(gameNamesMenu)
 
@@ -30,8 +33,9 @@ class GameListSceneHandler(gameNames: MutableList<String>) : SceneHandler() {
      */
     override fun selectAction(): SceneHandler? {
         if (gameNamesMenu.size() != 0) {
-            // TODO choose game
-            // player.equip(inventoryMenu.currentItemIndex())
+            val currentGameName = gameNamesMenu.currentItem()
+            GameState.currentController = MultiPlayerController(client, currentGameName, playerName)
+            client.joinGame(currentGameName, playerName)
         }
         return this
     }
