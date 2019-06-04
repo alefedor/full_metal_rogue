@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
+import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
@@ -23,5 +24,13 @@ abstract class Controller {
     protected fun checkView(view: View?) {
         if (view is DeathView)
             wasDeath = true
+    }
+
+    fun drawView(view: View?) {
+        val shownView = if (wasDeath) null else view
+
+        checkView(shownView)
+
+        GameState.gui.draw(shownView)
     }
 }

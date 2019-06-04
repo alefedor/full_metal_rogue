@@ -6,8 +6,6 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.playerPositions
 import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
-import ru.hse.spb.sd.full_metal_rogue.view.handler.DeathSceneHandler
-import ru.hse.spb.sd.full_metal_rogue.view.handler.LevelSceneHandler
 import java.awt.event.KeyEvent
 import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 
@@ -27,19 +25,19 @@ class SinglePlayerController(private val map: MutableGameMap) : Controller() {
     }
 
     private fun drawView() {
-        val view = if (wasDeath) null else game.getView(PLAYER_NAME)
+        val view = game.getView(PLAYER_NAME)
+
+        if (view is DeathView) {
+            FileMapLoader.deleteMap()
+        }
 
         if (view == null) {
             // save and delete is available only in single player mode
-            if (map.playerPositions().isEmpty())
-                FileMapLoader.deleteMap()
-            else
+            if (map.playerPositions().isNotEmpty())
                 FileMapLoader.saveMap(map)
         }
 
-        checkView(view)
-
-        GameState.gui.draw(view)
+        drawView(view)
     }
 
     companion object {

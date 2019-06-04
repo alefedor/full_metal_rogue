@@ -3,7 +3,7 @@ package ru.hse.spb.sd.full_metal_rogue.grpc
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
-import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.GameState.currentController
 import ru.hse.spb.sd.full_metal_rogue.Server
 import ru.hse.spb.sd.full_metal_rogue.controller.*
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
@@ -47,7 +47,7 @@ class Client(
 
             override fun onNext(view: Server.View) {
                 val view = protoViewToGameView(view)
-                GameState.gui.draw(view)
+                currentController.drawView(view)
 
                 if (!wasView) {
                     barrier.arrive()
