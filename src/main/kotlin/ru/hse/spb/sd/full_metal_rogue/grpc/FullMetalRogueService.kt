@@ -36,6 +36,10 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
 
         observers[request.playerName] = responseObserver
 
+        synchronized(session.game) {
+            session.game.join(request.playerName)
+        }
+
         sendUpdates(session)
     }
 
