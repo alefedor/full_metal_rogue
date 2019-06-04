@@ -13,4 +13,5 @@ object GameState {
 fun main() {
     GameState.gui.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     GameState.gui.isVisible = true
+    GameState.gui.isResizable = false
 }
