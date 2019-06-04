@@ -2,6 +2,7 @@ package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
+import ru.hse.spb.sd.full_metal_rogue.logic.map.player
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.*
 import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.*
@@ -27,23 +28,11 @@ class SceneDrawer(terminal: AsciiPanel) {
         }
     }
 
-    private fun getPlayerFromMap(map: GameMap): Player {
-        for (i in 0 until map.height) {
-            for (j in 0 until map.width) {
-                if (map[j, i] is Player) {
-                    return map[j, i] as Player
-                }
-            }
-        }
-
-        throw NoPlayerOnMapException()
-    }
-
     private fun drawLevelScene(scene: LevelView) {
         levelSceneUIDrawer.clear()
         levelSceneUIDrawer.drawMap(scene.map, scene.currentPlayerName)
         levelSceneUIDrawer.outputMessage(scene.message)
-        levelSceneUIDrawer.outputPlayerState(getPlayerFromMap(scene.map))
+        levelSceneUIDrawer.outputPlayerState(scene.map.player(scene.currentPlayerName))
     }
 
     private fun drawInventoryScene(scene: InventoryView) {
