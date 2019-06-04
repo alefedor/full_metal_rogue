@@ -1,9 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
-import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.player
-import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.*
 import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.*
 
@@ -30,9 +28,9 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawLevelScene(scene: LevelView) {
         levelSceneUIDrawer.clear()
-        levelSceneUIDrawer.drawMap(scene.map, scene.currentPlayerName)
+        levelSceneUIDrawer.drawMap(scene.map, scene.chosenPlayerName)
         levelSceneUIDrawer.outputMessage(scene.message)
-        levelSceneUIDrawer.outputPlayerState(scene.map.player(scene.currentPlayerName))
+        levelSceneUIDrawer.outputPlayerState(scene.map.player(scene.chosenPlayerName))
     }
 
     private fun drawInventoryScene(scene: InventoryView) {

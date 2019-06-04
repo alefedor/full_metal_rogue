@@ -28,7 +28,7 @@ class Game(private val map: MutableGameMap) {
     private val playerList = mutableListOf<String>()
     private val playersByName = mutableMapOf<String, Player>()
 
-    private val levelScene = LevelSceneHandler(map)
+    private val levelScene = LevelSceneHandler(map, this)
     private val handlersStack = Stack<SceneHandler>()
 
     init {
@@ -94,7 +94,7 @@ class Game(private val map: MutableGameMap) {
             turnPosition = nextTurnPosition()
     }
 
-    private fun currentPlayerName(): String? = if (turnPosition == -1) null else playerList[turnPosition]
+    fun currentPlayerName(): String? = if (turnPosition == -1) null else playerList[turnPosition]
 
     private fun nextTurnPosition(): Int {
         var someOneIsAlive = false

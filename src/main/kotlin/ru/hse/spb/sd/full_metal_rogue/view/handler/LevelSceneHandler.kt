@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
+import ru.hse.spb.sd.full_metal_rogue.controller.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.view.LevelView
@@ -8,7 +9,7 @@ import kotlin.random.Random
 /**
  * Handles user input on a LevelView.
  */
-class LevelSceneHandler(private val map: MutableGameMap) {
+class LevelSceneHandler(private val map: MutableGameMap, private val game: Game) {
     private var backActionOccured = false
     private val messages = MessageNavigation()
 
@@ -61,7 +62,12 @@ class LevelSceneHandler(private val map: MutableGameMap) {
 
     inner class LevelSceneHandlerWithPlayer(private val playerName: String) : SceneHandler() {
         override val view: LevelView?
-            get() = if (backActionOccured) null else LevelView(map, messages.getCurrentMessage(), playerName)
+            get() = if (backActionOccured) null else LevelView(
+                map,
+                messages.getCurrentMessage(),
+                playerName,
+                game.currentPlayerName()!!
+            )
         /**
          * Saves the current map and exits current view.
          */
