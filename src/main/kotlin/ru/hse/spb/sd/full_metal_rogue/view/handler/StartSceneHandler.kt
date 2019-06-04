@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
+import io.grpc.StatusRuntimeException
 import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.controller.Client
 import ru.hse.spb.sd.full_metal_rogue.controller.Game
@@ -111,7 +112,16 @@ class StartSceneHandler(
                 val gameName = createInputDialog("Input game name", "Game")
                 if (host != null && gameName != null) {
                     val client = Client(host)
-                    client.createGame(gameName)
+                    try {
+                        client.createGame(gameName)
+                    } catch (e: StatusRuntimeException) {
+                        showMessageDialog(
+                            null,
+                            "A game with this name already exists.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                        )
+                    }
                 }
                 StartSceneHandler(menu, host)
             }
