@@ -10,6 +10,8 @@ import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
+import ru.hse.spb.sd.full_metal_rogue.view.DeathView
+import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.util.concurrent.ConcurrentHashMap
 
 class FullMetalRogueService(private val levelGenerator: LevelGenerator = StandardLevelGenerator()) : FullMetalRogueServerGrpc.FullMetalRogueServerImplBase() {
@@ -21,7 +23,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         request: Server.SubscribeGameRequest,
         responseObserver: StreamObserver<Server.View>
     ) {
-        if (!sessions.contains(request.gameName)) {
+        if (!sessions.containsKey(request.gameName)) {
             responseObserver.onError(IllegalArgumentException("No game with such name"))
             return
         }
@@ -38,7 +40,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         request: Server.Action,
         responseObserver: StreamObserver<Server.SendCommandResponse>
     ) {
-        if (!sessions.contains(request.gameName)) {
+        if (!sessions.containsKey(request.gameName)) {
             responseObserver.onError(IllegalArgumentException("No game with such name"))
             return
         }
@@ -48,7 +50,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         val game = session.game
         val observers = session.observers
 
-        val updates = mutableListOf<Pair<String, Server.View>>()
+        val updates = mutableListOf<Pair<String, View?>>()
 
         synchronized(game) {
             game.makeTurn(request.playerName, parseCommand(request.command))
@@ -56,17 +58,21 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
 
             for (entry in observers.entries) {
                 val playerName = entry.key
-                val view = game.getView(playerName)//.toJson()
-                val update = Server.View.newBuilder().setJson("TODO").build()
-                updates.add(playerName to update)
+                val view = game.getView(playerName)
+                updates.add(playerName to view)
             }
         }
 
         responseObserver.onNext(Server.SendCommandResponse.newBuilder().build())
         responseObserver.onCompleted()
 
-        for (update in updates)
-            observers[update.first]!!.onNext(update.second)
+        for (update in updates) {
+            val view = Server.View.newBuilder().setJson("").build()
+            val observer = observers[update.first]!!
+            observer.onNext(view)
+            /*if (update.second is DeathView)
+                observer.onCompleted()*/
+        }
     }
 
     /**
@@ -88,7 +94,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
     ) {
 
         synchronized(sessions) { // synchronized is needed to make creation atomic
-            if (sessions.contains(request.gameName)) {
+            if (sessions.containsKey(request.gameName)) {
                 responseObserver.onError(IllegalArgumentException("There is already game with such name"))
                 return
             }
