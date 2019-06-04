@@ -91,8 +91,9 @@ class StartSceneHandler(
             }
             MainMenuItem.MULTIPLAYER_JOIN -> {
                 val playerName = createInputDialog("Input player name", "Game player")
-                if (playerName != null && playerName.length > 10) {
-                    showErrorMessage("Player name should not exceed 10.")
+                if (playerName != null && !checkPlayerName(playerName)) {
+                    showErrorMessage("Incorrect player name. " +
+                            "A valid name consists of  up to 10 latin symbols, digits, or underscores.")
                     StartSceneHandler(menu, host)
                 } else {
                     if (host != null && playerName != null) {
@@ -131,6 +132,9 @@ class StartSceneHandler(
         message,
         title,
         JOptionPane.QUESTION_MESSAGE)
+
+    private fun checkPlayerName(playerName: String) =
+        playerName.length <= 10 && playerName.matches(Regex("[A-Za-z0-9_]+"))
 
     enum class MainMenuItem {
         SINGLEPLAYER, SINGLEPLAYER_NEW_GAME, SINGLEPLAYER_CONTINUE, MULTIPLAYER, MULTIPLAYER_NEW_GAME, MULTIPLAYER_JOIN
