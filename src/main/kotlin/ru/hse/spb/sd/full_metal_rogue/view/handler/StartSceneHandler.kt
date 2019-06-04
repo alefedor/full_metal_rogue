@@ -28,8 +28,8 @@ class StartSceneHandler(
     override val view
         get() = StartView(menu)
 
-    private lateinit var host: String
-    private lateinit var gameName: String
+    private var host: String? = null
+    private var gameName: String? = null
 
     /**
      * Exits the game.
@@ -78,13 +78,16 @@ class StartSceneHandler(
             }
             MainMenuItem.MULTIPLAYER -> {
                 host = createInputDialog("Input host name", "Server host")
-                // create local controller
-                val newMenu = MutableMenu(
-                    mutableListOf(
-                        MainMenuItem.MULTIPLAYER_JOIN,
-                        MainMenuItem.MULTIPLAYER_NEW_GAME)
-                )
-                StartSceneHandler(newMenu)
+                if (host == null) {
+                     StartSceneHandler()
+                } else {
+                    val newMenu = MutableMenu(
+                        mutableListOf(
+                            MainMenuItem.MULTIPLAYER_JOIN,
+                            MainMenuItem.MULTIPLAYER_NEW_GAME)
+                    )
+                    StartSceneHandler(newMenu)
+                }
             }
             // change controller to the local controller that we previously created
             MainMenuItem.MULTIPLAYER_JOIN -> {
@@ -96,7 +99,9 @@ class StartSceneHandler(
             }
             MainMenuItem.MULTIPLAYER_NEW_GAME -> {
                 gameName = createInputDialog("Input game name", "Game")
-                GameState.currentController = MultiPlayerController(Client(gameName, host, true))
+                if (host != null && gameName != null) {
+                    GameState.currentController = MultiPlayerController(Client(gameName!!, host!!, true))
+                }
                 StartSceneHandler(menu)
             }
         }
