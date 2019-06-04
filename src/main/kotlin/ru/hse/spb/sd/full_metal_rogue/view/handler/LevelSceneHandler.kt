@@ -118,16 +118,16 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
 
                     if (targetTile.isDead) {
                         val isLevelUp = player.earnExperience(targetTile.experienceCost)
-                        messages.addMessage("You have slain the ${targetTile.name} " +
+                        messages.addMessage("$playerName slayed the ${targetTile.name} " +
                                 "and earned ${targetTile.experienceCost} experience points " +
                                 "${if (isLevelUp) "(level up!)" else ""}.")
                         map[targetPosition] = targetTile.die() ?: FreeSpace
                     } else {
                         if (targetTile is Enemy && shouldConfuseEnemy(player)) {
                             targetTile.getConfused()
-                            messages.addMessage("You hit and confused the ${targetTile.name}.")
+                            messages.addMessage("$playerName hit and confused the ${targetTile.name}.")
                         } else {
-                            messages.addMessage("You hit the ${targetTile.name}.")
+                            messages.addMessage("$playerName hit the ${targetTile.name}.")
                         }
                     }
                 }

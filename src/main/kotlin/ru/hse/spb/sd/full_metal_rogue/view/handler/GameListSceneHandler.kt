@@ -1,11 +1,14 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
+import io.grpc.Status
+import io.grpc.StatusRuntimeException
 import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.grpc.Client
 import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.GameListView
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
+import javax.swing.JOptionPane
 
 /**
  * Handles user input on a GameListSceneHandler.
@@ -36,7 +39,13 @@ class GameListSceneHandler(private val client: Client, private val playerName: S
         if (gameNamesMenu.size() != 0) {
             val currentGameName = gameNamesMenu.currentItem()
             GameState.currentController = MultiPlayerController(client, currentGameName, playerName)
-            client.joinGame(currentGameName, playerName)
+            try {
+                client.joinGame(currentGameName, playerName)
+            } catch (e: StatusRuntimeException) {
+                if (e.status.code == Status.Code.UNAVAILABLE) {
+                    showServerUnavailableMessage()
+                }
+            }
         }
         return this
     }

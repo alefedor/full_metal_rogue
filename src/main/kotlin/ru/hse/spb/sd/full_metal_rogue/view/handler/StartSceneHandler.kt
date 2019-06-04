@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
+import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.grpc.Client
@@ -90,17 +91,17 @@ class StartSceneHandler(
             MainMenuItem.MULTIPLAYER_JOIN -> {
                 val playerName = createInputDialog("Input player name", "Game player")
                 if (playerName != null && playerName.length > 10) {
-                    showMessageDialog(
-                        null,
-                        "Player name should not exceed 10.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                    )
+                    showErrorMessage("Player name should not exceed 10.")
                     StartSceneHandler(menu, host)
                 } else {
                     if (host != null && playerName != null) {
                         val client = Client(host)
-                        GameListSceneHandler(client, playerName)
+                        try {
+                            GameListSceneHandler(client, playerName)
+                        } catch (e: StatusRuntimeException) {
+                            showServerUnavailableMessage()
+                            StartSceneHandler(menu, host)
+                        }
                     } else {
                         StartSceneHandler(menu, host)
                     }
@@ -113,12 +114,11 @@ class StartSceneHandler(
                     try {
                         client.createGame(gameName)
                     } catch (e: StatusRuntimeException) {
-                        showMessageDialog(
-                            null,
-                            "A game with this name already exists.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                        )
+                        if (e.status.code == Status.Code.UNAVAILABLE) {
+                            showServerUnavailableMessage()
+                        } else {
+                            showErrorMessage("A game with this name already exists.")
+                        }
                     }
                 }
                 StartSceneHandler(menu, host)

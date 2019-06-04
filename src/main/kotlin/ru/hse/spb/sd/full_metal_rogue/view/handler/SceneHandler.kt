@@ -3,6 +3,7 @@ package ru.hse.spb.sd.full_metal_rogue.view.handler
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.io.Serializable
+import javax.swing.JOptionPane
 
 /**
  * Handles user input on a View.
@@ -30,4 +31,17 @@ abstract class SceneHandler : Serializable {
      * @return next SceneHandler or null to return to previous SceneHandler
      */
     open fun directionAction(direction: Direction): SceneHandler? = this
+
+    protected fun showErrorMessage(message: String) {
+        JOptionPane.showMessageDialog(
+            null,
+            message,
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        )
+    }
+
+    protected fun showServerUnavailableMessage() {
+        showErrorMessage("Server is unavailable.")
+    }
 }
