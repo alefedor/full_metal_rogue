@@ -38,6 +38,7 @@ class Game(private val map: MutableGameMap) {
                 if (gameObject is Player) {
                     playerList.add(gameObject.name)
                     playersByName[gameObject.name] = gameObject
+                    turnPosition = 0
                 }
             }
     }
