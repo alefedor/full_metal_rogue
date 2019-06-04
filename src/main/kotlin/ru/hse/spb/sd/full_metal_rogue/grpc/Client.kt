@@ -3,12 +3,13 @@ package ru.hse.spb.sd.full_metal_rogue.grpc
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
+import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.Server
-import ru.hse.spb.sd.full_metal_rogue.controller.BackCommand
-import ru.hse.spb.sd.full_metal_rogue.controller.Command
-import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
-import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
+import ru.hse.spb.sd.full_metal_rogue.controller.*
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
+import ru.hse.spb.sd.full_metal_rogue.view.View
+import java.io.ByteArrayInputStream
+import java.io.ObjectInputStream
 import java.util.concurrent.Phaser
 
 private const val PORT = 10000
@@ -44,10 +45,9 @@ class Client(
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun onNext(value: Server.View?) {
-                /*
-                redraw UI here
-                 */
+            override fun onNext(view: Server.View) {
+                val view = protoViewToGameView(view)
+                GameState.gui.draw(view)
 
                 if (!wasView) {
                     barrier.arrive()
@@ -92,5 +92,11 @@ class Client(
             .setGameName(gameName)
             .build()
         blockingStub.createGame(request)
+    }
+
+    private fun protoViewToGameView(view: Server.View): View? {
+        val bytes = view.bytes.toByteArray()
+        val gameView = ObjectInputStream(ByteArrayInputStream(bytes)).use { it.readObject() }
+        return gameView as View?
     }
 }
