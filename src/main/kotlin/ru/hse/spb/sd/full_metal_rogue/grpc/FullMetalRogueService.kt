@@ -1,6 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.grpc
 
 import com.google.protobuf.ByteString
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
 import ru.hse.spb.sd.full_metal_rogue.Server
@@ -27,21 +28,31 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         request: Server.SubscribeGameRequest,
         responseObserver: StreamObserver<Server.View>
     ) {
-        if (!sessions.containsKey(request.gameName)) {
-            responseObserver.onError(IllegalArgumentException("No game with such name"))
-            return
+        try {
+            if (!sessions.containsKey(request.gameName))
+                throw IllegalArgumentException("No game with such name")
+
+            val session = sessions[request.gameName]!!
+            val observers = session.observers
+
+            if (observers.containsKey(request.playerName))
+                throw java.lang.IllegalArgumentException("The player with such name is or was in the game")
+
+            synchronized(session.game) {
+                session.game.join(request.playerName)
+            }
+
+            observers[request.playerName] = responseObserver
+
+            sendUpdates(session)
+        } catch (e: IllegalArgumentException) {
+            responseObserver.onError(
+                Status.INVALID_ARGUMENT
+                    .withDescription(e.message)
+                    .withCause(e)
+                    .asRuntimeException()
+            )
         }
-
-        val session = sessions[request.gameName]!!
-        val observers = session.observers
-
-        synchronized(session.game) {
-            session.game.join(request.playerName)
-        }
-
-        observers[request.playerName] = responseObserver
-
-        sendUpdates(session)
     }
 
     /**
@@ -91,7 +102,11 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
     ) {
         synchronized(sessions) { // synchronized is needed to make creation atomic
             if (sessions.containsKey(request.gameName)) {
-                responseObserver.onError(IllegalArgumentException("There is already game with such name"))
+                responseObserver.onError(
+                    Status.INVALID_ARGUMENT
+                        .withDescription("There is already game with such name")
+                        .asRuntimeException()
+                )
                 return
             }
             sessions[request.gameName] = GameSession(Game(levelGenerator.generateLevel()))
