@@ -5,6 +5,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.objects.Chest
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.ChestView
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
+import java.lang.IllegalStateException
 
 /**
  * Handles user input on a ChestView.
@@ -23,6 +24,7 @@ class ChestSceneHandler(chest: Chest, private val player: Player) : SceneHandler
         when(direction) {
             Direction.UP -> chestItems.toPreviousItem()
             Direction.DOWN -> chestItems.toNextItem()
+            else -> throw IllegalStateException("Direction should be up or down")
         }
         return this
     }

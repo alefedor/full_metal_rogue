@@ -46,8 +46,8 @@ class Client(
             }
 
             override fun onNext(view: Server.View) {
-                val view = protoViewToGameView(view)
-                currentController.drawView(view)
+                val protoView = protoViewToGameView(view)
+                currentController.drawView(protoView)
 
                 if (!wasView) {
                     barrier.arrive()

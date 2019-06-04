@@ -10,6 +10,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.view.StartView
+import java.lang.IllegalStateException
 import javax.swing.JOptionPane
 import kotlin.system.exitProcess
 
@@ -46,6 +47,7 @@ class StartSceneHandler(
         when (direction) {
             Direction.UP -> menu.toPreviousItem()
             Direction.DOWN -> menu.toNextItem()
+            else -> throw IllegalStateException("Direction in menu should be up or down")
         }
         return this
     }

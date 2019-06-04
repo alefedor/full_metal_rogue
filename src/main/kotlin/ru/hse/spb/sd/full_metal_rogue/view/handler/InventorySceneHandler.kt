@@ -4,6 +4,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.InventoryView
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
+import java.lang.IllegalStateException
 
 /**
  * Handles user input on a InventoryView.
@@ -22,6 +23,7 @@ class InventorySceneHandler(private val player: Player) : SceneHandler() {
         when (direction) {
             Direction.UP -> inventoryMenu.toPreviousItem()
             Direction.DOWN -> inventoryMenu.toNextItem()
+            else -> throw IllegalStateException("Direction should be up or down")
         }
         return this
     }

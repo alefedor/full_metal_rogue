@@ -5,6 +5,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.ui.Tile
 import java.awt.Color
+import java.lang.IllegalStateException
 
 class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     private val enemiesColors = HashMap<String, Color>()
@@ -46,6 +47,7 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
             }
             is Enemy -> drawEnemy(gameObject, x, y)
             is Chest -> drawChest(x, y)
+            else -> throw IllegalStateException("Unrecognized object")
         }
     }
 

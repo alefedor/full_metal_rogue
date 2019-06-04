@@ -4,6 +4,7 @@ import ru.hse.spb.sd.full_metal_rogue.controller.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.view.LevelView
+import java.lang.IllegalStateException
 import kotlin.random.Random
 
 /**
@@ -91,14 +92,14 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
         /**
          * Makes game turn.
          */
-        override fun directionAction(playerMove: Direction): SceneHandler {
+        override fun directionAction(direction: Direction): SceneHandler {
             if (messages.hasNextMessage()) {
                 messages.toNextMessage()
                 return this
             }
             messages.clear()
 
-            return movePlayer(playerName, playerMove)
+            return movePlayer(playerName, direction)
         }
 
         /**
@@ -143,6 +144,7 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
                     move(currentPosition, targetPosition)
                     return ChestSceneHandler(targetTile, map.player(playerName))
                 }
+                else -> throw IllegalStateException("Unrecognized object")
             }
 
             return this
