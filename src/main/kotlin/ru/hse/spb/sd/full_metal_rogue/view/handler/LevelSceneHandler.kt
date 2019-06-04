@@ -10,7 +10,7 @@ import kotlin.random.Random
  * Handles user input on a LevelView.
  */
 class LevelSceneHandler(private val map: MutableGameMap, private val game: Game) {
-    private var backActionOccured = false
+    private var backActionMadeBy: String? = null
     private val messages = MessageNavigation()
 
     fun withPlayer(playerName: String) = LevelSceneHandlerWithPlayer(playerName)
@@ -63,8 +63,8 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
     inner class LevelSceneHandlerWithPlayer(private val playerName: String) : SceneHandler() {
         override val view: LevelView?
             get() {
-                if (backActionOccured) {
-                    backActionOccured = false
+                if (playerName == backActionMadeBy) {
+                    backActionMadeBy = null
                     return null
                 } else {
                     return LevelView(
@@ -79,7 +79,7 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
          * Saves the current map and exits current view.
          */
         override fun backAction(): SceneHandler? {
-            backActionOccured = true
+            backActionMadeBy = playerName
             return this
         }
 
