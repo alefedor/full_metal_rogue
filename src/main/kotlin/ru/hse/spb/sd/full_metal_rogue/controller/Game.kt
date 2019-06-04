@@ -21,7 +21,12 @@ class Game(private val map: MutableGameMap) {
         if (playersByName[playerName]!!.isDead)
             return DeathView(playersByName[playerName]!!)
 
-        return if (handlersStack.isNotEmpty()) handlersStack.peek().view else levelScene.withPlayer(playerName).view
+        val shouldShowAdditionalScenes = handlersStack.isNotEmpty() && playerName == currentPlayerName()
+
+        if (shouldShowAdditionalScenes)
+            return handlersStack.peek().view
+        else
+            return levelScene.withPlayer(playerName).view
     }
 
     private var turnPosition: Int = -1
@@ -96,16 +101,21 @@ class Game(private val map: MutableGameMap) {
 
     fun currentPlayerName(): String? = if (turnPosition == -1) null else playerList[turnPosition]
 
-    private fun nextTurnPosition(): Int {
-        var someOneIsAlive = false
+    private fun isSomeOneAlive(): Boolean {
+        var result = false
         for (player in playersByName.values)
             if (player.isAlive)
-                someOneIsAlive = true
+                result = true
 
-        if (!someOneIsAlive)
-            return -1
+        return result
+    }
+
+    private fun nextTurnPosition(): Int {
 
         do {
+            if (!isSomeOneAlive())
+                return -1
+
             turnPosition++
             if (turnPosition == playerList.size) {
                 levelScene.moveEnemies() // end of round

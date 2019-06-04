@@ -27,12 +27,13 @@ class SinglePlayerController(private val map: MutableGameMap) : Controller() {
     private fun drawView() {
         val view = game.getView(PLAYER_NAME)
 
+
+        // save and delete are available only in single player mode
         if (view is DeathView) {
             FileMapLoader.deleteMap()
         }
 
         if (view == null) {
-            // save and delete is available only in single player mode
             if (map.playerPositions().isNotEmpty())
                 FileMapLoader.saveMap(map)
         }
