@@ -11,6 +11,7 @@ import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
+import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
@@ -116,6 +117,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         return Server.View.newBuilder().setBytes(byteString).build()
     }
 
+    @Synchronized
     private fun sendUpdates(session: GameSession) {
         val game = session.game
         val observers = session.observers
@@ -134,8 +136,11 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
             val view = gameViewToProtoView(update.second)
             val observer = observers[update.first]!!
             observer.onNext(view)
-            /*if (update.second is DeathView)
-                observer.onCompleted()*/
+            if (update.second is DeathView || update.second == null) {
+                observer.onCompleted()
+                observers.remove(update.first)
+                game.removePlayer(update.first)
+            }
         }
     }
 

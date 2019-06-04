@@ -62,12 +62,19 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
 
     inner class LevelSceneHandlerWithPlayer(private val playerName: String) : SceneHandler() {
         override val view: LevelView?
-            get() = if (backActionOccured) null else LevelView(
-                map,
-                messages.getCurrentMessage(),
-                playerName,
-                game.currentPlayerName()!!
-            )
+            get() {
+                if (backActionOccured) {
+                    backActionOccured = false
+                    return null
+                } else {
+                    return LevelView(
+                        map,
+                        messages.getCurrentMessage(),
+                        playerName,
+                        game.currentPlayerName()!!
+                    )
+                }
+            }
         /**
          * Saves the current map and exits current view.
          */
