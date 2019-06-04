@@ -35,7 +35,6 @@ class SinglePlayerController(private val map: MutableGameMap) : Controller() {
                 FileMapLoader.deleteMap()
             else
                 FileMapLoader.saveMap(map)
-            return
         }
 
         checkView(view)

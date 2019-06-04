@@ -47,7 +47,8 @@ class LevelSceneHandler(private val map: MutableGameMap) {
 
             is Actor -> {
                 targetTile.takeDamage(enemy.attackPower)
-                map[targetPosition] = targetTile.die() ?: FreeSpace
+                if (targetTile.isDead)
+                    map[targetPosition] = targetTile.die() ?: FreeSpace
             }
 
             is Chest -> {
