@@ -9,6 +9,9 @@ import javax.swing.JOptionPane
  * Handles user input on a View.
  */
 abstract class SceneHandler : Serializable {
+    /**
+     * View object to be given to GUI. Is null if we want to reset game mode.
+     */
     abstract val view: View?
 
     /**
