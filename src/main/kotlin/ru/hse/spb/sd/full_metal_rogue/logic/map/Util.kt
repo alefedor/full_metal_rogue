@@ -18,6 +18,9 @@ fun GameMap.playerPosition(name: String): Position {
     throw IllegalStateException("No player on the map, but player position queried")
 }
 
+/**
+ * Gets positions of all players on the map.
+ */
 fun GameMap.playerPositions(): List<Position> {
     val playerPositions = mutableListOf<Position>()
     for (x in 0 until width)
@@ -29,23 +32,6 @@ fun GameMap.playerPositions(): List<Position> {
     return playerPositions
 }
 
-fun GameMap.hasPlayer(name: String): Boolean {
-    for (x in 0 until width)
-        for (y in 0 until height) {
-            val gameObject = get(x, y)
-            if (gameObject is Player && gameObject.name == name)
-                return true
-        }
-    return false
-}
-
-/**
- * Throws exception [IllegalStateException] if the GameMap doesn't contain player.
- */
-fun GameMap.assertContainsPlayer(name: String) {
-    playerPosition(name)
-}
-
 /**
  * Finds player in the GameMap and returns it.
  */
@@ -54,7 +40,7 @@ fun GameMap.player(name: String): Player = get(playerPosition(name)) as Player
 /**
  * Checks whether a position in inside map constraints.
  */
-fun GameMap.inBounds(position: Position) = 0 <= position.x && position.x < width && 0 <= position.y && position.y < height
+fun GameMap.inBounds(position: Position) = position.x in 0 until width && 0 <= position.y && position.y < height
 
 /**
  * Checks whether a position in the map can is traversable.

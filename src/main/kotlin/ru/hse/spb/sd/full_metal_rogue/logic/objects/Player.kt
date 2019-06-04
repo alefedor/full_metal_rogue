@@ -3,6 +3,9 @@ package ru.hse.spb.sd.full_metal_rogue.logic.objects
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.*
 import kotlin.math.roundToInt
 
+/**
+ * Represents a game player. A player has health, attack, and name attributes, inventory and equipped items.
+ */
 class Player(maxHealth: Int, attackPower: Int, name: String) : Actor(maxHealth, attackPower, name, 0) {
     companion object {
         const val NEEDED_EXPERIENCE_RISE = 1.2

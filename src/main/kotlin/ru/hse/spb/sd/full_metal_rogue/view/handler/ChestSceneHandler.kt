@@ -21,7 +21,7 @@ class ChestSceneHandler(chest: Chest, private val player: Player) : SceneHandler
      * Changes current chest item.
      */
     override fun directionAction(direction: Direction): SceneHandler? {
-        when(direction) {
+        when (direction) {
             Direction.UP -> chestItems.toPreviousItem()
             Direction.DOWN -> chestItems.toNextItem()
             else -> throw IllegalStateException("Direction should be up or down")

@@ -5,7 +5,7 @@ import io.grpc.ServerBuilder
 import java.util.logging.Logger
 
 /**
- * A sample gRPC server that serve the RouteGuide (see route_guide.proto) service.
+ * A sample gRPC server that serves the FullMetalRogue service.
  */
 class FullMetalRogueServer(private val port: Int) {
     private val server: Server = ServerBuilder.forPort(port).addService(FullMetalRogueService())

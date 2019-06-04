@@ -13,6 +13,9 @@ interface Inventory : Serializable {
     fun items(): MutableList<Item>
 }
 
+/**
+ * Player inventory implementation basic methods: add, remove, get by id, get all items.
+ */
 class SimpleInventory : Inventory {
     private val items = mutableListOf<Item>()
     override val size: Int

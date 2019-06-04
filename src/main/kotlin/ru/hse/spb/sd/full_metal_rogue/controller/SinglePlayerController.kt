@@ -7,6 +7,9 @@ import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import java.awt.event.KeyEvent
 import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 
+/**
+ * Game controller for single player mode.
+ */
 class SinglePlayerController(private val map: MutableGameMap) : Controller() {
     private val game = Game(map)
 

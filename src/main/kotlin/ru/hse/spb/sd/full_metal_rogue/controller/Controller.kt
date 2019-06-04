@@ -6,6 +6,9 @@ import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.awt.event.KeyEvent
 
+/**
+ * Represents a game controller, handling user input and calling GUI to output current view.
+ */
 abstract class Controller {
     protected var wasDeath = false
 
@@ -21,7 +24,7 @@ abstract class Controller {
         else -> null
     }
 
-    protected fun checkView(view: View?) {
+    private fun checkView(view: View?) {
         if (view is DeathView)
             wasDeath = true
     }

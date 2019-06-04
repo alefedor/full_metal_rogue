@@ -21,6 +21,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
     private val sessions = ConcurrentHashMap<String, GameSession>()
 
     /**
+     * Allows the user to join a game and subscribe to a view stream.
      */
     override fun subscribeGame(
         request: Server.SubscribeGameRequest,
@@ -44,6 +45,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
     }
 
     /**
+     * Sends a user command to server in order to make a turn in the game.
      */
     override fun sendCommand(
         request: Server.Action,
@@ -69,6 +71,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
     }
 
     /**
+     * Returns a list of all available games.
      */
     override fun getGameList(
         request: Server.GameListRequest,
@@ -80,6 +83,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
     }
 
     /**
+     * Creates a new game with a given name.
      */
     override fun createGame(
         request: Server.CreateGameRequest,

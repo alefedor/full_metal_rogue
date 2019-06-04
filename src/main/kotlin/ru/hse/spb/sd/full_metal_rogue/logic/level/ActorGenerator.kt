@@ -12,11 +12,18 @@ import kotlin.random.Random
  * Interface for generating different actors (players, enemies)
  */
 interface ActorGenerator {
+    /**
+     * Generates a player.
+     */
     fun generatePlayer(name: String): Player
+
+    /**
+     * Generates an enemy.
+     */
     fun generateEnemy(): Enemy
 }
 
-class TrivialActorGenerator(val contentGenerator: ContentGenerator) : ActorGenerator {
+class TrivialActorGenerator(private val contentGenerator: ContentGenerator) : ActorGenerator {
     companion object {
         private val ENEMY_NAMES = listOf("oxygen", "water", "acid")
         private val BEHAVIOURS = listOf(PassiveBehaviour, AggressiveBehaviour, CowardBehaviour)
@@ -25,10 +32,10 @@ class TrivialActorGenerator(val contentGenerator: ContentGenerator) : ActorGener
     override fun generateEnemy(): Enemy {
         val behaviour = randomBehaviour()
 
-        val prefix = when {
-            behaviour is PassiveBehaviour -> "lazy "
-            behaviour is AggressiveBehaviour -> "furious "
-            behaviour is CowardBehaviour -> "coward "
+        val prefix = when (behaviour) {
+            is PassiveBehaviour -> "lazy "
+            is AggressiveBehaviour -> "furious "
+            is CowardBehaviour -> "coward "
             else -> ""
         }
 

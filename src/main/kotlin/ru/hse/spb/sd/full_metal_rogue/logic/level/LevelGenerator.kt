@@ -4,7 +4,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.inventory.SimpleContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 
 /**
- * Interface for generation complete level with player and enemies
+ * Interface for generation complete level with enemies.
  */
 interface LevelGenerator {
     companion object {
@@ -12,6 +12,9 @@ interface LevelGenerator {
         const val DEFAULT_MAP_WIDTH = 85
     }
 
+    /**
+     * Generated a level (a game map).
+     */
     fun generateLevel(width: Int = DEFAULT_MAP_WIDTH, height: Int = DEFAULT_MAP_HEIGHT): MutableGameMap
 }
 

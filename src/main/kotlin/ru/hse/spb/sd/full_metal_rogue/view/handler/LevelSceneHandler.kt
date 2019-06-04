@@ -14,13 +14,14 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
     private var backActionMadeBy: String? = null
     private val messages = MessageNavigation()
 
+    /**
+     * Returns a handler for a certain players.
+     */
     fun withPlayer(playerName: String) = LevelSceneHandlerWithPlayer(playerName)
 
-    private fun move(from: Position, to: Position) {
-        map[to] = map[from]
-        map[from] = FreeSpace
-    }
-
+    /**
+     * Traverses the map and moves all enemies.
+     */
     fun moveEnemies() {
         val movedEnemies = HashSet<Actor>()
         for (x in 0 until map.width) {
@@ -34,6 +35,11 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
         }
     }
 
+    private fun move(from: Position, to: Position) {
+        map[to] = map[from]
+        map[from] = FreeSpace
+    }
+
     /**
      * Moves specified enemy from specified position.
      */
@@ -42,7 +48,7 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
         if (targetPosition == position)
             return
 
-        when(val targetTile = map[targetPosition]) {
+        when (val targetTile = map[targetPosition]) {
             is FreeSpace -> {
                 move(position, targetPosition)
             }

@@ -4,6 +4,9 @@ import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.view.Menu
 
+/**
+ * Handles writing to terminal for InventoryView.
+ */
 class InventorySceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     // the following values DO NOT take leftOffset into consideration
     // and can be used with any left offset

@@ -3,6 +3,9 @@ package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 
+/**
+ * Handles writing to terminal for DeathView.
+ */
 class DeathSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     /**
      * Outputs a message in case of player death.

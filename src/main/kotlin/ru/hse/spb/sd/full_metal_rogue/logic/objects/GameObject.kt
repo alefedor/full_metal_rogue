@@ -11,6 +11,9 @@ object FreeSpace : GameObject()
 
 class Chest(val items: MutableList<Item>) : GameObject()
 
+/**
+ * Represents a game object which can move, attack other actors and take damage.
+ */
 abstract class Actor(
     maxHealthValue: Int,
     attackPowerValue: Int,
@@ -18,10 +21,8 @@ abstract class Actor(
     open val experienceCost: Int
 ) : GameObject() {
     protected var baseMaxHealth = maxHealthValue
-        protected set
 
     protected var baseAttackPower = attackPowerValue
-        protected set
 
     val maxHealth: Int
         get() = calculateMaxHealth()

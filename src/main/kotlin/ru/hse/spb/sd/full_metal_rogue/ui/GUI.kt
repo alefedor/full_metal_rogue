@@ -30,6 +30,9 @@ class GUI : JFrame() {
         drawer = SceneDrawer(terminal)
     }
 
+    /**
+     * Draws a view. Replaces the controller with LocalController if necessary.
+     */
     fun draw(view: View?) {
         if (view == null) { // should reset controller
             GameState.currentController = LocalController()

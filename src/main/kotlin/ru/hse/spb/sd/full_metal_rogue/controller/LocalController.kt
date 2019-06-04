@@ -6,6 +6,9 @@ import ru.hse.spb.sd.full_metal_rogue.view.handler.StartSceneHandler
 import java.awt.event.KeyEvent
 import java.util.*
 
+/**
+ * Local game controller used in main menu.
+ */
 class LocalController : Controller() {
     private val handlersStack = Stack<SceneHandler>()
 

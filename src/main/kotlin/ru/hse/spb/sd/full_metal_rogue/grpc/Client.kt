@@ -14,6 +14,11 @@ import java.util.concurrent.Phaser
 
 private const val PORT = 10000
 
+/**
+ * Represents a gRPC client.
+ * A client can create a new game, view all available games,
+ * join an existing game, and send commands to a game.
+ */
 class Client(
     host: String
 ) {
@@ -26,6 +31,9 @@ class Client(
         asyncStub = FullMetalRogueServerGrpc.newStub(channel)
     }
 
+    /**
+     * Allows player [playerName] join game [gameName].
+     */
     fun joinGame(gameName: String, playerName: String) {
         val request = Server.SubscribeGameRequest.newBuilder()
             .setGameName(gameName)
@@ -59,11 +67,17 @@ class Client(
         barrier.arriveAndAwaitAdvance()
     }
 
+    /**
+     * Returns a list of all games available on the server.
+     */
     fun getGameList(): List<String> {
         val request = Server.GameListRequest.newBuilder().build()
         return blockingStub.getGameList(request).gamesList
     }
 
+    /**
+     * Sends a command made by player [playerName] in game [gameName].
+     */
     fun sendCommand(gameName:String, playerName: String, command: Command) {
         val serverCommand = when (command) {
             is DirectionCommand -> {
@@ -86,6 +100,9 @@ class Client(
         blockingStub.sendCommand(request)
     }
 
+    /**
+     * Creates a game names [gameName] on server.
+     */
     fun createGame(gameName: String) {
         val request = Server.CreateGameRequest.newBuilder()
             .setGameName(gameName)

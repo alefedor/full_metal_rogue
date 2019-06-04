@@ -16,6 +16,9 @@ class SceneDrawer(terminal: AsciiPanel) {
     private val startSceneUIDrawer = StartSceneUIDrawer(terminal)
     private val gameSceneUIDrawer = GameListSceneUIDrawer(terminal)
 
+    /**
+     * Outputs a view to screen.
+     */
     fun draw(view: View) {
         when (view) {
             is LevelView -> drawLevelScene(view)
@@ -55,7 +58,7 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawStartScene(scene: StartView) {
         startSceneUIDrawer.clear()
-        startSceneUIDrawer.outputGameTitle()
+        startSceneUIDrawer.outputsWelcomeMessage()
         when {
             scene.isSinglePlayerMenu() -> {
                 startSceneUIDrawer.outputMenuItems(

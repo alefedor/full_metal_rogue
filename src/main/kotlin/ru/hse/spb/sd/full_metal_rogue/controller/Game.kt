@@ -13,6 +13,9 @@ import ru.hse.spb.sd.full_metal_rogue.view.handler.LevelSceneHandler
 import ru.hse.spb.sd.full_metal_rogue.view.handler.SceneHandler
 import java.util.*
 
+/**
+ * Game logic representation.
+ */
 class Game(private val map: MutableGameMap) {
     fun getView(playerName: String): View? {
         if (playerName !in playerList)
@@ -23,10 +26,10 @@ class Game(private val map: MutableGameMap) {
 
         val shouldShowAdditionalScenes = handlersStack.isNotEmpty() && playerName == currentPlayerName()
 
-        if (shouldShowAdditionalScenes)
-            return handlersStack.peek().view
+        return if (shouldShowAdditionalScenes)
+            handlersStack.peek().view
         else
-            return levelScene.withPlayer(playerName).view
+            levelScene.withPlayer(playerName).view
     }
 
     private var turnPosition: Int = -1
@@ -48,6 +51,9 @@ class Game(private val map: MutableGameMap) {
             }
     }
 
+    /**
+     * Adds player [playerName] to the game.
+     */
     fun join(playerName: String): Boolean {
         if (playerName in playerList)
             return false
@@ -64,6 +70,9 @@ class Game(private val map: MutableGameMap) {
         return true
     }
 
+    /**
+     * Removes player [playerName] from the game.
+     */
     fun removePlayer(playerName: String) {
         if (playerName !in playerList)
             return // nothing to do
@@ -75,6 +84,9 @@ class Game(private val map: MutableGameMap) {
             turnPosition = nextTurnPosition()
     }
 
+    /**
+     * Makes a turn for player [playerName] based on command [command].
+     */
     fun makeTurn(playerName: String, command: Command) {
         if (playerName != currentPlayerName())
             return
@@ -99,6 +111,9 @@ class Game(private val map: MutableGameMap) {
             turnPosition = nextTurnPosition()
     }
 
+    /**
+     * Returns the name of the current player (whose turn it is to make a move).
+     */
     fun currentPlayerName(): String? = if (turnPosition == -1) null else playerList[turnPosition]
 
     private fun isSomeOneAlive(): Boolean {

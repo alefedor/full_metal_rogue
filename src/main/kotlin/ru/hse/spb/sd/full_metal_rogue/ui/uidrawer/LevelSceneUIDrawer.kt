@@ -7,6 +7,9 @@ import ru.hse.spb.sd.full_metal_rogue.ui.Tile
 import java.awt.Color
 import java.lang.IllegalStateException
 
+/**
+ * Handles writing to terminal for LevelView.
+ */
 class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     private val enemiesColors = HashMap<String, Color>()
 
@@ -30,6 +33,9 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
             outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
     }
 
+    /**
+     * Outputs which player's turn it currently is in the left panel.
+     */
     fun outputCurrentTurnHolder(currentPlayerName: String) {
         terminal.write("Current turn:", 0, terminal.heightInCharacters- 3)
         terminal.write(currentPlayerName, 0, terminal.heightInCharacters - 2)

@@ -15,6 +15,9 @@ interface ContentGenerator {
 
 private data class WeaponCharacteristics(val name: String, val confusionChance: Double)
 
+/**
+ * Generates basic armor, weapons, and chests.
+ */
 object SimpleContentGenerator : ContentGenerator {
     private val BASIC_WEAPONS = listOf(
         WeaponCharacteristics("Markov chain", 0.9),
@@ -32,10 +35,10 @@ object SimpleContentGenerator : ContentGenerator {
 
     override fun generateArmor(): Armor {
         val armorName = BASIC_ARMOR_NAMES.random()
-        if (Random.nextBoolean()) {
-            return Armor(armorName, Bonus(Random.nextInt(2, 4), BonusType.MULTIPLIER))
+        return if (Random.nextBoolean()) {
+            Armor(armorName, Bonus(Random.nextInt(2, 4), BonusType.MULTIPLIER))
         } else {
-            return Armor(armorName, Bonus(Random.nextInt(50, 400), BonusType.ADDEND))
+            Armor(armorName, Bonus(Random.nextInt(50, 400), BonusType.ADDEND))
         }
     }
 

@@ -4,6 +4,9 @@ import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
 import ru.hse.spb.sd.full_metal_rogue.view.Menu
 
+/**
+ * Handles writing to terminal for ChestView.
+ */
 class ChestSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     // the following values DO take leftOffset into consideration
     private val chestBonusValuePosition = 65
