@@ -41,7 +41,6 @@ message SubscribeGameRequest {
 }
 
 message SendCommandResponse {
-
 }
 
 service FullMetalRogueServer {
