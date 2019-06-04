@@ -32,7 +32,7 @@ message CreateGameResponse {
 }
 
 message View {
-    string json = 1;
+    bytes bytes = 1;
 }
 
 message SubscribeGameRequest {

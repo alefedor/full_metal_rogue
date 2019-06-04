@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.grpc
 
+import com.google.protobuf.ByteString
 import io.grpc.stub.StreamObserver
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
 import ru.hse.spb.sd.full_metal_rogue.Server
@@ -12,6 +13,8 @@ import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
+import java.io.ByteArrayOutputStream
+import java.io.ObjectOutputStream
 import java.util.concurrent.ConcurrentHashMap
 
 class FullMetalRogueService(private val levelGenerator: LevelGenerator = StandardLevelGenerator()) : FullMetalRogueServerGrpc.FullMetalRogueServerImplBase() {
@@ -67,7 +70,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         responseObserver.onCompleted()
 
         for (update in updates) {
-            val view = Server.View.newBuilder().setJson("").build()
+            val view = gameViewToProtoView(update.second)
             val observer = observers[update.first]!!
             observer.onNext(view)
             /*if (update.second is DeathView)
@@ -112,6 +115,17 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         Server.Command.LEFT -> DirectionCommand(Direction.LEFT)
         Server.Command.RIGHT -> DirectionCommand(Direction.RIGHT)
         Server.Command.UNRECOGNIZED -> throw IllegalArgumentException("Command is not recognized")
+    }
+
+    private fun gameViewToProtoView(view: View?): Server.View {
+        val byteArrayStream = ByteArrayOutputStream()
+        val objectStream = ObjectOutputStream(byteArrayStream)
+        objectStream.writeObject(view)
+        objectStream.flush()
+        val bytes = byteArrayStream.toByteArray()
+
+        val byteString = ByteString.copyFrom(bytes)
+        return Server.View.newBuilder().setBytes(byteString).build()
     }
 
     class GameSession(val game: Game) {
