@@ -11,7 +11,6 @@ import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
-import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
@@ -34,11 +33,11 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         val session = sessions[request.gameName]!!
         val observers = session.observers
 
-        observers[request.playerName] = responseObserver
-
         synchronized(session.game) {
             session.game.join(request.playerName)
         }
+
+        observers[request.playerName] = responseObserver
 
         sendUpdates(session)
     }
@@ -62,10 +61,10 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
             game.makeTurn(request.playerName, parseCommand(request.command))
         }
 
-        sendUpdates(session)
-
         responseObserver.onNext(Server.SendCommandResponse.newBuilder().build())
         responseObserver.onCompleted()
+
+        sendUpdates(session)
     }
 
     /**
@@ -85,7 +84,6 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         request: Server.CreateGameRequest,
         responseObserver: StreamObserver<Server.CreateGameResponse>
     ) {
-
         synchronized(sessions) { // synchronized is needed to make creation atomic
             if (sessions.containsKey(request.gameName)) {
                 responseObserver.onError(IllegalArgumentException("There is already game with such name"))
