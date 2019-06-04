@@ -4,6 +4,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.lang.Exception
 import java.nio.file.Files
 import java.nio.file.Paths
 import javax.swing.JOptionPane
@@ -17,9 +18,11 @@ object FileMapLoader {
     /**
      * Loads map from the save file.
      */
-    fun loadMap(): MutableGameMap? {
-        val oos = ObjectInputStream(FileInputStream(SAVE_NAME))
-        return oos.readObject() as MutableGameMap
+    fun loadMap() = try {
+        ObjectInputStream(FileInputStream(SAVE_NAME)).use { it.readObject() as MutableGameMap }
+    } catch (exception: Exception) {
+        showErrorDialog("Unable to load previous save.")
+        null
     }
 
     /**
@@ -32,21 +35,12 @@ object FileMapLoader {
     /**
      * Writes map to the save file.
      */
-    fun saveMap(map: GameMap): Boolean {
-        val ois = ObjectOutputStream(FileOutputStream(SAVE_NAME))
-        ois.writeObject(map)
-
-
-        /*
-        val file = Paths.get(SAVE_NAME).toFile()
-        try {
-            file.writeText(serializedMap)
-        } catch (exception: Exception) {
-            showErrorDialog("Unable to save the game.")
-            return false
-        }*/
-
-        return true
+    fun saveMap(map: GameMap) = try {
+        ObjectOutputStream(FileOutputStream(SAVE_NAME)).use { it.writeObject(map) }
+        true
+    } catch (exception: Exception) {
+        showErrorDialog("Unable to save the game.")
+        false
     }
 
     private fun showErrorDialog(message: String) =
