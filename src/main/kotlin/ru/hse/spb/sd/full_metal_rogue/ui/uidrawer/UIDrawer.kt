@@ -33,15 +33,6 @@ abstract class UIDrawer(protected val terminal: AsciiPanel) {
     }
 
     /**
-     * Outputs player state in the left panel.
-     * The state consists of a characteristic and its value.
-     */
-    fun outputPlayerState(player: Player) {
-        getPlayerStats(player).forEachIndexed { index, pair ->
-            outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
-    }
-
-    /**
      * Outputs a header message in the top left part of the terminal.
      */
     fun outputHeader(header: String, offset: Int = leftOffset) {
@@ -108,12 +99,6 @@ abstract class UIDrawer(protected val terminal: AsciiPanel) {
                 outputItem(itemMenu[i], y++, offset, itemTypePosition, bonusValuePosition, confusionChancePosition)
             }
         }
-    }
-
-    private fun outputStateCharacteristic(characteristic: String, value: Int, topOffset: Int) {
-        terminal.write(characteristic, 0, topOffset, AsciiPanel.white)
-        val valueStartPosition = mapLeftOffset - 1 - value.toString().length
-        terminal.write("$value", valueStartPosition, topOffset, AsciiPanel.brightGreen)
     }
 
     private fun outputBonus(effect: Bonus, x: Int, y: Int, itemColor: Color = AsciiPanel.white) {

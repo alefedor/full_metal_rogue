@@ -20,6 +20,20 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
         }
     }
 
+    /**
+     * Outputs player state in the left panel.
+     * The state consists of a characteristic and its value.
+     */
+    fun outputPlayerState(player: Player) {
+        getPlayerStats(player).forEachIndexed { index, pair ->
+            outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
+    }
+
+    fun outputCurrentTurnHolder(currentPlayerName: String) {
+        terminal.write("Current turn:", 0, terminal.heightInCharacters- 3)
+        terminal.write(currentPlayerName, 0, terminal.heightInCharacters - 2)
+    }
+
     private fun drawGameObject(gameObject: GameObject, x: Int, y: Int, currentPlayerName: String) {
         when (gameObject) {
             is Wall -> drawWall(x, y)
@@ -66,5 +80,11 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
 
     private fun drawFreeSpace(x: Int, y: Int) {
         terminal.write(Tile.FREE_SPACE.glyph, x, y, Tile.FREE_SPACE.color)
+    }
+
+    private fun outputStateCharacteristic(characteristic: String, value: Int, topOffset: Int) {
+        terminal.write(characteristic, 0, topOffset, AsciiPanel.white)
+        val valueStartPosition = mapLeftOffset - 1 - value.toString().length
+        terminal.write("$value", valueStartPosition, topOffset, AsciiPanel.brightGreen)
     }
 }

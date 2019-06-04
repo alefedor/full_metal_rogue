@@ -24,6 +24,7 @@ class GameListSceneHandler(private val client: Client, private val playerName: S
         when (direction) {
             Direction.UP -> gameNamesMenu.toPreviousItem()
             Direction.DOWN -> gameNamesMenu.toNextItem()
+            else -> return this
         }
         return this
     }

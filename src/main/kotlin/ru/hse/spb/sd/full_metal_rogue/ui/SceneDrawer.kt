@@ -14,6 +14,7 @@ class SceneDrawer(terminal: AsciiPanel) {
     private val chestSceneUIDrawer = ChestSceneUIDrawer(terminal)
     private val deathSceneUIDrawer = DeathSceneUIDrawer(terminal)
     private val startSceneUIDrawer = StartSceneUIDrawer(terminal)
+    private val gameSceneUIDrawer = GameListSceneUIDrawer(terminal)
 
     fun draw(view: View) {
         when (view) {
@@ -22,6 +23,7 @@ class SceneDrawer(terminal: AsciiPanel) {
             is ChestView -> drawChestScene(view)
             is DeathView -> drawDeathScene(view)
             is StartView -> drawStartScene(view)
+            is GameListView -> drawGameListView(view)
             else -> return
         }
     }
@@ -31,6 +33,7 @@ class SceneDrawer(terminal: AsciiPanel) {
         levelSceneUIDrawer.drawMap(scene.map, scene.chosenPlayerName)
         levelSceneUIDrawer.outputMessage(scene.message)
         levelSceneUIDrawer.outputPlayerState(scene.map.player(scene.chosenPlayerName))
+        levelSceneUIDrawer.outputCurrentTurnHolder(scene.currentPlayerName)
     }
 
     private fun drawInventoryScene(scene: InventoryView) {
@@ -74,5 +77,10 @@ class SceneDrawer(terminal: AsciiPanel) {
             }
         }
         startSceneUIDrawer.outputHelpMessage()
+    }
+
+    private fun drawGameListView(view: GameListView) {
+        gameSceneUIDrawer.clear()
+        gameSceneUIDrawer.outputGamesList(view.gameListMenu.currentItemIndex(), view.gameListMenu.getItemsList())
     }
 }
