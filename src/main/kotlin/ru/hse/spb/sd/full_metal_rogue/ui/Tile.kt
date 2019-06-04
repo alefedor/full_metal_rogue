@@ -10,5 +10,6 @@ enum class Tile(val glyph: Char, val color: Color) {
     FREE_SPACE('.', AsciiPanel.green),
     WALL('#', AsciiPanel.magenta),
     PLAYER('@', AsciiPanel.brightWhite),
-    CHEST(10.toChar(), AsciiPanel.yellow)
+    CHEST(10.toChar(), AsciiPanel.yellow),
+    OTHER_PLAYER('@', AsciiPanel.brightRed)
 }

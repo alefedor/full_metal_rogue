@@ -20,7 +20,7 @@ class GUI : JFrame() {
         pack()
         addKeyListener(object : KeyListener {
             override fun keyPressed(key: KeyEvent) {
-                GameState.currentController.innerHandleKey(key)
+                GameState.currentController.handleKey(key)
             }
 
             override fun keyTyped(key: KeyEvent) {}

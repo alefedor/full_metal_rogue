@@ -7,8 +7,6 @@ class StartSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     val multiPlayerOptions = listOf("Join a running game", "Start a new game")
     val defaultMenuOptions = mutableListOf("Singleplayer", "Multiplayer")
 
-    private val optionsLeftOffset = 15
-
     fun outputGameTitle() {
         outputMessageInCenter("Welcome to Full Metal Rogue.", -8)
     }

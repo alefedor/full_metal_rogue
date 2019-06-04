@@ -4,6 +4,8 @@ import ru.hse.spb.sd.full_metal_rogue.logic.inventory.SimpleContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.TrivialActorGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.SparseMapInhabitator
+import ru.hse.spb.sd.full_metal_rogue.logic.map.playerPosition
+import ru.hse.spb.sd.full_metal_rogue.logic.objects.FreeSpace
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
 import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import ru.hse.spb.sd.full_metal_rogue.view.View
@@ -19,7 +21,7 @@ class Game(private val map: MutableGameMap) {
         if (playersByName[playerName]!!.isDead)
             return DeathView(playersByName[playerName]!!)
 
-        return if (handlersStack.isNotEmpty()) handlersStack.peek().view else levelScene.view
+        return if (handlersStack.isNotEmpty()) handlersStack.peek().view else levelScene.withPlayer(playerName).view
     }
 
     private var turnPosition: Int = -1
@@ -57,7 +59,14 @@ class Game(private val map: MutableGameMap) {
     }
 
     fun removePlayer(playerName: String) {
-        TODO()
+        if (playerName !in playerList)
+            return // nothing to do
+
+        val player = playersByName[playerName]!!
+        player.takeDamage(player.maxHealth) // automatically kill the player
+        map[map.playerPosition(playerName)] = FreeSpace
+        if (turnPosition == playerList.indexOf(playerName))
+            turnPosition = nextTurnPosition()
     }
 
     fun makeTurn(playerName: String, command: Command) {

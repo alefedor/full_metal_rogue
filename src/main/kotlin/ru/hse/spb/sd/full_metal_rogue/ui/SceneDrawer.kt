@@ -41,7 +41,7 @@ class SceneDrawer(terminal: AsciiPanel) {
 
     private fun drawLevelScene(scene: LevelView) {
         levelSceneUIDrawer.clear()
-        levelSceneUIDrawer.drawMap(scene.map)
+        levelSceneUIDrawer.drawMap(scene.map, scene.currentPlayerName)
         levelSceneUIDrawer.outputMessage(scene.message)
         levelSceneUIDrawer.outputPlayerState(getPlayerFromMap(scene.map))
     }

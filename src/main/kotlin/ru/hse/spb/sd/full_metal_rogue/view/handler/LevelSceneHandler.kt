@@ -11,8 +11,6 @@ import kotlin.random.Random
 class LevelSceneHandler(private val map: MutableGameMap) {
     private var backActionOccured = false
     private val messages = MessageNavigation()
-    val view: LevelView?
-        get() = if (backActionOccured) null else LevelView(map, messages.getCurrentMessage())
 
     fun withPlayer(playerName: String) = LevelSceneHandlerWithPlayer(playerName)
 
@@ -62,7 +60,7 @@ class LevelSceneHandler(private val map: MutableGameMap) {
 
     inner class LevelSceneHandlerWithPlayer(private val playerName: String) : SceneHandler() {
         override val view: LevelView?
-            get() = this@LevelSceneHandler.view
+            get() = if (backActionOccured) null else LevelView(map, messages.getCurrentMessage(), playerName)
         /**
          * Saves the current map and exits current view.
          */
