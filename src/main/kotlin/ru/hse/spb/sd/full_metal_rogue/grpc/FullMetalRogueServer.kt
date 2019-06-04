@@ -11,7 +11,9 @@ class FullMetalRogueServer(private val port: Int) {
     private val server: Server = ServerBuilder.forPort(port).addService(FullMetalRogueService())
         .build()
 
-    /** Start serving requests.  */
+    /**
+     * Start serving requests.
+     */
     fun start() {
         server.start()
         logger.info("Server started, listening on $port")
@@ -24,7 +26,9 @@ class FullMetalRogueServer(private val port: Int) {
         })
     }
 
-    /** Stop serving requests and shutdown resources.  */
+    /**
+     * Stop serving requests and shutdown resources.
+     */
     fun stop() {
         server.shutdown()
     }

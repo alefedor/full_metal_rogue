@@ -42,7 +42,7 @@ class Client(
             }
 
             override fun onError(t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                t?.printStackTrace()
             }
 
             override fun onNext(view: Server.View) {
@@ -84,7 +84,6 @@ class Client(
             .setCommand(serverCommand)
             .build()
         blockingStub.sendCommand(request)
-
     }
 
     fun createGame(gameName: String) {

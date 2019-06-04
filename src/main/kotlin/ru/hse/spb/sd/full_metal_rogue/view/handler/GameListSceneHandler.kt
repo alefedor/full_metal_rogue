@@ -8,7 +8,6 @@ import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.GameListView
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
-import javax.swing.JOptionPane
 
 /**
  * Handles user input on a GameListSceneHandler.

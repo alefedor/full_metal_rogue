@@ -1,11 +1,9 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
-import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.playerPositions
 import ru.hse.spb.sd.full_metal_rogue.view.DeathView
-import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.awt.event.KeyEvent
 import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 

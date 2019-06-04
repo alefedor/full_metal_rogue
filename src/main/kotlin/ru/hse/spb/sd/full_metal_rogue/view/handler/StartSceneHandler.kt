@@ -11,7 +11,6 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.view.StartView
 import javax.swing.JOptionPane
-import javax.swing.JOptionPane.showMessageDialog
 import kotlin.system.exitProcess
 
 /**
