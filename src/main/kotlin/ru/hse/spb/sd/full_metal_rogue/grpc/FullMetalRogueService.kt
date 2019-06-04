@@ -60,6 +60,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
             }
         }
 
+        responseObserver.onNext(Server.SendCommandResponse.newBuilder().build())
         responseObserver.onCompleted()
     }
 
@@ -88,6 +89,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
             }
             games[request.gameName] = Game(levelGenerator.generateLevel())
         }
+        responseObserver.onNext(Server.CreateGameResponse.newBuilder().build())
         responseObserver.onCompleted()
     }
 
