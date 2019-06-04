@@ -41,8 +41,10 @@ class GameListSceneHandler(private val client: Client, private val playerName: S
             try {
                 client.joinGame(currentGameName, playerName)
             } catch (e: StatusRuntimeException) {
-                if (e.status.code == Status.Code.UNAVAILABLE) {
-                    showServerUnavailableMessage()
+                when (e.status.code) {
+                    Status.Code.UNAVAILABLE -> showServerUnavailableMessage()
+                    Status.Code.INVALID_ARGUMENT -> showErrorMessage(e.status.description ?: "Can't join this game.")
+                    else -> showErrorMessage("Can't join this game")
                 }
             }
         }

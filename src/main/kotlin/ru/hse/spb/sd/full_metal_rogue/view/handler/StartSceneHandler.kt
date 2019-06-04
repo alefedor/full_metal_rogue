@@ -116,10 +116,11 @@ class StartSceneHandler(
                     try {
                         client.createGame(gameName)
                     } catch (e: StatusRuntimeException) {
-                        if (e.status.code == Status.Code.UNAVAILABLE) {
-                            showServerUnavailableMessage()
-                        } else {
-                            showErrorMessage("A game with this name already exists.")
+                        when (e.status.code) {
+                            Status.Code.UNAVAILABLE -> showServerUnavailableMessage()
+                            Status.Code.INVALID_ARGUMENT -> showErrorMessage(e.status.description ?:
+                                "Can't create a game with this name.")
+                            else -> showErrorMessage("Can't create a game with this name.")
                         }
                     }
                 }
