@@ -11,6 +11,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.view.MutableMenu
 import ru.hse.spb.sd.full_metal_rogue.view.StartView
 import javax.swing.JOptionPane
+import javax.swing.JOptionPane.showMessageDialog
 import kotlin.system.exitProcess
 
 /**
@@ -89,11 +90,21 @@ class StartSceneHandler(
             }
             MainMenuItem.MULTIPLAYER_JOIN -> {
                 val playerName = createInputDialog("Input player name", "Game player")
-                if (host != null && playerName != null) {
-                    val client = Client(host)
-                    GameListSceneHandler(client, playerName)
-                } else {
+                if (playerName != null && playerName.length > 10) {
+                    showMessageDialog(
+                        null,
+                        "Player name should not exceed 10.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                    )
                     StartSceneHandler(menu, host)
+                } else {
+                    if (host != null && playerName != null) {
+                        val client = Client(host)
+                        GameListSceneHandler(client, playerName)
+                    } else {
+                        StartSceneHandler(menu, host)
+                    }
                 }
             }
             MainMenuItem.MULTIPLAYER_NEW_GAME -> {
