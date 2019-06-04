@@ -84,7 +84,7 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
         }
 
         /**
-         * Creates LevelSceneHandler for player's current inventory.
+         * Creates LevelSceneHandler for player's current inventory.s
          */
         override fun selectAction(): SceneHandler? = InventorySceneHandler(map.player(playerName))
 
