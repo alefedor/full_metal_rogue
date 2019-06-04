@@ -34,7 +34,7 @@ class GameListSceneHandler(private val client: Client, private val playerName: S
     override fun selectAction(): SceneHandler? {
         if (gameNamesMenu.size() != 0) {
             val currentGameName = gameNamesMenu.currentItem()
-            GameState.currentController = MultiPlayerController(client)
+            GameState.currentController = MultiPlayerController(client, currentGameName, playerName)
             client.joinGame(currentGameName, playerName)
         }
         return this
