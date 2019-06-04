@@ -25,20 +25,6 @@ class Client(
             .setPlayerName(playerName)
             .build()
         blockingStub.subscribeGame(request)
-        /*val responseObserver = object : StreamObserver<Server.View> {
-            override fun onNext(value: Server.View?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onCompleted() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onError(t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        }
-        asyncStub.subscribeGame(request, responseObserver)*/
     }
 
     fun getGameList(): List<String> {
@@ -65,7 +51,6 @@ class Client(
             .setPlayerName(playerName)
             .setCommand(serverCommand)
             .build()
-        // this obviously needs to be sent via an async stub, this is just for testing
         blockingStub.sendCommand(request)
 
     }
@@ -75,20 +60,5 @@ class Client(
             .setGameName(gameName)
             .build()
         blockingStub.createGame(request)
-        /*val responseObserver = object : StreamObserver<Server.CreateGameResponse> {
-            override fun onNext(value: Server.CreateGameResponse?) {
-                // send game name to server
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onCompleted() {
-
-            }
-
-            override fun onError(t: Throwable?) {
-
-            }
-        }
-        asyncStub.createGame(request, responseObserver)*/
     }
 }
