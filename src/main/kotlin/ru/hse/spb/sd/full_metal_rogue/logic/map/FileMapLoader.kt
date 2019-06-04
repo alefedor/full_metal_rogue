@@ -23,7 +23,7 @@ object FileMapLoader {
     fun loadMap(): MutableGameMap? {
         val file = Paths.get(SAVE_NAME).toFile()
         return try {
-            val map = JsonAdapter.gameObjectGson.fromJson(file.readText(), MutableGameMap::class.java)
+            val map = MapJsonAdapter.gameObjectGson.fromJson(file.readText(), MutableGameMap::class.java)
             map.assertContainsPlayer(SinglePlayerController.PLAYER_NAME)
             map
         } catch (exception: Exception) {
@@ -43,7 +43,7 @@ object FileMapLoader {
      * Writes map to the save file.
      */
     fun saveMap(map: GameMap): Boolean {
-        val serializedMap = JsonAdapter.gameObjectGson.toJson(map)
+        val serializedMap = MapJsonAdapter.gameObjectGson.toJson(map)
         val file = Paths.get(SAVE_NAME).toFile()
         try {
             file.writeText(serializedMap)
@@ -62,7 +62,7 @@ object FileMapLoader {
 /**
  * Map serialization/deserialization.
  */
-object JsonAdapter {
+object MapJsonAdapter {
     private val itemGson = GsonBuilder()
         .registerTypeHierarchyAdapter(Item::class.java, HierarchyAdapter<Item>())
         .create()
@@ -75,7 +75,7 @@ object JsonAdapter {
         .registerTypeHierarchyAdapter(GameObject::class.java, HierarchyAdapter<GameObject>(baseGson))
         .create()
 
-    private class HierarchyAdapter<T : Any>(private val baseGson: Gson = Gson()) : JsonSerializer<T>, JsonDeserializer<T> {
+    class HierarchyAdapter<T : Any>(private val baseGson: Gson = Gson()) : JsonSerializer<T>, JsonDeserializer<T> {
         override fun serialize(
             gameObject: T,
             interfaceType: Type,

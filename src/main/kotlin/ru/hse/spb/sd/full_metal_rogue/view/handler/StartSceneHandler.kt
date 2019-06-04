@@ -1,8 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
 import ru.hse.spb.sd.full_metal_rogue.GameState
-import ru.hse.spb.sd.full_metal_rogue.controller.Game
-import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
 import ru.hse.spb.sd.full_metal_rogue.controller.SinglePlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
@@ -88,7 +86,7 @@ class StartSceneHandler(
             // change controller to the local controller that we previously created
             MainMenuItem.MULTIPLAYER_JOIN -> {
                 val playerName = createInputDialog("Input player name", "Game player")
-                GameState.currentController = MultiPlayerController(host, gameName)
+                //GameState.currentController = MultiPlayerController(host, gameName)
                 val gameNamesList = mutableListOf<String>()
                 GameListSceneHandler(gameNamesList)
                 StartSceneHandler(menu)
