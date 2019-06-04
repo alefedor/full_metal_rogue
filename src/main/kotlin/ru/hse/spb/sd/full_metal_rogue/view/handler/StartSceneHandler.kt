@@ -2,9 +2,7 @@ package ru.hse.spb.sd.full_metal_rogue.view.handler
 
 import io.grpc.StatusRuntimeException
 import ru.hse.spb.sd.full_metal_rogue.GameState
-import ru.hse.spb.sd.full_metal_rogue.controller.Client
-import ru.hse.spb.sd.full_metal_rogue.controller.Game
-import ru.hse.spb.sd.full_metal_rogue.controller.MultiPlayerController
+import ru.hse.spb.sd.full_metal_rogue.grpc.Client
 import ru.hse.spb.sd.full_metal_rogue.controller.SinglePlayerController
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction

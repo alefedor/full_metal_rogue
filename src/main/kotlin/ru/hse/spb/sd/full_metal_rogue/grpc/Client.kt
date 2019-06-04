@@ -1,8 +1,12 @@
-package ru.hse.spb.sd.full_metal_rogue.controller
+package ru.hse.spb.sd.full_metal_rogue.grpc
 
 import io.grpc.ManagedChannelBuilder
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
 import ru.hse.spb.sd.full_metal_rogue.Server
+import ru.hse.spb.sd.full_metal_rogue.controller.BackCommand
+import ru.hse.spb.sd.full_metal_rogue.controller.Command
+import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
+import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 
 private const val PORT = 10000
