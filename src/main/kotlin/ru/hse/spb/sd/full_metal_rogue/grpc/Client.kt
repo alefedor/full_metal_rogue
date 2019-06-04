@@ -1,6 +1,7 @@
 package ru.hse.spb.sd.full_metal_rogue.grpc
 
 import io.grpc.ManagedChannelBuilder
+import io.grpc.stub.StreamObserver
 import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
 import ru.hse.spb.sd.full_metal_rogue.Server
 import ru.hse.spb.sd.full_metal_rogue.controller.BackCommand
@@ -8,6 +9,7 @@ import ru.hse.spb.sd.full_metal_rogue.controller.Command
 import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
 import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
+import java.util.concurrent.Phaser
 
 private const val PORT = 10000
 
@@ -28,7 +30,33 @@ class Client(
             .setGameName(gameName)
             .setPlayerName(playerName)
             .build()
-        blockingStub.subscribeGame(request)
+
+        val barrier = Phaser(2)
+
+        asyncStub.subscribeGame(request, object : StreamObserver<Server.View> {
+            var wasView = false
+
+            override fun onCompleted() {
+                // nothing to do
+            }
+
+            override fun onError(t: Throwable?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onNext(value: Server.View?) {
+                /*
+                redraw UI here
+                 */
+
+                if (!wasView) {
+                    barrier.arrive()
+                    wasView = true
+                }
+            }
+        })
+
+        barrier.arriveAndAwaitAdvance()
     }
 
     fun getGameList(): List<String> {

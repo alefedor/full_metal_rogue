@@ -51,31 +51,15 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
         val session = sessions[request.gameName]!!
 
         val game = session.game
-        val observers = session.observers
-
-        val updates = mutableListOf<Pair<String, View?>>()
 
         synchronized(game) {
             game.makeTurn(request.playerName, parseCommand(request.command))
-
-
-            for (entry in observers.entries) {
-                val playerName = entry.key
-                val view = game.getView(playerName)
-                updates.add(playerName to view)
-            }
         }
+
+        sendUpdates(session)
 
         responseObserver.onNext(Server.SendCommandResponse.newBuilder().build())
         responseObserver.onCompleted()
-
-        for (update in updates) {
-            val view = gameViewToProtoView(update.second)
-            val observer = observers[update.first]!!
-            observer.onNext(view)
-            /*if (update.second is DeathView)
-                observer.onCompleted()*/
-        }
     }
 
     /**
@@ -126,6 +110,29 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
 
         val byteString = ByteString.copyFrom(bytes)
         return Server.View.newBuilder().setBytes(byteString).build()
+    }
+
+    private fun sendUpdates(session: GameSession) {
+        val game = session.game
+        val observers = session.observers
+
+        val updates = mutableListOf<Pair<String, View?>>()
+
+        synchronized(game) {
+            for (entry in observers.entries) {
+                val playerName = entry.key
+                val view = game.getView(playerName)
+                updates.add(playerName to view)
+            }
+        }
+
+        for (update in updates) {
+            val view = gameViewToProtoView(update.second)
+            val observer = observers[update.first]!!
+            observer.onNext(view)
+            /*if (update.second is DeathView)
+                observer.onCompleted()*/
+        }
     }
 
     class GameSession(val game: Game) {
