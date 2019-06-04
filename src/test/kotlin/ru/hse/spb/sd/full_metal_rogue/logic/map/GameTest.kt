@@ -3,7 +3,7 @@ package ru.hse.spb.sd.full_metal_rogue.logic.map
 import org.junit.Assert.*
 import org.junit.Test
 import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
-import ru.hse.spb.sd.full_metal_rogue.controller.Game
+import ru.hse.spb.sd.full_metal_rogue.logic.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.SimpleContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.TrivialActorGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.FreeSpace

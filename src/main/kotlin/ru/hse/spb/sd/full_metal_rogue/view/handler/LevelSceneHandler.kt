@@ -1,6 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.view.handler
 
-import ru.hse.spb.sd.full_metal_rogue.controller.Game
+import ru.hse.spb.sd.full_metal_rogue.logic.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.view.LevelView

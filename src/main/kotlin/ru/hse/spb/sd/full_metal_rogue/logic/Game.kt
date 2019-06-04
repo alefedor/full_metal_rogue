@@ -1,5 +1,9 @@
-package ru.hse.spb.sd.full_metal_rogue.controller
+package ru.hse.spb.sd.full_metal_rogue.logic
 
+import ru.hse.spb.sd.full_metal_rogue.controller.BackCommand
+import ru.hse.spb.sd.full_metal_rogue.controller.Command
+import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
+import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.SimpleContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.TrivialActorGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap

@@ -6,7 +6,7 @@ import ru.hse.spb.sd.full_metal_rogue.FullMetalRogueServerGrpc
 import ru.hse.spb.sd.full_metal_rogue.Server
 import ru.hse.spb.sd.full_metal_rogue.controller.BackCommand
 import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
-import ru.hse.spb.sd.full_metal_rogue.controller.Game
+import ru.hse.spb.sd.full_metal_rogue.logic.Game
 import ru.hse.spb.sd.full_metal_rogue.controller.SelectCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.level.LevelGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.level.StandardLevelGenerator

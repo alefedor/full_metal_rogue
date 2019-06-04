@@ -1,5 +1,6 @@
 package ru.hse.spb.sd.full_metal_rogue.controller
 
+import ru.hse.spb.sd.full_metal_rogue.logic.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.playerPositions
