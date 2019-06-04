@@ -49,7 +49,6 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
             responseObserver.onError(
                 Status.INVALID_ARGUMENT
                     .withDescription(e.message)
-                    .withCause(e)
                     .asRuntimeException()
             )
         }
