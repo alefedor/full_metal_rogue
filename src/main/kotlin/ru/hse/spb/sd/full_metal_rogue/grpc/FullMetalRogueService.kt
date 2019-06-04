@@ -36,7 +36,7 @@ class FullMetalRogueService(private val levelGenerator: LevelGenerator = Standar
             val observers = session.observers
 
             if (observers.containsKey(request.playerName))
-                throw java.lang.IllegalArgumentException("The player with such name is or was in the game")
+                throw java.lang.IllegalArgumentException("The player with such name is already in the game")
 
             synchronized(session.game) {
                 session.game.join(request.playerName)
