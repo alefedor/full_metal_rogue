@@ -20,7 +20,7 @@ abstract class Controller {
         else -> null
     }
 
-    protected fun checkView(view: View) {
+    protected fun checkView(view: View?) {
         if (view is DeathView)
             wasDeath = true
     }
