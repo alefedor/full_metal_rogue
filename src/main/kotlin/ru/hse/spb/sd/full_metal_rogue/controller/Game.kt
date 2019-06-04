@@ -17,21 +17,6 @@ import java.util.*
  * Game logic representation.
  */
 class Game(private val map: MutableGameMap) {
-    fun getView(playerName: String): View? {
-        if (playerName !in playerList)
-            return null
-
-        if (playersByName[playerName]!!.isDead)
-            return DeathView(playersByName[playerName]!!)
-
-        val shouldShowAdditionalScenes = handlersStack.isNotEmpty() && playerName == currentPlayerName()
-
-        return if (shouldShowAdditionalScenes)
-            handlersStack.peek().view
-        else
-            levelScene.withPlayer(playerName).view
-    }
-
     private var turnPosition: Int = -1
     private val playerList = mutableListOf<String>()
     private val playersByName = mutableMapOf<String, Player>()
@@ -49,6 +34,24 @@ class Game(private val map: MutableGameMap) {
                     turnPosition = 0
                 }
             }
+    }
+
+    /**
+     * Get view which should be shown to a player with specified [playerName].
+     */
+    fun getView(playerName: String): View? {
+        if (playerName !in playerList)
+            return null
+
+        if (playersByName[playerName]!!.isDead)
+            return DeathView(playersByName[playerName]!!)
+
+        val shouldShowAdditionalScenes = handlersStack.isNotEmpty() && playerName == currentPlayerName()
+
+        return if (shouldShowAdditionalScenes)
+            handlersStack.peek().view
+        else
+            levelScene.withPlayer(playerName).view
     }
 
     /**
