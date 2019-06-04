@@ -1,8 +1,9 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.objects
 
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
+import java.io.Serializable
 
-sealed class GameObject
+sealed class GameObject : Serializable
 
 object Wall : GameObject()
 
@@ -10,7 +11,12 @@ object FreeSpace : GameObject()
 
 class Chest(val items: MutableList<Item>) : GameObject()
 
-abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() {
+abstract class Actor(
+    maxHealthValue: Int,
+    attackPowerValue: Int,
+    val name: String,
+    open val experienceCost: Int
+) : GameObject() {
     protected var baseMaxHealth = maxHealthValue
         protected set
 
@@ -35,6 +41,8 @@ abstract class Actor(maxHealthValue: Int, attackPowerValue: Int) : GameObject() 
     fun takeDamage(damage: Int) {
         currentHealth -= damage
     }
+
+    abstract fun die(): Chest?
 
     protected open fun calculateMaxHealth() = baseMaxHealth
     protected open fun calculateAttackPower() = baseAttackPower

@@ -1,9 +1,11 @@
 package ru.hse.spb.sd.full_metal_rogue.view
 
+import java.io.Serializable
+
 /**
  * Represents a navigable menu in the game.
  */
-interface Menu<T> {
+interface Menu<T> : Serializable {
     /**
      * Returns number of menu items.
      */

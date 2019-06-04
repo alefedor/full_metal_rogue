@@ -2,6 +2,7 @@ package ru.hse.spb.sd.full_metal_rogue.ui
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.GameState
+import ru.hse.spb.sd.full_metal_rogue.controller.LocalController
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -29,7 +30,12 @@ class GUI : JFrame() {
         drawer = SceneDrawer(terminal)
     }
 
-    fun draw(view: View) {
+    fun draw(view: View?) {
+        if (view == null) { // should reset controller
+            GameState.currentController = LocalController()
+            return
+        }
+
         drawer.draw(view)
         super.repaint()
     }

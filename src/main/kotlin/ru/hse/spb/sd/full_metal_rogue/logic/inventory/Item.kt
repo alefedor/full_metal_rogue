@@ -1,9 +1,11 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.inventory
 
+import java.io.Serializable
+
 /**
  * An abstraction for an item in the game.
  */
-sealed class Item(val name: String)
+sealed class Item(val name: String) : Serializable
 
 /**
  * Weapon class item.
@@ -19,7 +21,7 @@ class Armor(name: String, val effect: Bonus) : Item(name)
  * An effect on characteristics.
  * Either characteristics are multiplied by a value or a value is added to characteristics.
  */
-class Bonus(val value: Int, val bonusType: BonusType)
+class Bonus(val value: Int, val bonusType: BonusType) : Serializable
 
 enum class BonusType {
     MULTIPLIER,

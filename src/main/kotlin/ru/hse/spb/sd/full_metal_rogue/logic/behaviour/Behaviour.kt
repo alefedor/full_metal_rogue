@@ -1,11 +1,12 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.behaviour
 
 import ru.hse.spb.sd.full_metal_rogue.logic.map.*
+import java.io.Serializable
 
 /**
  * Interface for different behaviours of actors.
  */
-interface Behaviour {
+interface Behaviour : Serializable {
     fun makeMove(currentPosition: Position, map: GameMap): Position
 }
 

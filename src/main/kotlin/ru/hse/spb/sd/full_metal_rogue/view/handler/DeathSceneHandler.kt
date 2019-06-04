@@ -6,7 +6,7 @@ import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 /**
  * Handles user input on a DeathView.
  */
-class DeathSceneHandler(private val player: Player) : GameSceneHandler() {
+class DeathSceneHandler(private val player: Player) : SceneHandler() {
     private var backActionOccured = false
     override val view: DeathView?
         get() = if (backActionOccured) null else DeathView(player)
@@ -14,7 +14,7 @@ class DeathSceneHandler(private val player: Player) : GameSceneHandler() {
     /**
      * Returns a new StartView, which is to be output by the same SceneDrawer.
      */
-    override fun backAction(): GameSceneHandler? {
+    override fun backAction(): SceneHandler? {
         backActionOccured = true
         return this
     }

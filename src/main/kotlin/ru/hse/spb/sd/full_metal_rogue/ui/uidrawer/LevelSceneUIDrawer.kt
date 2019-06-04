@@ -12,19 +12,24 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     /**
      * Draws the game map.
      */
-    fun drawMap(map: GameMap) {
+    fun drawMap(map: GameMap, currentPlayerName: String) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
-                drawGameObject(map[j, i], j + mapLeftOffset, i + messageOffset)
+                drawGameObject(map[j, i], j + mapLeftOffset, i + messageOffset, currentPlayerName)
             }
         }
     }
 
-    private fun drawGameObject(gameObject: GameObject, x: Int, y: Int) {
+    private fun drawGameObject(gameObject: GameObject, x: Int, y: Int, currentPlayerName: String) {
         when (gameObject) {
             is Wall -> drawWall(x, y)
             is FreeSpace -> drawFreeSpace(x, y)
-            is Player -> drawPlayer(x, y)
+            is Player -> {
+                when (gameObject.name) {
+                    currentPlayerName -> drawPlayer(x, y)
+                    else -> drawOtherPlayer(x, y)
+                }
+            }
             is Enemy -> drawEnemy(gameObject, x, y)
             is Chest -> drawChest(x, y)
         }
@@ -32,6 +37,10 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
 
     private fun drawPlayer(x: Int, y: Int) {
         terminal.write(Tile.PLAYER.glyph, x, y, Tile.PLAYER.color)
+    }
+
+    private fun drawOtherPlayer(x: Int, y: Int) {
+        terminal.write(Tile.OTHER_PLAYER.glyph, x, y, Tile.OTHER_PLAYER.color)
     }
 
     private fun generateRandomBrightColor(): Color {

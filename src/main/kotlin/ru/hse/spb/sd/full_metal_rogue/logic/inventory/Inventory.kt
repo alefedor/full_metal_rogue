@@ -1,9 +1,11 @@
 package ru.hse.spb.sd.full_metal_rogue.logic.inventory
 
+import java.io.Serializable
+
 /**
  * An abstraction for an inventory of a player.
  */
-interface Inventory {
+interface Inventory : Serializable {
     val size: Int
     fun add(item: Item)
     fun pop(itemId: Int)
