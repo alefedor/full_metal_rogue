@@ -85,8 +85,11 @@ class Game(private val map: MutableGameMap) {
             return // nothing to do
 
         val player = playersByName[playerName]!!
-        player.takeDamage(player.maxHealth) // automatically kill the player
-        map[map.playerPosition(playerName)] = FreeSpace
+
+        if (player.isAlive) {
+            player.takeDamage(player.maxHealth) // automatically kill the player
+            map[map.playerPosition(playerName)] = FreeSpace
+        }
 
         val position = playerName.indexOf(playerName)
         playerList.removeAt(position)

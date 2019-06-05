@@ -12,6 +12,9 @@ import java.awt.event.KeyEvent
 abstract class Controller {
     protected var wasDeath = false
 
+    /**
+     * Handles key pressed by user.
+     */
     abstract fun handleKey(key: KeyEvent)
 
     protected fun mapKey(key: KeyEvent): Command? = when (key.keyCode) {
@@ -29,6 +32,9 @@ abstract class Controller {
             wasDeath = true
     }
 
+    /**
+     * Makes GUI show the given [view]. If died then call GUI method with null to reset Controller.
+     */
     fun drawView(view: View?) {
         val shownView = if (wasDeath) null else view
 

@@ -11,6 +11,8 @@ class MultiPlayerController(val client: Client, val gameName: String, val player
         val command = mapKey(key) ?: return
 
         if (!wasDeath)
-            client.sendCommand(gameName, playerName, command)
+             client.sendCommand(gameName, playerName, command)
+        else
+            drawView(null) // reset controller upon death
     }
 }
