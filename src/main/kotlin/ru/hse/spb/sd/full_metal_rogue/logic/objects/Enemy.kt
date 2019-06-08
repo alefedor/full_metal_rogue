@@ -27,9 +27,10 @@ class Enemy(
      * Confuses the enemy, causing it to move in random directions for several next turns.
      */
     fun getConfused() {
-        // one way to avoid nested decorators is to just not confuse a confused mob
         if (behaviour !is ConfusionDecorator) {
             behaviour = ConfusionDecorator(behaviour)
+        } else {
+            (behaviour as ConfusionDecorator).renewConfusion()
         }
     }
 

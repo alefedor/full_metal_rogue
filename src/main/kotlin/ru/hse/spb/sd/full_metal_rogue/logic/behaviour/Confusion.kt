@@ -23,7 +23,7 @@ class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
         private const val MAX_CONFUSED_TURNS_COUNT = 20
     }
 
-    private val confusedTurnsCount = (MIN_CONFUSED_TURNS_COUNT..MAX_CONFUSED_TURNS_COUNT).random()
+    private var confusedTurnsCount = getConfusedTurnsCount()
     private var turnsCount = 0
 
 
@@ -35,8 +35,15 @@ class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
         }
     }
 
+    fun renewConfusion() {
+        turnsCount = 0
+        confusedTurnsCount = getConfusedTurnsCount()
+    }
+
     private fun makeConfusedMove(currentPosition: Position, map: GameMap): Position {
         val possibleMoves = possibleMoves(currentPosition, map)
         return possibleMoves.random()
     }
+
+    private fun getConfusedTurnsCount() = (MIN_CONFUSED_TURNS_COUNT..MAX_CONFUSED_TURNS_COUNT).random()
 }
