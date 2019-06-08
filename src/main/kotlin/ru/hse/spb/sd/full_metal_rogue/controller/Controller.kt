@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent
  * Represents a game controller, handling user input and calling GUI to output current view.
  */
 abstract class Controller {
-    protected var wasDeath = false
+    protected var showedDeathView = false
 
     /**
      * Handles key pressed by user.
@@ -28,18 +28,17 @@ abstract class Controller {
     }
 
     private fun checkView(view: View?) {
-        if (view is DeathView)
-            wasDeath = true
+        if (view is DeathView) {
+            showedDeathView = true
+        }
     }
 
     /**
      * Makes GUI show the given [view]. If died then call GUI method with null to reset Controller.
      */
     fun drawView(view: View?) {
-        val shownView = if (wasDeath) null else view
-
+        val shownView = if (showedDeathView) null else view
         checkView(shownView)
-
         GameState.gui.draw(shownView)
     }
 }

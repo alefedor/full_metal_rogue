@@ -4,8 +4,6 @@ import ru.hse.spb.sd.full_metal_rogue.logic.Game
 import ru.hse.spb.sd.full_metal_rogue.logic.map.FileMapLoader
 import ru.hse.spb.sd.full_metal_rogue.logic.map.MutableGameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.player
-import ru.hse.spb.sd.full_metal_rogue.logic.map.playerPositions
-import ru.hse.spb.sd.full_metal_rogue.view.DeathView
 import java.awt.event.KeyEvent
 import ru.hse.spb.sd.full_metal_rogue.controller.Controller as Controller
 
@@ -17,7 +15,7 @@ class SinglePlayerController(private val map: MutableGameMap) : Controller() {
 
     init {
         game.join(PLAYER_NAME)
-        drawView()
+        drawView(game.getView(PLAYER_NAME))
     }
 
     override fun handleKey(key: KeyEvent) {
@@ -29,12 +27,7 @@ class SinglePlayerController(private val map: MutableGameMap) : Controller() {
         if (map.player(PLAYER_NAME).isDead) {
             FileMapLoader.deleteMap()
         }
-        drawView()
-    }
-
-    private fun drawView() {
-        val view = game.getView(PLAYER_NAME)
-        drawView(view)
+        drawView(game.getView(PLAYER_NAME))
     }
 
     companion object {

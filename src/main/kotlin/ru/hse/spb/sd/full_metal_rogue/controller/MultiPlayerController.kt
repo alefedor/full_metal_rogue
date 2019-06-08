@@ -10,9 +10,10 @@ class MultiPlayerController(val client: Client, val gameName: String, val player
     override fun handleKey(key: KeyEvent) {
         val command = mapKey(key) ?: return
 
-        if (!wasDeath)
-             client.sendCommand(gameName, playerName, command)
-        else
+        if (!showedDeathView) {
+            client.sendCommand(gameName, playerName, command)
+        } else {
             drawView(null) // reset controller upon death
+        }
     }
 }
