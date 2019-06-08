@@ -18,7 +18,12 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectOutputStream
 import java.util.concurrent.ConcurrentHashMap
 
-class FullMetalRogueService(private val levelGenerator: LevelGenerator = StandardLevelGenerator()) : FullMetalRogueServerGrpc.FullMetalRogueServerImplBase() {
+/**
+ * Handles client's queries
+ */
+class FullMetalRogueService(
+    private val levelGenerator: LevelGenerator = StandardLevelGenerator()
+) : FullMetalRogueServerGrpc.FullMetalRogueServerImplBase() {
     private val sessions = ConcurrentHashMap<String, GameSession>()
 
     /**

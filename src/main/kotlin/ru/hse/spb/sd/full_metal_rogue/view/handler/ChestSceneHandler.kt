@@ -24,7 +24,6 @@ class ChestSceneHandler(chest: Chest, private val player: Player) : SceneHandler
         when (direction) {
             Direction.UP -> chestItems.toPreviousItem()
             Direction.DOWN -> chestItems.toNextItem()
-            else -> throw IllegalStateException("Direction should be up or down")
         }
         return this
     }

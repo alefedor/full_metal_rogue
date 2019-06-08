@@ -47,7 +47,6 @@ class StartSceneHandler(
         when (direction) {
             Direction.UP -> menu.toPreviousItem()
             Direction.DOWN -> menu.toNextItem()
-            else -> throw IllegalStateException("Direction in menu should be up or down")
         }
         return this
     }
@@ -79,7 +78,7 @@ class StartSceneHandler(
             MainMenuItem.MULTIPLAYER -> {
                 val host = createInputDialog("Input host name", "Server host")
                 if (host == null) {
-                     StartSceneHandler()
+                     this
                 } else {
                     val newMenu = MutableMenu(
                         mutableListOf(

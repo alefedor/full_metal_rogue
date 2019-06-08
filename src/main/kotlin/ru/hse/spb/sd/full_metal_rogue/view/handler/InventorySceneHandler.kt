@@ -23,7 +23,6 @@ class InventorySceneHandler(private val player: Player) : SceneHandler() {
         when (direction) {
             Direction.UP -> inventoryMenu.toPreviousItem()
             Direction.DOWN -> inventoryMenu.toNextItem()
-            else -> throw IllegalStateException("Direction should be up or down")
         }
         return this
     }
