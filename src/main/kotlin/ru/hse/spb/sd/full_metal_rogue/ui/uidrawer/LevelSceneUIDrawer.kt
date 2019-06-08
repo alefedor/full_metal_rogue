@@ -65,17 +65,8 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
         terminal.write(Tile.OTHER_PLAYER.glyph, x, y, Tile.OTHER_PLAYER.color)
     }
 
-    private fun generateRandomBrightColor(): Color {
-        val rand = java.util.Random()
-        val r = rand.nextFloat()
-        val g = rand.nextFloat() / 2f + 0.5f
-        val b = rand.nextFloat() / 3f
-        return Color(r, g, b).brighter()
-    }
-
     private fun drawEnemy(enemy: Enemy, x: Int, y: Int) {
-        val enemyColor = enemiesColors.getOrPut(enemy.name) { generateRandomBrightColor() }
-        terminal.write(enemy.name.first(), x, y, enemyColor)
+        terminal.write(enemy.name.first(), x, y, enemy.color)
     }
 
     private fun drawWall(x: Int, y: Int) {
