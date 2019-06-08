@@ -47,6 +47,7 @@ class StartSceneHandler(
         when (direction) {
             Direction.UP -> menu.toPreviousItem()
             Direction.DOWN -> menu.toNextItem()
+            else -> {}
         }
         return this
     }

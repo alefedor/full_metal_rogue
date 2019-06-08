@@ -24,6 +24,7 @@ class ChestSceneHandler(chest: Chest, private val player: Player) : SceneHandler
         when (direction) {
             Direction.UP -> chestItems.toPreviousItem()
             Direction.DOWN -> chestItems.toNextItem()
+            else -> {}
         }
         return this
     }

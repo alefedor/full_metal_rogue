@@ -23,6 +23,7 @@ class InventorySceneHandler(private val player: Player) : SceneHandler() {
         when (direction) {
             Direction.UP -> inventoryMenu.toPreviousItem()
             Direction.DOWN -> inventoryMenu.toNextItem()
+            else -> {}
         }
         return this
     }

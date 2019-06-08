@@ -87,6 +87,7 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
          */
         override fun backAction(): SceneHandler? {
             backActionMadeBy = playerName
+            FileMapLoader.saveMap(map)
             return this
         }
 
