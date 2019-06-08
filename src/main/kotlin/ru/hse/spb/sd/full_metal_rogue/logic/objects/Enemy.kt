@@ -4,6 +4,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.Behaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.ConfusionDecorator
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Position
+import java.awt.Color
 
 /**
  * Represents an enemy which the current player can attack and take damage from.
@@ -14,7 +15,8 @@ class Enemy(
     private var behaviour: Behaviour,
     name: String,
     experienceCost: Int,
-    private var chest: Chest
+    private var chest: Chest,
+    val color: Color = Color.RED
 ) : Actor(maxHealth, attackPower, name, experienceCost) {
     /**
      * Moves the enemy according to its behavior.
@@ -25,7 +27,10 @@ class Enemy(
      * Confuses the enemy, causing it to move in random directions for several next turns.
      */
     fun getConfused() {
-        behaviour = ConfusionDecorator(behaviour)
+        // one way to avoid nested decorators is to just not confuse a confused mob
+        if (behaviour !is ConfusionDecorator) {
+            behaviour = ConfusionDecorator(behaviour)
+        }
     }
 
     override fun die(): Chest? {

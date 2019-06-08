@@ -6,6 +6,7 @@ import ru.hse.spb.sd.full_metal_rogue.logic.behaviour.PassiveBehaviour
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.ContentGenerator
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Enemy
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.Player
+import java.awt.Color
 import kotlin.random.Random
 
 /**
@@ -39,7 +40,14 @@ class TrivialActorGenerator(private val contentGenerator: ContentGenerator) : Ac
             else -> ""
         }
 
-        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10, contentGenerator.generateChest())
+        val color = when (behaviour) {
+            is PassiveBehaviour -> Color.YELLOW
+            is AggressiveBehaviour -> Color.GREEN
+            is CowardBehaviour -> Color.CYAN
+            else -> Color.RED
+        }
+
+        return Enemy(20, 3, behaviour, prefix + randomEnemyName(), 10, contentGenerator.generateChest(), color)
 
     }
     override fun generatePlayer(name: String) = Player(100, 5, name)
