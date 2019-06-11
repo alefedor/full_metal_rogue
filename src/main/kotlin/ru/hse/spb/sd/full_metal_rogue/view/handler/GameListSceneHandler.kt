@@ -37,6 +37,8 @@ class GameListSceneHandler(private val client: Client, private val playerName: S
     override fun selectAction(): SceneHandler? {
         if (gameNamesMenu.size() != 0) {
             val currentGameName = gameNamesMenu.currentItem()
+            val controller = GameState.currentController
+
             GameState.currentController = MultiPlayerController(client, currentGameName, playerName)
             try {
                 client.joinGame(currentGameName, playerName)
@@ -46,6 +48,7 @@ class GameListSceneHandler(private val client: Client, private val playerName: S
                     Status.Code.INVALID_ARGUMENT -> showErrorMessage(e.status.description ?: "Can't join this game.")
                     else -> showErrorMessage("Can't join this game")
                 }
+                GameState.currentController = controller
             }
         }
         return this

@@ -118,8 +118,9 @@ class StartSceneHandler(
                     } catch (e: StatusRuntimeException) {
                         when (e.status.code) {
                             Status.Code.UNAVAILABLE -> showServerUnavailableMessage()
-                            Status.Code.INVALID_ARGUMENT -> showErrorMessage(e.status.description ?:
-                                "Can't create a game with this name.")
+                            Status.Code.INVALID_ARGUMENT -> showErrorMessage(
+                                e.status.description ?: "Can't create a game with this name."
+                            )
                             else -> showErrorMessage("Can't create a game with this name.")
                         }
                     }

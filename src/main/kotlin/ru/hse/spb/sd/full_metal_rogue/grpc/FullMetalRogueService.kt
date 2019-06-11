@@ -29,6 +29,7 @@ class FullMetalRogueService(
     /**
      * Allows the user to join a game and subscribe to a view stream.
      */
+    @Synchronized
     override fun subscribeGame(
         request: Server.SubscribeGameRequest,
         responseObserver: StreamObserver<Server.View>
@@ -40,11 +41,11 @@ class FullMetalRogueService(
             val session = sessions[request.gameName]!!
             val observers = session.observers
 
-            if (observers.containsKey(request.playerName))
-                throw java.lang.IllegalArgumentException("The player with such name is already in the game")
-
             synchronized(session.game) {
-                session.game.join(request.playerName)
+                val success = session.game.join(request.playerName)
+
+                if (!success)
+                    throw java.lang.IllegalArgumentException("The player with such name is already in the game")
             }
 
             observers[request.playerName] = responseObserver
@@ -152,6 +153,11 @@ class FullMetalRogueService(
                 val playerName = entry.key
                 val view = game.getView(playerName)
                 updates.add(playerName to view)
+
+                val isLeavingTheGame = view == null
+
+                if (isLeavingTheGame)
+                    game.autoKillPlayer(playerName)
             }
         }
 
@@ -159,10 +165,18 @@ class FullMetalRogueService(
             val view = gameViewToProtoView(update.second)
             val observer = observers[update.first]!!
             observer.onNext(view)
-            if (update.second is DeathView || update.second == null) {
-                observer.onCompleted()
-                observers.remove(update.first)
-                game.removePlayer(update.first)
+        }
+
+        synchronized(game) {
+            for (entry in observers.entries) {
+                val playerName = entry.key
+                val isDead = !game.isAlive(playerName)
+
+                if (isDead) {
+                    observers[playerName]?.onCompleted()
+                    game.removePlayer(playerName)
+                    observers.remove(playerName)
+                }
             }
         }
     }

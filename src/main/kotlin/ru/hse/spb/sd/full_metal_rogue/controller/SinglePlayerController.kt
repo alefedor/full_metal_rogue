@@ -20,13 +20,17 @@ class SinglePlayerController(private val map: MutableGameMap) : Controller() {
 
     override fun handleKey(key: KeyEvent) {
         val command = mapKey(key) ?: return
-        if (map.player(PLAYER_NAME).isAlive) {
+        if (game.isAlive(PLAYER_NAME))
             game.makeTurn(PLAYER_NAME, command)
-        }
-        // save and delete are available only in single player mode
-        if (map.player(PLAYER_NAME).isDead) {
+
+        val isDead = !game.isAlive(PLAYER_NAME)
+
+        // save and load are available only in single player mode
+        if (isDead)
             FileMapLoader.deleteMap()
-        }
+        else
+            FileMapLoader.saveMap(map) // auto save every turn
+
         drawView(game.getView(PLAYER_NAME))
     }
 

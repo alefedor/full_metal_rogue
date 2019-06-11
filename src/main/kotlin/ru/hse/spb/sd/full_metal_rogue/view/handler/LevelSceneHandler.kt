@@ -40,6 +40,11 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
         map[from] = FreeSpace
     }
 
+    private fun killAndDrop(position: Position) {
+        val actor = map[position] as? Actor ?: return
+        map[position] = actor.die() ?: FreeSpace
+    }
+
     /**
      * Moves specified enemy from specified position.
      */
@@ -56,7 +61,7 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
             is Actor -> {
                 targetTile.takeDamage(enemy.attackPower)
                 if (targetTile.isDead)
-                    map[targetPosition] = targetTile.die() ?: FreeSpace
+                    killAndDrop(targetPosition)
             }
 
             is Chest -> {
@@ -83,11 +88,10 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
                 }
             }
         /**
-         * Saves the current map and exits current view.
+         * Exit current view and leave the map.
          */
         override fun backAction(): SceneHandler? {
             backActionMadeBy = playerName
-            FileMapLoader.saveMap(map)
             return this
         }
 
@@ -133,10 +137,12 @@ class LevelSceneHandler(private val map: MutableGameMap, private val game: Game)
 
                     if (targetTile.isDead) {
                         val isLevelUp = player.earnExperience(targetTile.experienceCost)
-                        messages.addMessage("$playerName slayed ${targetTile.name} " +
-                                "and earned ${targetTile.experienceCost} experience points " +
-                                "${if (isLevelUp) "(level up!)" else ""}.")
-                        map[targetPosition] = targetTile.die() ?: FreeSpace
+                        messages.addMessage(
+                            "$playerName slayed ${targetTile.name} " +
+                                    "and earned ${targetTile.experienceCost} experience points " +
+                                    "${if (isLevelUp) "(level up!)" else ""}."
+                        )
+                        killAndDrop(targetPosition)
                     } else {
                         if (targetTile is Enemy && shouldConfuseEnemy(player)) {
                             targetTile.getConfused()

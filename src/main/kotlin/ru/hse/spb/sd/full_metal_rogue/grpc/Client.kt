@@ -10,7 +10,8 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.io.ByteArrayInputStream
 import java.io.ObjectInputStream
-import java.util.concurrent.Phaser
+import java.util.concurrent.locks.Condition
+import java.util.concurrent.locks.ReentrantLock
 
 private const val PORT = 10000
 
@@ -24,6 +25,9 @@ class Client(
 ) {
     private val blockingStub: FullMetalRogueServerGrpc.FullMetalRogueServerBlockingStub
     private val asyncStub: FullMetalRogueServerGrpc.FullMetalRogueServerStub
+
+    @Volatile
+    private var initializationFinished = false
 
     init {
         val channel = ManagedChannelBuilder.forAddress(host, PORT).usePlaintext().build()
@@ -40,31 +44,51 @@ class Client(
             .setPlayerName(playerName)
             .build()
 
-        val barrier = Phaser(2)
+        val initializationLock = ReentrantLock()
+        val initializationCondition = initializationLock.newCondition()
+
+        var exception: Throwable? = null
 
         asyncStub.subscribeGame(request, object : StreamObserver<Server.View> {
-            var wasView = false
-
             override fun onCompleted() {
                 // nothing to do
             }
 
             override fun onError(t: Throwable?) {
-                t?.printStackTrace()
+                if (!initializationFinished) {
+                    exception = t
+
+                    if (!initializationFinished)
+                        finishInitialization()
+                } else {
+                    t?.printStackTrace()
+                }
             }
 
             override fun onNext(view: Server.View) {
                 val protoView = protoViewToGameView(view)
                 currentController.drawView(protoView)
 
-                if (!wasView) {
-                    barrier.arrive()
-                    wasView = true
-                }
+                if (!initializationFinished)
+                    finishInitialization()
+            }
+
+            fun finishInitialization() {
+                initializationLock.lock()
+                initializationFinished = true
+                initializationCondition.signal()
+                initializationLock.unlock()
             }
         })
 
-        barrier.arriveAndAwaitAdvance()
+        initializationLock.lock()
+        while (!initializationFinished) {
+            initializationCondition.await()
+        }
+        initializationLock.unlock()
+
+        if (exception != null)
+            throw exception!!
     }
 
     /**

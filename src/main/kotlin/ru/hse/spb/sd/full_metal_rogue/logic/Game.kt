@@ -84,19 +84,16 @@ class Game(private val map: MutableGameMap) {
         if (playerName !in playerList)
             return // nothing to do
 
-        val player = playersByName[playerName]!!
+        autoKillPlayer(playerName)
 
-        if (player.isAlive) {
-            player.takeDamage(player.maxHealth) // automatically kill the player
-            map[map.playerPosition(playerName)] = FreeSpace
-        }
-
-        val position = playerName.indexOf(playerName)
+        val position = playerList.indexOf(playerName)
         playerList.removeAt(position)
 
-        if (turnPosition == position) {
+        if (turnPosition >= position) {
+            val hadTurn = turnPosition == position
             turnPosition--
-            turnPosition = nextTurnPosition()
+            if (hadTurn)
+                turnPosition = nextTurnPosition()
         }
     }
 
@@ -121,7 +118,7 @@ class Game(private val map: MutableGameMap) {
             else -> handlersStack.push(newHandler)
         }
 
-        val movementMade = activeHandler is LevelSceneHandler.LevelSceneHandlerWithPlayer && command is DirectionCommand
+        val movementMade = activeHandler is LevelSceneHandler.LevelSceneHandlerWithPlayer && command !is SelectCommand
 
         if (movementMade)
             turnPosition = nextTurnPosition()
@@ -131,6 +128,25 @@ class Game(private val map: MutableGameMap) {
      * Returns the name of the current player (whose turn it is to make a move).
      */
     fun currentPlayerName(): String? = if (turnPosition == -1) null else playerList[turnPosition]
+
+    /**
+     * Returns whether player denoted by [playerName] is still alive in the game.
+     */
+    fun isAlive(playerName: String): Boolean {
+        return playersByName[playerName]?.isAlive ?: false
+    }
+
+    /**
+     * Kills the player denoted by [playerName].
+     */
+    fun autoKillPlayer(playerName: String) {
+        val player = playersByName[playerName] ?: return
+
+        if (player.isAlive) {
+            player.takeDamage(player.maxHealth) // automatically kill the player
+            map[map.playerPosition(playerName)] = FreeSpace
+        }
+    }
 
     private fun isSomeOneAlive(): Boolean {
         var result = false
