@@ -5,7 +5,9 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.FixMethodOrder
 import org.junit.Test
+import org.junit.runners.MethodSorters
 import ru.hse.spb.sd.full_metal_rogue.controller.DirectionCommand
 import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 
@@ -26,7 +28,7 @@ class ClientServerInteractionTest {
     fun setUp() {
         server = FullMetalRogueServer(port)
         server.start()
-        Thread.sleep(1000)
+        Thread.sleep(5000) // wait for server to initialize
         client = Client(host)
     }
 
