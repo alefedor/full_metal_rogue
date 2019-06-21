@@ -41,11 +41,12 @@ class FullMetalRogueServer(private val port: Int) {
     }
 
     companion object {
+        const val PORT = 10000
         private val logger = Logger.getLogger(FullMetalRogueServer::class.java.name)
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val server = FullMetalRogueServer(10000)
+            val server = FullMetalRogueServer(PORT)
             server.start()
             server.blockUntilShutdown()
         }

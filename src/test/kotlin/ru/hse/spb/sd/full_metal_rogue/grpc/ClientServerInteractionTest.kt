@@ -12,10 +12,11 @@ import ru.hse.spb.sd.full_metal_rogue.logic.map.Direction
 // the reason setUp and tearDown are used instead of the grpcCleanup rule
 // is that using the grpcCleanup rule results with an exception
 // in which a channel resource can not be released in time at the end of test
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ClientServerInteractionTest {
     companion object {
-        private const val host = "localhost"
-        private const val port = 10000
+        private val host = "localhost"
+        private val port = FullMetalRogueServer.PORT
     }
 
     private lateinit var server: FullMetalRogueServer
@@ -25,6 +26,7 @@ class ClientServerInteractionTest {
     fun setUp() {
         server = FullMetalRogueServer(port)
         server.start()
+        Thread.sleep(1000)
         client = Client(host)
     }
 
