@@ -31,15 +31,15 @@ enum class BonusType {
 /**
  * Applies an effect of the bonus to the value.
  */
-fun apply(value: Int, bonus: Bonus) = when(bonus.bonusType) {
-        BonusType.MULTIPLIER -> value * bonus.value
-        BonusType.ADDEND -> value + bonus.value
-    }
+fun Int.apply(bonus: Bonus) = when(bonus.bonusType) {
+    BonusType.MULTIPLIER -> this * bonus.value
+    BonusType.ADDEND -> this + bonus.value
+}
 
 /**
  * Applies reverse effect to an effect of the bonus on the value.
  */
-fun unapply(value: Int, bonus: Bonus) = when(bonus.bonusType) {
-    BonusType.MULTIPLIER -> value / bonus.value
-    BonusType.ADDEND -> value - bonus.value
+fun Int.unapply(bonus: Bonus) = when(bonus.bonusType) {
+    BonusType.MULTIPLIER -> this / bonus.value
+    BonusType.ADDEND -> this - bonus.value
 }
