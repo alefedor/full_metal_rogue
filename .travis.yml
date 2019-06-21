@@ -5,6 +5,7 @@ os: linux
 notifications:
   email: false
 
-script: 
+script:
+  - export DISPLAY=:0.0
   - chmod +x script.sh
   - bash script.sh
