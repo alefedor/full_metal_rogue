@@ -1,26 +1,23 @@
-package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer
+package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.ascii
 
 import asciiPanel.AsciiPanel
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.StartSceneUIDrawer
 
 /**
  * Handles writing to terminal for StartView.
  */
-class StartSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
-    val singlePlayerOptions = listOf("Continue", "Start a new game")
-    val multiPlayerOptions = listOf("Join a running game", "Start a new game")
-    val defaultMenuOptions = mutableListOf("Singleplayer", "Multiplayer")
-
+class StartSceneAsciiUIDrawer(terminal: AsciiPanel) : AsciiUIDrawer(terminal), StartSceneUIDrawer {
     /**
      * Outputs game title.
      */
-    fun outputsWelcomeMessage() {
+    override fun outputWelcomeMessage() {
         outputMessageInCenter("Welcome to Full Metal Rogue.", -8)
     }
 
     /**
      * Outputs game controls hints.
      */
-    fun outputHelpMessage() {
+    override fun outputHelpMessage() {
         val verticalOffset = (terminal.heightInCharacters - 8) - terminal.heightInCharacters / 2
         outputMessageInCenter("Press Esc to exit", verticalOffset)
         outputMessageInCenter("Press E to choose an option", verticalOffset + 1)
@@ -30,7 +27,7 @@ class StartSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     /**
      * Outputs start scene menu.
      */
-    fun outputMenuItems(currentPosition: Int, options: List<String>) {
+    override fun outputMenuItems(currentPosition: Int, options: List<String>) {
         val pos = if (currentPosition < 0 || currentPosition >= options.size) 0 else currentPosition
         var offset = -5
         options.forEachIndexed { i, s ->

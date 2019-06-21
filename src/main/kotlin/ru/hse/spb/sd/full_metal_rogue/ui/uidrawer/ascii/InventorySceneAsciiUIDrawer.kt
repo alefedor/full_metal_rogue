@@ -1,13 +1,14 @@
-package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer
+package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.ascii
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.InventorySceneUIDrawer
 import ru.hse.spb.sd.full_metal_rogue.view.Menu
 
 /**
  * Handles writing to terminal for InventoryView.
  */
-class InventorySceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
+class InventorySceneAsciiUIDrawer(terminal: AsciiPanel) : AsciiUIDrawer(terminal), InventorySceneUIDrawer {
     // the following values DO NOT take leftOffset into consideration
     // and can be used with any left offset
     private val inventoryItemTypePosition = 25
@@ -17,7 +18,7 @@ class InventorySceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     /**
      * Outputs inventory item menu and equipped items.
      */
-    fun outputInventory(inventoryItems: Menu<Item>, equippedItems: List<Item>) {
+    override fun outputInventory(inventoryItems: Menu<Item>, equippedItems: List<Item>) {
         val inventoryOffset = leftOffset + (terminal.widthInCharacters - leftOffset) / 2
         outputHeader("Equipped items", leftOffset)
         outputHeader("Inventory", inventoryOffset)

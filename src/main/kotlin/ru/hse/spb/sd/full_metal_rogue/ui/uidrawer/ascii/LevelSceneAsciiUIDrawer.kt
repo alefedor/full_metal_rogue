@@ -1,22 +1,23 @@
-package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer
+package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.ascii
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.map.GameMap
 import ru.hse.spb.sd.full_metal_rogue.logic.objects.*
 import ru.hse.spb.sd.full_metal_rogue.ui.Tile
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.LevelSceneUIDrawer
 import java.awt.Color
 import java.lang.IllegalStateException
 
 /**
  * Handles writing to terminal for LevelView.
  */
-class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
+class LevelSceneAsciiUIDrawer(terminal: AsciiPanel) : AsciiUIDrawer(terminal), LevelSceneUIDrawer {
     private val enemiesColors = HashMap<String, Color>()
 
     /**
      * Draws the game map.
      */
-    fun drawMap(map: GameMap, currentPlayerName: String) {
+    override fun drawMap(map: GameMap, currentPlayerName: String) {
         for (i in 0 until map.height) {
             for (j in 0 until map.width) {
                 drawGameObject(map[j, i], j + mapLeftOffset, i + messageOffset, currentPlayerName)
@@ -28,15 +29,23 @@ class LevelSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
      * Outputs player state in the left panel.
      * The state consists of a characteristic and its value.
      */
-    fun outputPlayerState(player: Player) {
+    override fun outputPlayerState(player: Player) {
         getPlayerStats(player).forEachIndexed { index, pair ->
-            outputStateCharacteristic(pair.first, pair.second, messageOffset + index) }
+            outputStateCharacteristic(pair.first, pair.second, messageOffset + index)
+        }
     }
 
     /**
-     * Outputs which player's turn it currently is in the left panel.
+     * Outputs a message in the top left corner of the terminal.
      */
-    fun outputCurrentTurnHolder(currentPlayerName: String) {
+    override fun outputMessage(message: String) {
+        terminal.write(message, 0, 0, AsciiPanel.white)
+    }
+
+    /**
+     * Outputs which player's turn. It currently is in the left panel.
+     */
+    override fun outputCurrentTurnHolder(currentPlayerName: String) {
         terminal.write("Current turn:", 0, terminal.heightInCharacters- 3)
         terminal.write(currentPlayerName, 0, terminal.heightInCharacters - 2)
     }

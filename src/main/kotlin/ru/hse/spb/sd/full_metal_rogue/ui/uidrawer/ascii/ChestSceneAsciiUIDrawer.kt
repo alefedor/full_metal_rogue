@@ -1,13 +1,14 @@
-package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer
+package ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.ascii
 
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.logic.inventory.Item
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.ChestSceneUIDrawer
 import ru.hse.spb.sd.full_metal_rogue.view.Menu
 
 /**
  * Handles writing to terminal for ChestView.
  */
-class ChestSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
+class ChestSceneAsciiUIDrawer(terminal: AsciiPanel) : AsciiUIDrawer(terminal), ChestSceneUIDrawer {
     // the following values DO take leftOffset into consideration
     private val chestBonusValuePosition = 65
     private val chestConfusionChancePosition = 80
@@ -16,7 +17,7 @@ class ChestSceneUIDrawer(terminal: AsciiPanel) : UIDrawer(terminal) {
     /**
      * Outputs a chest item menu.
      */
-    fun outputChest(chestItemMenu: Menu<Item>) {
+    override fun outputChest(chestItemMenu: Menu<Item>) {
         outputItemsHeaderForChest()
         outputMenuItems(chestItemMenu, leftOffset,
             chestItemTypePosition, chestBonusValuePosition, chestConfusionChancePosition)

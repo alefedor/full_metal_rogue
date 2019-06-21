@@ -3,6 +3,8 @@ package ru.hse.spb.sd.full_metal_rogue.ui
 import asciiPanel.AsciiPanel
 import ru.hse.spb.sd.full_metal_rogue.GameState
 import ru.hse.spb.sd.full_metal_rogue.controller.LocalController
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.UIDrawerFactory
+import ru.hse.spb.sd.full_metal_rogue.ui.uidrawer.ascii.AsciiUIDrawerFactory
 import ru.hse.spb.sd.full_metal_rogue.view.View
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
@@ -12,7 +14,7 @@ private const val WINDOW_HEIGHT = 40
 private const val WINDOW_WIDTH = 100
 
 class GUI : JFrame() {
-    private val drawer: SceneDrawer
+    private val drawerFactory: UIDrawerFactory
 
     init {
         val terminal = AsciiPanel(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -27,7 +29,8 @@ class GUI : JFrame() {
 
             override fun keyReleased(key: KeyEvent) {}
         })
-        drawer = SceneDrawer(terminal)
+
+        drawerFactory = AsciiUIDrawerFactory(terminal)
     }
 
     /**
@@ -39,7 +42,7 @@ class GUI : JFrame() {
             return
         }
 
-        drawer.draw(view)
+        view.draw(drawerFactory)
         super.repaint()
     }
 }
