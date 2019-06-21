@@ -11,6 +11,10 @@ abstract class BehaviourDecorator(private val behaviour: Behaviour) : Behaviour 
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
         return behaviour.makeMove(currentPosition, map)
     }
+
+    override fun simplify(): Behaviour = if (stillDecorated()) this else behaviour.simplify()
+
+    protected abstract fun stillDecorated(): Boolean
 }
 
 /**
@@ -23,9 +27,8 @@ class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
         private const val MAX_CONFUSED_TURNS_COUNT = 20
     }
 
-    private var confusedTurnsCount = getConfusedTurnsCount()
+    private val confusedTurnsCount = getConfusedTurnsCount()
     private var turnsCount = 0
-
 
     override fun makeMove(currentPosition: Position, map: GameMap): Position {
         return if (turnsCount++ < confusedTurnsCount) {
@@ -35,10 +38,7 @@ class ConfusionDecorator(behaviour: Behaviour) : BehaviourDecorator(behaviour) {
         }
     }
 
-    fun renewConfusion() {
-        turnsCount = 0
-        confusedTurnsCount = getConfusedTurnsCount()
-    }
+    override fun stillDecorated(): Boolean = turnsCount < confusedTurnsCount
 
     private fun makeConfusedMove(currentPosition: Position, map: GameMap): Position {
         val possibleMoves = possibleMoves(currentPosition, map)

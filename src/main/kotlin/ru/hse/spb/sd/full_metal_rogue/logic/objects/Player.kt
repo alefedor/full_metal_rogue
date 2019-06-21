@@ -42,10 +42,10 @@ class Player(maxHealth: Int, attackPower: Int, name: String) : Actor(maxHealth, 
                 weapon = item
             }
             is Armor -> {
-                currentHealth = unapply(currentHealth, armor.effect)
+                currentHealth = currentHealth.unapply(armor.effect)
                 inventory.add(armor)
                 armor = item
-                currentHealth = apply(currentHealth, armor.effect)
+                currentHealth = currentHealth.apply(armor.effect)
             }
         }
     }
@@ -81,6 +81,6 @@ class Player(maxHealth: Int, attackPower: Int, name: String) : Actor(maxHealth, 
         return chest
     }
 
-    override fun calculateMaxHealth() = apply(baseMaxHealth, armor.effect)
-    override fun calculateAttackPower() = apply(baseAttackPower, weapon.effect)
+    override fun calculateMaxHealth() = baseMaxHealth.apply(armor.effect)
+    override fun calculateAttackPower() = baseAttackPower.apply(weapon.effect)
 }

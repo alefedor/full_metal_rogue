@@ -21,17 +21,17 @@ class Enemy(
     /**
      * Moves the enemy according to its behavior.
      */
-    fun makeMove(currentPosition: Position, map: GameMap): Position = behaviour.makeMove(currentPosition, map)
+    fun makeMove(currentPosition: Position, map: GameMap): Position {
+        val move = behaviour.makeMove(currentPosition, map)
+        behaviour = behaviour.simplify() // check for decorators to expire
+        return move
+    }
 
     /**
      * Confuses the enemy, causing it to move in random directions for several next turns.
      */
     fun getConfused() {
-        if (behaviour !is ConfusionDecorator) {
-            behaviour = ConfusionDecorator(behaviour)
-        } else {
-            (behaviour as ConfusionDecorator).renewConfusion()
-        }
+        behaviour = ConfusionDecorator(behaviour)
     }
 
     override fun die(): Chest? {

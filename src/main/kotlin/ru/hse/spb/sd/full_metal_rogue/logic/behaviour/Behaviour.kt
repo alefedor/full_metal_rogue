@@ -8,6 +8,7 @@ import java.io.Serializable
  */
 interface Behaviour : Serializable {
     fun makeMove(currentPosition: Position, map: GameMap): Position
+    fun simplify(): Behaviour = this
 }
 
 /**
