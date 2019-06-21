@@ -6,6 +6,6 @@ notifications:
   email: false
 
 script:
-  - export DISPLAY=:0.0
+  - unset DISPLAY
   - chmod +x script.sh
   - bash script.sh
