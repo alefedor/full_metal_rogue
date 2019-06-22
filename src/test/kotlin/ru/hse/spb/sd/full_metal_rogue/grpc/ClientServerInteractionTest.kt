@@ -44,14 +44,7 @@ class ClientServerInteractionTest {
         client.createGame("game")
         client.createGame("game")
     }
-
-    // just checks that there are no exceptions
-    @Test
-    fun testJoinGame() {
-        client.createGame("game")
-        client.joinGame("game", "player")
-    }
-
+    
     @Test
     fun testGetGameList() {
         client.createGame("game1")
@@ -60,14 +53,6 @@ class ClientServerInteractionTest {
         val gameList = client.getGameList()
         assertTrue(gameList.containsAll(listOf("game1", "game2", "Game2")))
         assertEquals(3, gameList.size)
-    }
-
-    // just checks that there are no exceptions
-    @Test
-    fun testSendCommand() {
-        client.createGame("game")
-        client.joinGame("game", "player")
-        client.sendCommand("game", "player", DirectionCommand(Direction.UP))
     }
 
     @After
