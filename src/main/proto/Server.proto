@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_package = "ru.hse.spb.sd.full_metal_rogue";
+
+enum Command {
+    SELECT = 0;
+    BACK = 1;
+    UP = 2;
+    DOWN = 3;
+    LEFT = 4;
+    RIGHT = 5;
+}
+
+message Action {
+    string gameName = 1;
+    string playerName = 2;
+    Command command = 3;
+}
+
+message GameListRequest {
+}
+
+message GameListResponse {
+    repeated string games = 1;
+}
+
+message CreateGameRequest {
+    string gameName = 1;
+}
+
+message CreateGameResponse {
+}
+
+message View {
+    bytes bytes = 1;
+}
+
+message SubscribeGameRequest {
+    string gameName = 1;
+    string playerName = 2;
+}
+
+message SendCommandResponse {
+}
+
+service FullMetalRogueServer {
+    rpc subscribeGame(SubscribeGameRequest) returns (stream View) {}
+    rpc sendCommand(Action) returns (SendCommandResponse) {}
+    rpc getGameList(GameListRequest) returns (GameListResponse) {}
+    rpc createGame(CreateGameRequest) returns (CreateGameResponse) {}
+}
